@@ -83,21 +83,21 @@
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.panel4 = new System.Windows.Forms.Panel();
             this.panel6 = new System.Windows.Forms.Panel();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.label21 = new System.Windows.Forms.Label();
+            this.label22 = new System.Windows.Forms.Label();
+            this.label23 = new System.Windows.Forms.Label();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.labelElecTest = new System.Windows.Forms.Label();
             this.labelBurnedConn = new System.Windows.Forms.Label();
             this.labelDmgConn = new System.Windows.Forms.Label();
             this.panel5 = new System.Windows.Forms.Panel();
+            this.labelLotInfo = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.radioButtonPolish = new System.Windows.Forms.RadioButton();
-            this.label23 = new System.Windows.Forms.Label();
-            this.label22 = new System.Windows.Forms.Label();
-            this.label21 = new System.Windows.Forms.Label();
             this.buttonSave = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
             this.timerLotToModel = new System.Windows.Forms.Timer(this.components);
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.labelLotInfo = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.Ng0BWadyLutowia)).BeginInit();
             this.panelNg.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Ng0UszkodzenieConn)).BeginInit();
@@ -131,9 +131,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel4.SuspendLayout();
             this.panel6.SuspendLayout();
+            this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.panel5.SuspendLayout();
-            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // textBoxLotNumber
@@ -141,7 +141,7 @@
             this.textBoxLotNumber.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.textBoxLotNumber.Location = new System.Drawing.Point(4, 27);
             this.textBoxLotNumber.Name = "textBoxLotNumber";
-            this.textBoxLotNumber.Size = new System.Drawing.Size(150, 23);
+            this.textBoxLotNumber.Size = new System.Drawing.Size(200, 23);
             this.textBoxLotNumber.TabIndex = 0;
             this.textBoxLotNumber.TextChanged += new System.EventHandler(this.textBoxLotNumber_TextChanged);
             // 
@@ -149,7 +149,7 @@
             // 
             this.labelLotNo.AutoSize = true;
             this.labelLotNo.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelLotNo.Location = new System.Drawing.Point(160, 30);
+            this.labelLotNo.Location = new System.Drawing.Point(225, 30);
             this.labelLotNo.Name = "labelLotNo";
             this.labelLotNo.Size = new System.Drawing.Size(106, 17);
             this.labelLotNo.TabIndex = 1;
@@ -159,7 +159,7 @@
             // 
             this.labelGoodQty.AutoSize = true;
             this.labelGoodQty.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelGoodQty.Location = new System.Drawing.Point(160, 81);
+            this.labelGoodQty.Location = new System.Drawing.Point(225, 81);
             this.labelGoodQty.Name = "labelGoodQty";
             this.labelGoodQty.Size = new System.Drawing.Size(91, 17);
             this.labelGoodQty.TabIndex = 3;
@@ -170,7 +170,7 @@
             this.textBoxGoodQty.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.textBoxGoodQty.Location = new System.Drawing.Point(4, 78);
             this.textBoxGoodQty.Name = "textBoxGoodQty";
-            this.textBoxGoodQty.Size = new System.Drawing.Size(150, 23);
+            this.textBoxGoodQty.Size = new System.Drawing.Size(200, 23);
             this.textBoxGoodQty.TabIndex = 2;
             this.textBoxGoodQty.MouseClick += new System.Windows.Forms.MouseEventHandler(this.textBoxGoodQty_MouseClick);
             this.textBoxGoodQty.Enter += new System.EventHandler(this.textBoxGoodQty_Enter);
@@ -676,7 +676,7 @@
             // 
             this.labelOperator.AutoSize = true;
             this.labelOperator.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelOperator.Location = new System.Drawing.Point(162, 55);
+            this.labelOperator.Location = new System.Drawing.Point(225, 55);
             this.labelOperator.Name = "labelOperator";
             this.labelOperator.Size = new System.Drawing.Size(65, 17);
             this.labelOperator.TabIndex = 43;
@@ -688,7 +688,7 @@
             this.comboBoxOperator.FormattingEnabled = true;
             this.comboBoxOperator.Location = new System.Drawing.Point(4, 52);
             this.comboBoxOperator.Name = "comboBoxOperator";
-            this.comboBoxOperator.Size = new System.Drawing.Size(149, 24);
+            this.comboBoxOperator.Size = new System.Drawing.Size(200, 24);
             this.comboBoxOperator.TabIndex = 44;
             // 
             // pictureBox1
@@ -738,6 +738,48 @@
             this.panel6.Name = "panel6";
             this.panel6.Size = new System.Drawing.Size(386, 825);
             this.panel6.TabIndex = 48;
+            // 
+            // panel1
+            // 
+            this.panel1.BackColor = System.Drawing.Color.LawnGreen;
+            this.panel1.Controls.Add(this.label21);
+            this.panel1.Controls.Add(this.label22);
+            this.panel1.Controls.Add(this.label23);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel1.Location = new System.Drawing.Point(0, 458);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(384, 73);
+            this.panel1.TabIndex = 50;
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.label21.Location = new System.Drawing.Point(48, 25);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(179, 24);
+            this.label21.TabIndex = 47;
+            this.label21.Text = "Norma 2500 szt./zm.";
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.label22.Location = new System.Drawing.Point(7, 0);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(224, 24);
+            this.label22.TabIndex = 48;
+            this.label22.Text = "Ilość od początku zmiany:";
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.label23.Location = new System.Drawing.Point(106, 48);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(121, 24);
+            this.label23.TabIndex = 49;
+            this.label23.Text = "średnio szt./h";
             // 
             // dataGridView1
             // 
@@ -798,6 +840,27 @@
             this.panel5.Size = new System.Drawing.Size(386, 236);
             this.panel5.TabIndex = 47;
             // 
+            // labelLotInfo
+            // 
+            this.labelLotInfo.AutoSize = true;
+            this.labelLotInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.labelLotInfo.Location = new System.Drawing.Point(3, 133);
+            this.labelLotInfo.Name = "labelLotInfo";
+            this.labelLotInfo.Size = new System.Drawing.Size(102, 17);
+            this.labelLotInfo.TabIndex = 53;
+            this.labelLotInfo.Text = "Dane zlecenia:";
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(301, 11);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(78, 23);
+            this.button1.TabIndex = 52;
+            this.button1.Text = "Debug stuff";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Visible = false;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // radioButton2
             // 
             this.radioButton2.AutoSize = true;
@@ -820,84 +883,21 @@
             this.radioButtonPolish.Text = "Polski";
             this.radioButtonPolish.UseVisualStyleBackColor = true;
             // 
-            // label23
-            // 
-            this.label23.AutoSize = true;
-            this.label23.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label23.Location = new System.Drawing.Point(7, 47);
-            this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(93, 17);
-            this.label23.TabIndex = 49;
-            this.label23.Text = "średnio szt./h";
-            // 
-            // label22
-            // 
-            this.label22.AutoSize = true;
-            this.label22.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label22.Location = new System.Drawing.Point(7, 28);
-            this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(92, 17);
-            this.label22.TabIndex = 48;
-            this.label22.Text = "Ilość od 6:00 ";
-            // 
-            // label21
-            // 
-            this.label21.AutoSize = true;
-            this.label21.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label21.Location = new System.Drawing.Point(7, 9);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(138, 17);
-            this.label21.TabIndex = 47;
-            this.label21.Text = "Norma 2500 szt./zm.";
-            // 
             // buttonSave
             // 
-            this.buttonSave.Location = new System.Drawing.Point(4, 107);
+            this.buttonSave.Location = new System.Drawing.Point(4, 103);
             this.buttonSave.Name = "buttonSave";
-            this.buttonSave.Size = new System.Drawing.Size(378, 23);
+            this.buttonSave.Size = new System.Drawing.Size(378, 29);
             this.buttonSave.TabIndex = 45;
             this.buttonSave.Text = "Zapisz";
             this.buttonSave.UseVisualStyleBackColor = true;
             this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(301, 11);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(78, 23);
-            this.button1.TabIndex = 52;
-            this.button1.Text = "Zapisz";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Visible = false;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // timerLotToModel
             // 
             this.timerLotToModel.Enabled = true;
             this.timerLotToModel.Interval = 600000;
             this.timerLotToModel.Tick += new System.EventHandler(this.timerLotToModel_Tick);
-            // 
-            // panel1
-            // 
-            this.panel1.BackColor = System.Drawing.Color.LawnGreen;
-            this.panel1.Controls.Add(this.label21);
-            this.panel1.Controls.Add(this.label22);
-            this.panel1.Controls.Add(this.label23);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 458);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(384, 73);
-            this.panel1.TabIndex = 50;
-            // 
-            // labelLotInfo
-            // 
-            this.labelLotInfo.AutoSize = true;
-            this.labelLotInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelLotInfo.Location = new System.Drawing.Point(3, 133);
-            this.labelLotInfo.Name = "labelLotInfo";
-            this.labelLotInfo.Size = new System.Drawing.Size(102, 17);
-            this.labelLotInfo.TabIndex = 53;
-            this.labelLotInfo.Text = "Dane zlecenia:";
             // 
             // Form1
             // 
@@ -947,11 +947,11 @@
             this.panel4.ResumeLayout(false);
             this.panel6.ResumeLayout(false);
             this.panel6.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.panel5.ResumeLayout(false);
             this.panel5.PerformLayout();
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             this.ResumeLayout(false);
 
         }

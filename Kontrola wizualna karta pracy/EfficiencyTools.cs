@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Kontrola_wizualna_karta_pracy
 {
@@ -17,7 +18,7 @@ namespace Kontrola_wizualna_karta_pracy
             string fileName = "RecentJobs.txt";
 
             if (!File.Exists(fileName))
-                    {
+            {
                 File.Create(fileName);
             }
 
@@ -49,6 +50,21 @@ namespace Kontrola_wizualna_karta_pracy
             textFileLines.RemoveAll(t => toRemove.Contains(t));
             File.WriteAllLines(fileName, textFileLines.ToArray());
 
+            return result;
+        }
+
+        public static double GetQuantityThisShift(DataGridView grid, bool eightHoursShift)
+        {
+            double result = 0;
+            DateTime beginingOfCurrentShift = TimeTools.GetBeginingDateOfShift(DateTime.Now, eightHoursShift);
+            foreach (DataGridViewRow row in grid.Rows)
+            {
+                DateTime date = DateTime.ParseExact(row.Cells["Data"].Value.ToString(), "dd-MM-yy HH:mm", CultureInfo.InvariantCulture);
+                if (date>=beginingOfCurrentShift)
+                {
+                    result += double.Parse(row.Cells["Ilość"].Value.ToString());
+                }
+            }
             return result;
         }
     }

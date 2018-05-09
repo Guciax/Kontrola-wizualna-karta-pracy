@@ -66,6 +66,7 @@
     <Compile Include="SummaryView.Designer.cs">
       <DependentUpon>SummaryView.cs</DependentUpon>
     </Compile>
+    <Compile Include="TimeTools.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
