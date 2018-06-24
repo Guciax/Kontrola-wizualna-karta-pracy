@@ -9,38 +9,38 @@ namespace Kontrola_wizualna_karta_pracy
 {
     class controlToDbTranslation
     {
-        public static string GetSqlColumnName(NumericUpDown numUpD)
+        public static string GetLabelCaptionFromDbColumn(string colName)
         {
-            switch (numUpD.Name)
+            switch (colName)
             {
-                case "Ng0BWadyLutowia" : return "ngBrakLutowia";
-                case "Ng0BrakDiodyLed" : return "ngBrakDiodyLed";
-                case "Ng0BrakResConn" : return "ngBrakResConn";
-                case "Ng0PrzesuniecieDiodyLed" : return "ngPrzesuniecieLed";
-                case "Ng0PrzesuniecieResConn": return "ngPrzesuniecieResConn";
-                case "Ng0ZabrudzonaDiodaLed" : return "ngZabrudzenieLed";
-                case "Ng0UszkodzenieDiodyLed" : return "ngUszkodzenieMechaniczneLed";
-                case "Ng0UszkodzenieConn" : return "ngUszkodzenieConn";
-                case "Ng0WadaFbrycznaLed" : return "ngWadaFabrycznaDiody";
-                case "Ng0UszkodzeniePcb" : return "ngUszkodzonePcb";
-                case "Ng0WadaNaklejki": return "ngWadaNaklejki";
-                case "Ng0SpalonyConn" : return "ngSpalonyConn";
-                case "Ng0Inne" : return "ngInne";
-                case "Scrap0WadyLutowia" : return "scrapBrakLutowia";
-                case "Scrap0BrakDiodyLed" : return "scrapBrakDiodyLed";
-                case "Scrap0BrakResConn": return "scrapBrakResConn";
-                case "Scrap0PrzesuniecieDiodyLed" : return "scrapPrzesuniecieLed";
-                case "Scrap0PrzesuniecieResConn" : return "scrapPrzesuniecieResConn";
-                case "Scrap0ZabrudzonaDiodaLed" : return "scrapZabrudzenieLed";
-                case "Scrap0UszkodzenieDiodyLed" : return "scrapUszkodzenieMechaniczneLed";
-                case "Scrap0UszkodzenieConn" : return "scrapUszkodzenieConn";
-                case "Scrap0WadaFabrycznaLed" : return "scrapWadaFabrycznaDiody";
-                case "Scrap0UszkodzeniePcb" : return "scrapUszkodzonePcb";
-                case "Scrap0WadaNaklejki" : return "scrapWadaNaklejki";
-                case "Scrap0SpalonyConn" : return "scrapSpalonyConn";
-                case "Scrap0Inne" : return "scrapInne";
-                case "Ng0Test" : return "ngTestElektryczny";
-                default: return null;
+                case "ngBrakLutowia": return "Brak Lutowia";
+                case "ngBrakDiodyLed": return "Brak LED";
+                case "ngBrakResConn": return "Brak RES/CONN";
+                case "ngPrzesuniecieLed": return "Przesunięcie LED";
+                case "ngPrzesuniecieResConn": return "Przesunięcie CONN";
+                case "ngZabrudzenieLed": return "Zabrudzenie LED";
+                case "ngUszkodzenieMechaniczneLed": return "Uszkodzenie mech. LED";
+                case "ngUszkodzenieConn": return "Uszkodzenie CONN";
+                case "ngWadaFabrycznaDiody": return "Wada fabryczna LED";
+                case "ngUszkodzonePcb": return "Uszkodzone PCB";
+                case "ngWadaNaklejki": return "Wada naklejki";
+                case "ngSpalonyConn": return "Spalony CONN";
+                case "ngInne": return "Inne";
+                case "scrapBrakLutowia": return "Brak Lutowia";
+                case "scrapBrakDiodyLed": return "Brak LED";
+                case "scrapBrakResConn": return "Brak RES/CONN";
+                case "scrapPrzesuniecieLed": return "Przesunięcie LED";
+                case "scrapPrzesuniecieResConn": return "Przesunięcie CONN";
+                case "scrapZabrudzenieLed": return "Zabrudzenie LED";
+                case "scrapUszkodzenieMechaniczneLed": return "Uszkodzenie mech. LED";
+                case "scrapUszkodzenieConn": return "Uszkodzenie CONN";
+                case "scrapWadaFabrycznaDiody": return "Wada fabryczna LED";
+                case "scrapUszkodzonePcb": return "Uszkodzone PCB";
+                case "scrapWadaNaklejki": return "Wada naklejki";
+                case "scrapSpalonyConn": return "Spalony CONN";
+                case "scrapInne": return "Inne";
+                case "ngTestElektryczny": return "Test elektryczny";
+                default: return colName;
             }
         }
 

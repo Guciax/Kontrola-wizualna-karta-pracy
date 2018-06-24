@@ -81,8 +81,12 @@
             this.comboBoxOperator = new System.Windows.Forms.ComboBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.panel4 = new System.Windows.Forms.Panel();
             this.panel6 = new System.Windows.Forms.Panel();
+            this.buttonAddFailure = new System.Windows.Forms.Button();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.flpNgBox = new System.Windows.Forms.FlowLayoutPanel();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.flpScrapBox = new System.Windows.Forms.FlowLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label21 = new System.Windows.Forms.Label();
             this.label22 = new System.Windows.Forms.Label();
@@ -92,12 +96,14 @@
             this.labelBurnedConn = new System.Windows.Forms.Label();
             this.labelDmgConn = new System.Windows.Forms.Label();
             this.panel5 = new System.Windows.Forms.Panel();
+            this.buttonCamStartStop = new System.Windows.Forms.Button();
             this.labelLotInfo = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.radioButtonPolish = new System.Windows.Forms.RadioButton();
             this.buttonSave = new System.Windows.Forms.Button();
             this.timerLotToModel = new System.Windows.Forms.Timer(this.components);
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             ((System.ComponentModel.ISupportInitialize)(this.Ng0BWadyLutowia)).BeginInit();
             this.panelNg.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Ng0UszkodzenieConn)).BeginInit();
@@ -129,11 +135,12 @@
             this.panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Ng0Test)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            this.panel4.SuspendLayout();
             this.panel6.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.panel5.SuspendLayout();
+            this.tableLayoutPanel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // textBoxLotNumber
@@ -143,13 +150,14 @@
             this.textBoxLotNumber.Name = "textBoxLotNumber";
             this.textBoxLotNumber.Size = new System.Drawing.Size(200, 23);
             this.textBoxLotNumber.TabIndex = 0;
+            this.textBoxLotNumber.Text = "123456";
             this.textBoxLotNumber.TextChanged += new System.EventHandler(this.textBoxLotNumber_TextChanged);
             // 
             // labelLotNo
             // 
             this.labelLotNo.AutoSize = true;
             this.labelLotNo.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelLotNo.Location = new System.Drawing.Point(225, 30);
+            this.labelLotNo.Location = new System.Drawing.Point(209, 30);
             this.labelLotNo.Name = "labelLotNo";
             this.labelLotNo.Size = new System.Drawing.Size(106, 17);
             this.labelLotNo.TabIndex = 1;
@@ -159,7 +167,7 @@
             // 
             this.labelGoodQty.AutoSize = true;
             this.labelGoodQty.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelGoodQty.Location = new System.Drawing.Point(225, 81);
+            this.labelGoodQty.Location = new System.Drawing.Point(209, 81);
             this.labelGoodQty.Name = "labelGoodQty";
             this.labelGoodQty.Size = new System.Drawing.Size(91, 17);
             this.labelGoodQty.TabIndex = 3;
@@ -180,7 +188,7 @@
             // 
             this.labelSolder.AutoSize = true;
             this.labelSolder.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelSolder.Location = new System.Drawing.Point(170, 63);
+            this.labelSolder.Location = new System.Drawing.Point(1196, 297);
             this.labelSolder.Name = "labelSolder";
             this.labelSolder.Size = new System.Drawing.Size(87, 20);
             this.labelSolder.TabIndex = 4;
@@ -190,7 +198,7 @@
             // 
             this.labelMissingLed.AutoSize = true;
             this.labelMissingLed.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelMissingLed.Location = new System.Drawing.Point(170, 90);
+            this.labelMissingLed.Location = new System.Drawing.Point(1196, 324);
             this.labelMissingLed.Name = "labelMissingLed";
             this.labelMissingLed.Size = new System.Drawing.Size(215, 20);
             this.labelMissingLed.TabIndex = 5;
@@ -200,7 +208,7 @@
             // 
             this.labelMissingRes.AutoSize = true;
             this.labelMissingRes.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelMissingRes.Location = new System.Drawing.Point(170, 117);
+            this.labelMissingRes.Location = new System.Drawing.Point(1196, 351);
             this.labelMissingRes.Name = "labelMissingRes";
             this.labelMissingRes.Size = new System.Drawing.Size(108, 20);
             this.labelMissingRes.TabIndex = 6;
@@ -210,7 +218,7 @@
             // 
             this.labelDirtyLed.AutoSize = true;
             this.labelDirtyLed.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelDirtyLed.Location = new System.Drawing.Point(170, 304);
+            this.labelDirtyLed.Location = new System.Drawing.Point(1196, 538);
             this.labelDirtyLed.Name = "labelDirtyLed";
             this.labelDirtyLed.Size = new System.Drawing.Size(146, 20);
             this.labelDirtyLed.TabIndex = 7;
@@ -220,7 +228,7 @@
             // 
             this.labelDmgLed.AutoSize = true;
             this.labelDmgLed.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelDmgLed.Location = new System.Drawing.Point(170, 198);
+            this.labelDmgLed.Location = new System.Drawing.Point(1196, 432);
             this.labelDmgLed.Name = "labelDmgLed";
             this.labelDmgLed.Size = new System.Drawing.Size(200, 20);
             this.labelDmgLed.TabIndex = 8;
@@ -230,7 +238,7 @@
             // 
             this.labelDmgPcb.AutoSize = true;
             this.labelDmgPcb.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelDmgPcb.Location = new System.Drawing.Point(170, 279);
+            this.labelDmgPcb.Location = new System.Drawing.Point(1196, 513);
             this.labelDmgPcb.Name = "labelDmgPcb";
             this.labelDmgPcb.Size = new System.Drawing.Size(119, 20);
             this.labelDmgPcb.TabIndex = 9;
@@ -240,7 +248,7 @@
             // 
             this.labelShiftedLed.AutoSize = true;
             this.labelShiftedLed.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelShiftedLed.Location = new System.Drawing.Point(170, 144);
+            this.labelShiftedLed.Location = new System.Drawing.Point(1196, 378);
             this.labelShiftedLed.Name = "labelShiftedLed";
             this.labelShiftedLed.Size = new System.Drawing.Size(154, 20);
             this.labelShiftedLed.TabIndex = 10;
@@ -250,7 +258,7 @@
             // 
             this.labelShiftedRes.AutoSize = true;
             this.labelShiftedRes.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelShiftedRes.Location = new System.Drawing.Point(170, 171);
+            this.labelShiftedRes.Location = new System.Drawing.Point(1196, 405);
             this.labelShiftedRes.Name = "labelShiftedRes";
             this.labelShiftedRes.Size = new System.Drawing.Size(159, 20);
             this.labelShiftedRes.TabIndex = 11;
@@ -260,7 +268,7 @@
             // 
             this.labelOther.AutoSize = true;
             this.labelOther.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelOther.Location = new System.Drawing.Point(170, 360);
+            this.labelOther.Location = new System.Drawing.Point(1196, 594);
             this.labelOther.Name = "labelOther";
             this.labelOther.Size = new System.Drawing.Size(34, 20);
             this.labelOther.TabIndex = 12;
@@ -270,7 +278,7 @@
             // 
             this.labelLabel.AutoSize = true;
             this.labelLabel.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelLabel.Location = new System.Drawing.Point(170, 36);
+            this.labelLabel.Location = new System.Drawing.Point(1196, 270);
             this.labelLabel.Name = "labelLabel";
             this.labelLabel.Size = new System.Drawing.Size(92, 20);
             this.labelLabel.TabIndex = 13;
@@ -280,7 +288,7 @@
             // 
             this.labelBadLed.AutoSize = true;
             this.labelBadLed.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelBadLed.Location = new System.Drawing.Point(170, 333);
+            this.labelBadLed.Location = new System.Drawing.Point(1196, 567);
             this.labelBadLed.Name = "labelBadLed";
             this.labelBadLed.Size = new System.Drawing.Size(171, 20);
             this.labelBadLed.TabIndex = 14;
@@ -338,7 +346,7 @@
             this.panelNg.Controls.Add(this.Ng0PrzesuniecieDiodyLed);
             this.panelNg.Controls.Add(this.Ng0WadaFbrycznaLed);
             this.panelNg.Controls.Add(this.Ng0UszkodzeniePcb);
-            this.panelNg.Location = new System.Drawing.Point(4, 5);
+            this.panelNg.Location = new System.Drawing.Point(1030, 239);
             this.panelNg.Name = "panelNg";
             this.panelNg.Size = new System.Drawing.Size(80, 387);
             this.panelNg.TabIndex = 19;
@@ -492,7 +500,7 @@
             this.panelScrap.Controls.Add(this.Scrap0UszkodzenieDiodyLed);
             this.panelScrap.Controls.Add(this.Scrap0WadaFabrycznaLed);
             this.panelScrap.Controls.Add(this.Scrap0UszkodzeniePcb);
-            this.panelScrap.Location = new System.Drawing.Point(84, 5);
+            this.panelScrap.Location = new System.Drawing.Point(1110, 239);
             this.panelScrap.Name = "panelScrap";
             this.panelScrap.Size = new System.Drawing.Size(80, 387);
             this.panelScrap.TabIndex = 20;
@@ -645,7 +653,7 @@
             this.panel3.BackColor = System.Drawing.Color.Navy;
             this.panel3.Controls.Add(this.label16);
             this.panel3.Controls.Add(this.Ng0Test);
-            this.panel3.Location = new System.Drawing.Point(85, 392);
+            this.panel3.Location = new System.Drawing.Point(1111, 626);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(80, 60);
             this.panel3.TabIndex = 42;
@@ -676,7 +684,7 @@
             // 
             this.labelOperator.AutoSize = true;
             this.labelOperator.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelOperator.Location = new System.Drawing.Point(225, 55);
+            this.labelOperator.Location = new System.Drawing.Point(209, 55);
             this.labelOperator.Name = "labelOperator";
             this.labelOperator.Size = new System.Drawing.Size(65, 17);
             this.labelOperator.TabIndex = 43;
@@ -694,50 +702,88 @@
             // pictureBox1
             // 
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox1.Location = new System.Drawing.Point(386, 0);
+            this.pictureBox1.Location = new System.Drawing.Point(332, 0);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(1057, 1061);
+            this.pictureBox1.Size = new System.Drawing.Size(1111, 1061);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 45;
             this.pictureBox1.TabStop = false;
             // 
-            // panel4
-            // 
-            this.panel4.Controls.Add(this.panel6);
-            this.panel4.Controls.Add(this.panel5);
-            this.panel4.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panel4.Location = new System.Drawing.Point(0, 0);
-            this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(386, 1061);
-            this.panel4.TabIndex = 46;
-            // 
             // panel6
             // 
             this.panel6.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel6.Controls.Add(this.tableLayoutPanel1);
+            this.panel6.Controls.Add(this.buttonAddFailure);
             this.panel6.Controls.Add(this.panel1);
-            this.panel6.Controls.Add(this.dataGridView1);
-            this.panel6.Controls.Add(this.labelElecTest);
-            this.panel6.Controls.Add(this.labelBurnedConn);
-            this.panel6.Controls.Add(this.labelDmgConn);
-            this.panel6.Controls.Add(this.labelMissingLed);
-            this.panel6.Controls.Add(this.panelNg);
-            this.panel6.Controls.Add(this.panelScrap);
-            this.panel6.Controls.Add(this.panel3);
-            this.panel6.Controls.Add(this.labelLabel);
-            this.panel6.Controls.Add(this.labelSolder);
-            this.panel6.Controls.Add(this.labelMissingRes);
-            this.panel6.Controls.Add(this.labelShiftedRes);
-            this.panel6.Controls.Add(this.labelDmgLed);
-            this.panel6.Controls.Add(this.labelDmgPcb);
-            this.panel6.Controls.Add(this.labelDirtyLed);
-            this.panel6.Controls.Add(this.labelBadLed);
-            this.panel6.Controls.Add(this.labelOther);
-            this.panel6.Controls.Add(this.labelShiftedLed);
             this.panel6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel6.Location = new System.Drawing.Point(0, 236);
+            this.panel6.Location = new System.Drawing.Point(3, 253);
             this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(386, 825);
+            this.panel6.Size = new System.Drawing.Size(326, 544);
             this.panel6.TabIndex = 48;
+            // 
+            // buttonAddFailure
+            // 
+            this.buttonAddFailure.BackColor = System.Drawing.Color.Maroon;
+            this.buttonAddFailure.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.buttonAddFailure.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.buttonAddFailure.ForeColor = System.Drawing.Color.White;
+            this.buttonAddFailure.Location = new System.Drawing.Point(0, 430);
+            this.buttonAddFailure.Name = "buttonAddFailure";
+            this.buttonAddFailure.Size = new System.Drawing.Size(324, 39);
+            this.buttonAddFailure.TabIndex = 51;
+            this.buttonAddFailure.Text = "Dodaj";
+            this.buttonAddFailure.UseVisualStyleBackColor = false;
+            this.buttonAddFailure.Click += new System.EventHandler(this.buttonAddFailure_Click);
+            // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.ColumnCount = 3;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 200F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.Controls.Add(this.flpNgBox, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel1, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.flpScrapBox, 2, 0);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 1;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(324, 430);
+            this.tableLayoutPanel1.TabIndex = 47;
+            // 
+            // flpNgBox
+            // 
+            this.flpNgBox.BackColor = System.Drawing.Color.Red;
+            this.flpNgBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flpNgBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.flpNgBox.Location = new System.Drawing.Point(0, 0);
+            this.flpNgBox.Margin = new System.Windows.Forms.Padding(0);
+            this.flpNgBox.Name = "flpNgBox";
+            this.flpNgBox.Size = new System.Drawing.Size(62, 430);
+            this.flpNgBox.TabIndex = 2;
+            // 
+            // flowLayoutPanel1
+            // 
+            this.flowLayoutPanel1.BackColor = System.Drawing.Color.White;
+            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flowLayoutPanel1.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(62, 0);
+            this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(200, 430);
+            this.flowLayoutPanel1.TabIndex = 4;
+            // 
+            // flpScrapBox
+            // 
+            this.flpScrapBox.BackColor = System.Drawing.Color.Black;
+            this.flpScrapBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flpScrapBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.flpScrapBox.Location = new System.Drawing.Point(262, 0);
+            this.flpScrapBox.Margin = new System.Windows.Forms.Padding(0);
+            this.flpScrapBox.Name = "flpScrapBox";
+            this.flpScrapBox.Size = new System.Drawing.Size(62, 430);
+            this.flpScrapBox.TabIndex = 3;
             // 
             // panel1
             // 
@@ -746,9 +792,9 @@
             this.panel1.Controls.Add(this.label22);
             this.panel1.Controls.Add(this.label23);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 458);
+            this.panel1.Location = new System.Drawing.Point(0, 469);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(384, 73);
+            this.panel1.Size = new System.Drawing.Size(324, 73);
             this.panel1.TabIndex = 50;
             // 
             // label21
@@ -784,17 +830,17 @@
             // dataGridView1
             // 
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.dataGridView1.Location = new System.Drawing.Point(0, 531);
+            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridView1.Location = new System.Drawing.Point(3, 803);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(384, 292);
+            this.dataGridView1.Size = new System.Drawing.Size(326, 255);
             this.dataGridView1.TabIndex = 46;
             // 
             // labelElecTest
             // 
             this.labelElecTest.AutoSize = true;
             this.labelElecTest.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelElecTest.Location = new System.Drawing.Point(170, 420);
+            this.labelElecTest.Location = new System.Drawing.Point(1196, 654);
             this.labelElecTest.Name = "labelElecTest";
             this.labelElecTest.Size = new System.Drawing.Size(106, 20);
             this.labelElecTest.TabIndex = 45;
@@ -804,7 +850,7 @@
             // 
             this.labelBurnedConn.AutoSize = true;
             this.labelBurnedConn.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelBurnedConn.Location = new System.Drawing.Point(170, 252);
+            this.labelBurnedConn.Location = new System.Drawing.Point(1196, 486);
             this.labelBurnedConn.Name = "labelBurnedConn";
             this.labelBurnedConn.Size = new System.Drawing.Size(99, 20);
             this.labelBurnedConn.TabIndex = 44;
@@ -814,7 +860,7 @@
             // 
             this.labelDmgConn.AutoSize = true;
             this.labelDmgConn.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelDmgConn.Location = new System.Drawing.Point(170, 225);
+            this.labelDmgConn.Location = new System.Drawing.Point(1196, 459);
             this.labelDmgConn.Name = "labelDmgConn";
             this.labelDmgConn.Size = new System.Drawing.Size(212, 20);
             this.labelDmgConn.TabIndex = 43;
@@ -823,6 +869,7 @@
             // panel5
             // 
             this.panel5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel5.Controls.Add(this.buttonCamStartStop);
             this.panel5.Controls.Add(this.labelLotInfo);
             this.panel5.Controls.Add(this.button1);
             this.panel5.Controls.Add(this.radioButton2);
@@ -834,17 +881,27 @@
             this.panel5.Controls.Add(this.textBoxGoodQty);
             this.panel5.Controls.Add(this.labelOperator);
             this.panel5.Controls.Add(this.labelGoodQty);
-            this.panel5.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel5.Location = new System.Drawing.Point(0, 0);
+            this.panel5.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel5.Location = new System.Drawing.Point(3, 3);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(386, 236);
+            this.panel5.Size = new System.Drawing.Size(326, 244);
             this.panel5.TabIndex = 47;
+            // 
+            // buttonCamStartStop
+            // 
+            this.buttonCamStartStop.Location = new System.Drawing.Point(243, 184);
+            this.buttonCamStartStop.Name = "buttonCamStartStop";
+            this.buttonCamStartStop.Size = new System.Drawing.Size(78, 23);
+            this.buttonCamStartStop.TabIndex = 54;
+            this.buttonCamStartStop.Text = "Cam";
+            this.buttonCamStartStop.UseVisualStyleBackColor = true;
+            this.buttonCamStartStop.Click += new System.EventHandler(this.buttonCamStartStop_Click);
             // 
             // labelLotInfo
             // 
             this.labelLotInfo.AutoSize = true;
             this.labelLotInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelLotInfo.Location = new System.Drawing.Point(3, 133);
+            this.labelLotInfo.Location = new System.Drawing.Point(3, 104);
             this.labelLotInfo.Name = "labelLotInfo";
             this.labelLotInfo.Size = new System.Drawing.Size(102, 17);
             this.labelLotInfo.TabIndex = 53;
@@ -852,13 +909,12 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(301, 11);
+            this.button1.Location = new System.Drawing.Point(243, 3);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(78, 23);
             this.button1.TabIndex = 52;
             this.button1.Text = "Debug stuff";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Visible = false;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // radioButton2
@@ -885,9 +941,11 @@
             // 
             // buttonSave
             // 
-            this.buttonSave.Location = new System.Drawing.Point(4, 103);
+            this.buttonSave.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.buttonSave.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.buttonSave.Location = new System.Drawing.Point(0, 213);
             this.buttonSave.Name = "buttonSave";
-            this.buttonSave.Size = new System.Drawing.Size(378, 29);
+            this.buttonSave.Size = new System.Drawing.Size(324, 29);
             this.buttonSave.TabIndex = 45;
             this.buttonSave.Text = "Zapisz";
             this.buttonSave.UseVisualStyleBackColor = true;
@@ -899,16 +957,51 @@
             this.timerLotToModel.Interval = 600000;
             this.timerLotToModel.Tick += new System.EventHandler(this.timerLotToModel_Tick);
             // 
+            // tableLayoutPanel2
+            // 
+            this.tableLayoutPanel2.ColumnCount = 1;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel2.Controls.Add(this.panel5, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.panel6, 0, 1);
+            this.tableLayoutPanel2.Controls.Add(this.dataGridView1, 0, 2);
+            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Left;
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+            this.tableLayoutPanel2.RowCount = 3;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 250F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 550F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(332, 1061);
+            this.tableLayoutPanel2.TabIndex = 49;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1443, 1061);
             this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.panel4);
+            this.Controls.Add(this.tableLayoutPanel2);
+            this.Controls.Add(this.labelElecTest);
+            this.Controls.Add(this.labelBurnedConn);
+            this.Controls.Add(this.labelDmgConn);
+            this.Controls.Add(this.panelScrap);
+            this.Controls.Add(this.labelMissingLed);
+            this.Controls.Add(this.labelShiftedLed);
+            this.Controls.Add(this.panelNg);
+            this.Controls.Add(this.labelOther);
+            this.Controls.Add(this.labelBadLed);
+            this.Controls.Add(this.panel3);
+            this.Controls.Add(this.labelDirtyLed);
+            this.Controls.Add(this.labelLabel);
+            this.Controls.Add(this.labelDmgPcb);
+            this.Controls.Add(this.labelSolder);
+            this.Controls.Add(this.labelDmgLed);
+            this.Controls.Add(this.labelMissingRes);
+            this.Controls.Add(this.labelShiftedRes);
             this.Name = "Form1";
             this.Text = "Form1";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.Ng0BWadyLutowia)).EndInit();
             this.panelNg.ResumeLayout(false);
@@ -944,15 +1037,16 @@
             this.panel3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Ng0Test)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            this.panel4.ResumeLayout(false);
             this.panel6.ResumeLayout(false);
-            this.panel6.PerformLayout();
+            this.tableLayoutPanel1.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.panel5.ResumeLayout(false);
             this.panel5.PerformLayout();
+            this.tableLayoutPanel2.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -1009,7 +1103,6 @@
         private System.Windows.Forms.ComboBox comboBoxOperator;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.ToolTip toolTip1;
-        private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.Panel panel6;
         
         private System.Windows.Forms.Panel panel5;
@@ -1028,6 +1121,13 @@
         private System.Windows.Forms.Timer timerLotToModel;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label labelLotInfo;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.FlowLayoutPanel flpScrapBox;
+        private System.Windows.Forms.FlowLayoutPanel flpNgBox;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+        private System.Windows.Forms.Button buttonAddFailure;
+        private System.Windows.Forms.Button buttonCamStartStop;
     }
 }
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Kontrola_wizualna_karta_pracy.DataStructures;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -9,6 +10,14 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static Kontrola_wizualna_karta_pracy.DynamicControls;
+using System.IO;
+using AForge;
+using AForge.Video;
+using AForge.Video.DirectShow;
+using ZXing;
+using ZXing.Aztec;
+using System.Diagnostics;
 
 namespace Kontrola_wizualna_karta_pracy
 {
@@ -21,77 +30,53 @@ namespace Kontrola_wizualna_karta_pracy
         List<Image> imagesList = new List<Image>();
         RecordToSave recordToSave = new RecordToSave("", 0, "", DateTime.Now);
         Dictionary<string, string> lotToModelDictionary = new Dictionary<string, string>();
-        Dictionary<string, string> smtInfo = new Dictionary<string, string>();
+        Dictionary<string, SmtInfo> smtInfo = new Dictionary<string, SmtInfo>();
+        FilterInfoCollection CaptureDevice;
+        VideoCaptureDevice FinalFrame;
+        Bitmap bitmap;
+
         private void Form1_Load(object sender, EventArgs e)
         {
-            imagesList = ImagesTools.CreateListOfImages(@"Zdjecia\PL");
-            Ng0BWadyLutowia.Tag = labelSolder;
-            Ng0BrakDiodyLed.Tag = labelMissingLed;
-            Ng0BrakResConn.Tag = labelMissingRes;
-            Ng0PrzesuniecieDiodyLed.Tag = labelShiftedLed;
-            Ng0PrzesuniecieResConn.Tag = labelShiftedRes;
-            Ng0ZabrudzonaDiodaLed.Tag = labelDirtyLed;
-            Ng0UszkodzenieDiodyLed.Tag = labelDmgLed;
-            Ng0UszkodzenieConn.Tag = labelDmgConn;
-            Ng0WadaFbrycznaLed.Tag = labelBadLed;
-            Ng0UszkodzeniePcb.Tag = labelDmgPcb;
-            Ng0WadaNaklejki.Tag = labelLabel;
-            Ng0SpalonyConn.Tag = labelBurnedConn;
-            Ng0Inne.Tag = labelOther;
-            Scrap0WadyLutowia.Tag = labelSolder;
-            Scrap0BrakDiodyLed.Tag = labelMissingLed;
-            Scrap0BrakResConn.Tag = labelMissingRes;
-            Scrap0PrzesuniecieDiodyLed.Tag = labelShiftedLed;
-            Scrap0PrzesuniecieResConn.Tag = labelShiftedRes;
-            Scrap0ZabrudzonaDiodaLed.Tag = labelDirtyLed;
-            Scrap0UszkodzenieDiodyLed.Tag = labelDmgLed;
-            Scrap0UszkodzenieConn.Tag = labelDmgConn;
-            Scrap0WadaFabrycznaLed.Tag = labelBadLed;
-            Scrap0UszkodzeniePcb.Tag = labelDmgPcb;
-            Scrap0WadaNaklejki.Tag = labelLabel;
-            Scrap0SpalonyConn.Tag = labelBurnedConn;
-            Scrap0Inne.Tag = labelOther;
-            Ng0Test.Tag = labelElecTest;
+            //imagesList = ImagesTools.CreateListOfImages(@"Zdjecia\PL");
+            CaptureDevice = new FilterInfoCollection(FilterCategory.VideoInputDevice);
+            foreach (FilterInfo item in CaptureDevice)
+            {
+                Debug.WriteLine(item.Name);
+            }
 
-            bindRecordToControls();
+            Debug.WriteLine(CaptureDevice[0].ToString());
 
-            comboBoxOperator.Items.AddRange(SqlOperations.RecentOperatorsList(90).ToArray());
-            lotToModelDictionary = SqlOperations.GetLotToModelDictionary();
-            smtInfo = SqlOperations.GetSmtInfo();
-        }
-
-        private void bindRecordToControls()
-        {
             textBoxLotNumber.DataBindings.Add("Text", recordToSave, "NumerZlecenia", false, DataSourceUpdateMode.OnPropertyChanged);
             comboBoxOperator.DataBindings.Add("Text", recordToSave, "Operator", false, DataSourceUpdateMode.OnPropertyChanged);
             textBoxGoodQty.DataBindings.Add("Text", recordToSave, "IloscDobrych", false, DataSourceUpdateMode.OnPropertyChanged);
-            Ng0BWadyLutowia.DataBindings.Add("Value", recordToSave, "NgBrakLutowia", false, DataSourceUpdateMode.OnPropertyChanged);
-            Ng0BrakDiodyLed.DataBindings.Add("Value", recordToSave, "NgBrakDiodyLed", false, DataSourceUpdateMode.OnPropertyChanged);
-            Ng0BrakResConn.DataBindings.Add("Value", recordToSave, "NgBrakResConn", false, DataSourceUpdateMode.OnPropertyChanged);
-            Ng0PrzesuniecieDiodyLed.DataBindings.Add("Value", recordToSave, "NgPrzesuniecieLed", false, DataSourceUpdateMode.OnPropertyChanged);
-            Ng0PrzesuniecieResConn.DataBindings.Add("Value", recordToSave, "NgPrzesuniecieResConn", false, DataSourceUpdateMode.OnPropertyChanged);
-            Ng0ZabrudzonaDiodaLed.DataBindings.Add("Value", recordToSave, "NgZabrudzenieLed", false, DataSourceUpdateMode.OnPropertyChanged);
-            Ng0UszkodzenieDiodyLed.DataBindings.Add("Value", recordToSave, "NgUszkodzenieMechaniczneLed", false, DataSourceUpdateMode.OnPropertyChanged);
-            Ng0UszkodzenieConn.DataBindings.Add("Value", recordToSave, "NgUszkodzenieConn", false, DataSourceUpdateMode.OnPropertyChanged);
-            Ng0WadaFbrycznaLed.DataBindings.Add("Value", recordToSave, "NgWadaFabrycznaDiody", false, DataSourceUpdateMode.OnPropertyChanged);
-            Ng0UszkodzeniePcb.DataBindings.Add("Value", recordToSave, "NgUszkodzonePcb", false, DataSourceUpdateMode.OnPropertyChanged);
-            Ng0WadaNaklejki.DataBindings.Add("Value", recordToSave, "NgWadaNaklejki", false, DataSourceUpdateMode.OnPropertyChanged);
-            Ng0SpalonyConn.DataBindings.Add("Value", recordToSave, "NgSpalonyConn", false, DataSourceUpdateMode.OnPropertyChanged);
-            Ng0Inne.DataBindings.Add("Value", recordToSave, "NgInne", false, DataSourceUpdateMode.OnPropertyChanged);
-            Scrap0WadyLutowia.DataBindings.Add("Value", recordToSave, "ScrapBrakLutowia", false, DataSourceUpdateMode.OnPropertyChanged);
-            Scrap0BrakDiodyLed.DataBindings.Add("Value", recordToSave, "ScrapBrakDiodyLed", false, DataSourceUpdateMode.OnPropertyChanged);
-            Scrap0BrakResConn.DataBindings.Add("Value", recordToSave, "ScrapBrakResConn", false, DataSourceUpdateMode.OnPropertyChanged);
-            Scrap0PrzesuniecieDiodyLed.DataBindings.Add("Value", recordToSave, "ScrapPrzesuniecieLed", false, DataSourceUpdateMode.OnPropertyChanged);
-            Scrap0PrzesuniecieResConn.DataBindings.Add("Value", recordToSave, "ScrapPrzesuniecieResConn", false, DataSourceUpdateMode.OnPropertyChanged);
-            Scrap0ZabrudzonaDiodaLed.DataBindings.Add("Value", recordToSave, "ScrapZabrudzenieLed", false, DataSourceUpdateMode.OnPropertyChanged);
-            Scrap0UszkodzenieDiodyLed.DataBindings.Add("Value", recordToSave, "ScrapUszkodzenieMechaniczneLed", false, DataSourceUpdateMode.OnPropertyChanged);
-            Scrap0UszkodzenieConn.DataBindings.Add("Value", recordToSave, "ScrapUszkodzenieConn", false, DataSourceUpdateMode.OnPropertyChanged);
-            Scrap0WadaFabrycznaLed.DataBindings.Add("Value", recordToSave, "ScrapWadaFabrycznaDiody", false, DataSourceUpdateMode.OnPropertyChanged);
-            Scrap0UszkodzeniePcb.DataBindings.Add("Value", recordToSave, "ScrapUszkodzonePcb", false, DataSourceUpdateMode.OnPropertyChanged);
-            Scrap0WadaNaklejki.DataBindings.Add("Value", recordToSave, "ScrapWadaNaklejki", false, DataSourceUpdateMode.OnPropertyChanged);
-            Scrap0SpalonyConn.DataBindings.Add("Value", recordToSave, "ScrapSpalonyConn", false, DataSourceUpdateMode.OnPropertyChanged);
-            Scrap0Inne.DataBindings.Add("Value", recordToSave, "ScrapInne", false, DataSourceUpdateMode.OnPropertyChanged);
-            Ng0Test.DataBindings.Add("Value", recordToSave, "NgTestElektryczny", false, DataSourceUpdateMode.OnPropertyChanged);
+
+            //comboBoxOperator.Items.AddRange(SqlOperations.RecentOperatorsList(90).ToArray());
+            //lotToModelDictionary = SqlOperations.GetLotToModelDictionary();
+            //smtInfo = SqlOperations.GetSmtInfo();
+
+            DynamicControls.CreateControls(flpNgBox, flpScrapBox, flowLayoutPanel1, SqlOperations.GetWasteColumnNames(), recordToSave);
+
+            FinalFrame = new VideoCaptureDevice();
+            FinalFrame = new VideoCaptureDevice(CaptureDevice[2].MonikerString);
+            FinalFrame.NewFrame += new NewFrameEventHandler(FinalFrame_NewFrame);
+            FinalFrame.NewFrame -= Handle_New_Frame;
+        }
+
+        private void Handle_New_Frame(object sender, NewFrameEventArgs eventArgs)
+        {
+            if (bitmap != null)
+                bitmap.Dispose();
+            bitmap = new Bitmap(eventArgs.Frame);
+
+            if (pictureBox1.Image != null)
+                this.Invoke(new MethodInvoker(delegate () { pictureBox1.Image.Dispose(); }));
+            pictureBox1.Image = bitmap;
+        }
+
+        private void FinalFrame_NewFrame(object sender, NewFrameEventArgs eventArgs)
+        {
+            bitmap = (Bitmap)eventArgs.Frame.Clone();
+            pictureBox1.Image = bitmap;
         }
 
         NumericUpDown previousUpDown = null;
@@ -117,18 +102,7 @@ namespace Kontrola_wizualna_karta_pracy
 
         private void highlightSelected(NumericUpDown numUp, bool state)
         {
-            if (state)
-            {
-                Label lbl = ((Label)numUp.Tag);
-                lbl.Font = new Font(lbl.Font, FontStyle.Bold);
-                numUp.BackColor = Color.LightYellow;
-            }
-            else
-            {
-                Label lbl = ((Label)numUp.Tag);
-                lbl.Font = new Font(lbl.Font, FontStyle.Regular);
-                numUp.BackColor = Color.White;
-            }
+
         }
 
         private string CreateSummaryText()
@@ -240,8 +214,7 @@ namespace Kontrola_wizualna_karta_pracy
 
         private void button1_Click(object sender, EventArgs e)
         {
-            //bindRecordToControls();
-            MessageBox.Show(recordToSave.IloscDobrych.ToString());
+            
         }
 
         private void textBoxGoodQty_KeyPress(object sender, KeyPressEventArgs e)
@@ -253,6 +226,9 @@ namespace Kontrola_wizualna_karta_pracy
         private void textBoxGoodQty_Enter(object sender, EventArgs e)
         {
             textBoxGoodQty.SelectAll();
+            virtualKeyboard kbForm = new virtualKeyboard(textBoxGoodQty);
+            kbForm.Location = new System.Drawing.Point(textBoxGoodQty.Location.X, textBoxGoodQty.Location.Y + textBoxGoodQty.Height);
+            kbForm.Show();
         }
 
         private void textBoxGoodQty_MouseClick(object sender, MouseEventArgs e)
@@ -298,23 +274,23 @@ namespace Kontrola_wizualna_karta_pracy
         private void textBoxLotNumber_TextChanged(object sender, EventArgs e)
         {
             string model = "";
-            string smtString = "";
+            SmtInfo smtIfo;
             string smtLine = "";
             string smtDate = "";
             string connInfo = "";
 
             lotToModelDictionary.TryGetValue(textBoxLotNumber.Text, out model);
-            smtInfo.TryGetValue(textBoxLotNumber.Text, out smtString);
+            smtInfo.TryGetValue(textBoxLotNumber.Text, out smtIfo);
 
             if (model!=null)
             {
                 connInfo = GetNumberOfConnectors(model);
             }
 
-            if (smtString!=null)
+            if (smtIfo != null)
             {
-                smtDate = smtString.Split(';')[0];
-                smtLine = smtString.Split(';')[1];
+                smtDate = smtIfo.CompletitionDate;
+                smtLine = smtIfo.SmtLine;
             }
 
             labelLotInfo.Text = "Model: " + model + Environment.NewLine
@@ -324,5 +300,80 @@ namespace Kontrola_wizualna_karta_pracy
                 labelLotInfo.Text += "Ilość złączek: " + connInfo;
             }
         }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            FinalFrame.Stop();
+        }
+
+        private void buttonCamStartStop_Click(object sender, EventArgs e)
+        {
+
+            if (FinalFrame.IsRunning)
+            {
+                FinalFrame.Stop();
+                pictureBox1.Image = null;
+                //pictureBoxCaptured.Image = null;
+                pictureBox1.Invalidate();
+                //pictureBoxCaptured.Invalidate();
+
+                buttonCamStartStop.Text = "Cam Start";
+
+            }
+            else
+            {
+                
+                FinalFrame.Start();
+
+                buttonCamStartStop.Text = "Cam Stop";
+
+            }
+        }
+
+        private void buttonAddFailure_Click(object sender, EventArgs e)
+        {
+            List<string> ngButtons = new List<string>();
+            List<string> scrapButtons = new List<string>();
+            foreach (Control ctrl in flpNgBox.Controls)
+            {
+                ngButtons.Add(ctrl.Name);
+            }
+            foreach (Control ctrl in flpScrapBox.Controls)
+            {
+                scrapButtons.Add(ctrl.Name);
+            }
+
+            FinalFrame.Stop();
+            NewFailureForm failForm = new NewFailureForm(ngButtons.ToArray(), scrapButtons.ToArray(), textBoxLotNumber.Text, DateTime.Now.ToString("dd-MM-yyyy"));
+            failForm.ShowDialog();
+            string buttonClicked = failForm.buttonClicked;
+            if (buttonClicked != null)
+            {
+                if (buttonClicked.StartsWith("ng"))
+                {
+                    foreach (Control tb in flpNgBox.Controls)
+                    {
+                        if (tb.Name == buttonClicked)
+                        {
+                            int val = int.Parse(tb.Text);
+                            val++;
+                            tb.Text = val.ToString();
+                        }
+                    }
+                }
+                else if (buttonClicked.StartsWith("scrap"))
+                {
+                    foreach (Control tb in flpScrapBox.Controls)
+                    {
+                        if (tb.Name == buttonClicked)
+                        {
+                            int val = int.Parse(tb.Text);
+                            val++;
+                            tb.Text = val.ToString();
+                        }
+                    }
+                }
+            }
+        }
     }
-}
+    }

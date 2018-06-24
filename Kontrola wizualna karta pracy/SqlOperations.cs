@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Kontrola_wizualna_karta_pracy.DataStructures;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -109,9 +110,9 @@ namespace Kontrola_wizualna_karta_pracy
             return result;
         }
 
-        public static Dictionary<string, string> GetSmtInfo()
+        public static Dictionary<string, SmtInfo> GetSmtInfo()
         {
-            Dictionary<string, string> result = new Dictionary<string, string>();
+            Dictionary<string, SmtInfo> result = new Dictionary<string, SmtInfo>();
 
             DataTable sqlTable = new DataTable();
             SqlConnection conn = new SqlConnection();
@@ -128,9 +129,18 @@ namespace Kontrola_wizualna_karta_pracy
             foreach (DataRow row in sqlTable.Rows)
             {
                 if (result.ContainsKey(row["NrZlecenia"].ToString())) continue;
-                result.Add(row["NrZlecenia"].ToString(), row["DataCzasKoniec"].ToString() + ";" + row["LiniaSMT"].ToString());
+                string completitionDate = row["DataCzasKoniec"].ToString();
+                string smtLine = row["LiniaSMT"].ToString();
+                SmtInfo newItem = new SmtInfo(smtLine, completitionDate);
+                result.Add(row["NrZlecenia"].ToString(), newItem );
             }
             return result;
+        }
+
+        public static string[] GetWasteColumnNames()
+        {
+
+            return new string[] { "ngBrakLutowia", "ngBrakDiodyLed", "ngBrakResConn", "ngPrzesuniecieLed", "ngPrzesuniecieResConn", "ngZabrudzenieLed", "ngUszkodzenieMechaniczneLed", "ngUszkodzenieConn", "ngWadaFabrycznaDiody", "ngUszkodzonePcb", "ngWadaNaklejki", "ngSpalonyConn", "ngInne", "scrapBrakLutowia", "scrapBrakDiodyLed", "scrapBrakResConn", "scrapPrzesuniecieLed", "scrapPrzesuniecieResConn", "scrapZabrudzenieLed", "scrapUszkodzenieMechaniczneLed", "scrapUszkodzenieConn", "scrapWadaFabrycznaDiody", "scrapUszkodzonePcb", "scrapWadaNaklejki", "scrapSpalonyConn", "scrapInne", "ngTestElektryczny" };
         }
     }
 }
