@@ -1,6 +1,9 @@
-﻿using System;
+﻿using AForge.Video.DirectShow;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,7 +13,7 @@ namespace Kontrola_wizualna_karta_pracy
 {
     public class DynamicControls
     {
-        public static void CreateControls(FlowLayoutPanel ngPanel, FlowLayoutPanel scrapPanel, FlowLayoutPanel labelPanel, string[] dbColumns, RecordToSave recordToSave)
+        public static void CreateControls(FlowLayoutPanel ngPanel, FlowLayoutPanel scrapPanel, FlowLayoutPanel labelPanel, string[] dbColumns, RecordToSave recordToSave, VideoCaptureDevice FinalFrame, List<Image> imagesList, PictureBox mainPicBox)
         {
             List<string> uniqeColumns = new List<string>();
             foreach (var col in dbColumns)
@@ -21,8 +24,9 @@ namespace Kontrola_wizualna_karta_pracy
                 Padding pad = new Padding((ngPanel.Width - 40) / 2, 1, (ngPanel.Width - 40) / 2, 1);
 
                 MyTextBox lblBox = new MyTextBox();
-                lblBox.Name = controlToDbTranslation.GetLabelCaptionFromDbColumn(col);
-                lblBox.Text = lblBox.Name;
+                lblBox.Name = col.Replace("ng","").Replace("scrap","");
+                Debug.WriteLine(lblBox.Name);
+                lblBox.Text = controlToDbTranslation.GetLabelCaptionFromDbColumn(col);
                 lblBox.Width = labelPanel.Width;
                 lblBox.ReadOnly = true;
                 lblBox.Cursor = Cursors.Arrow;
@@ -30,7 +34,28 @@ namespace Kontrola_wizualna_karta_pracy
                 lblBox.Margin = new Padding(0,1,0,1);
                 lblBox.BackColor = System.Drawing.Color.Khaki;
                 lblBox.MouseLeave += lblBox_MouseLeave;
-                lblBox.MouseEnter += lblBox_MouseEnter;
+                // lblBox.MouseEnter += lblBox_MouseEnter;
+                lblBox.MouseEnter += (sender, EventArgs) =>
+                {
+                    MyTextBox box = (MyTextBox)sender;
+                    box.BackColor = System.Drawing.Color.Orange;
+                    
+                    if (FinalFrame != null)
+                    {
+                        FinalFrame.Stop();
+                        mainPicBox.Image = null;
+                    }
+
+                    foreach (var img in imagesList)
+                    {
+                        if ((string)img.Tag == box.Name)
+                        {
+                            mainPicBox.Image = img;
+                            break;
+                        }
+                    }
+                };
+
 
                 MyTextBox ngBox = new MyTextBox();
                 ngBox.Name = "ng" + failureName;
@@ -72,8 +97,8 @@ namespace Kontrola_wizualna_karta_pracy
 
         private static void lblBox_MouseEnter(object sender, EventArgs e)
         {
-            MyTextBox box = (MyTextBox)sender;
-            box.BackColor = System.Drawing.Color.Orange;
+            
+            
         }
 
         public class MyTextBox : TextBox

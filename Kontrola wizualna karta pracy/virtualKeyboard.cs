@@ -63,6 +63,7 @@ namespace Kontrola_wizualna_karta_pracy
                     
                 }
             }
+            this.Close();
         }
     }
 }

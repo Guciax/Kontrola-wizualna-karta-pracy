@@ -18,6 +18,9 @@ using AForge.Video.DirectShow;
 using ZXing;
 using ZXing.Aztec;
 using System.Diagnostics;
+using System.Drawing.Text;
+using System.Globalization;
+using static Kontrola_wizualna_karta_pracy.DateOperations;
 
 namespace Kontrola_wizualna_karta_pracy
 {
@@ -26,6 +29,16 @@ namespace Kontrola_wizualna_karta_pracy
         public Form1()
         {
             InitializeComponent();
+
+            byte[] fontData = Properties.Resources.Open_24_Display_St;
+            IntPtr fontPtr = System.Runtime.InteropServices.Marshal.AllocCoTaskMem(fontData.Length);
+            System.Runtime.InteropServices.Marshal.Copy(fontData, 0, fontPtr, fontData.Length);
+            uint dummy = 0;
+            fonts.AddMemoryFont(fontPtr, Properties.Resources.Open_24_Display_St.Length);
+            AddFontMemResourceEx(fontPtr, (uint)Properties.Resources.Open_24_Display_St.Length, IntPtr.Zero, ref dummy);
+            System.Runtime.InteropServices.Marshal.FreeCoTaskMem(fontPtr);
+
+            myFont = new Font(fonts.Families[0], 56.0F);
         }
         List<Image> imagesList = new List<Image>();
         RecordToSave recordToSave = new RecordToSave("", 0, "", DateTime.Now);
@@ -35,9 +48,17 @@ namespace Kontrola_wizualna_karta_pracy
         VideoCaptureDevice FinalFrame;
         Bitmap bitmap;
 
+        [System.Runtime.InteropServices.DllImport("gdi32.dll")]
+        private static extern IntPtr AddFontMemResourceEx(IntPtr pbFont, uint cbFont,
+            IntPtr pdv, [System.Runtime.InteropServices.In] ref uint pcFonts);
+        Font myFont;
+        private PrivateFontCollection fonts = new PrivateFontCollection();
+
         private void Form1_Load(object sender, EventArgs e)
         {
-            //imagesList = ImagesTools.CreateListOfImages(@"Zdjecia\PL");
+            //label1.Font = myFont;
+            ClearRecordToSave();
+            imagesList = ImagesTools.CreateListOfImages(@"Zdjecia\PL");
             CaptureDevice = new FilterInfoCollection(FilterCategory.VideoInputDevice);
             foreach (FilterInfo item in CaptureDevice)
             {
@@ -50,16 +71,21 @@ namespace Kontrola_wizualna_karta_pracy
             comboBoxOperator.DataBindings.Add("Text", recordToSave, "Operator", false, DataSourceUpdateMode.OnPropertyChanged);
             textBoxGoodQty.DataBindings.Add("Text", recordToSave, "IloscDobrych", false, DataSourceUpdateMode.OnPropertyChanged);
 
-            //comboBoxOperator.Items.AddRange(SqlOperations.RecentOperatorsList(90).ToArray());
-            //lotToModelDictionary = SqlOperations.GetLotToModelDictionary();
-            //smtInfo = SqlOperations.GetSmtInfo();
+            comboBoxOperator.Items.AddRange(SqlOperations.RecentOperatorsList(45).ToArray());
+            lotToModelDictionary = SqlOperations.GetLotToModelDictionary();
+            smtInfo = SqlOperations.GetSmtInfo();
 
-            DynamicControls.CreateControls(flpNgBox, flpScrapBox, flowLayoutPanel1, SqlOperations.GetWasteColumnNames(), recordToSave);
+            
 
             FinalFrame = new VideoCaptureDevice();
-            FinalFrame = new VideoCaptureDevice(CaptureDevice[2].MonikerString);
+            FinalFrame = new VideoCaptureDevice(CaptureDevice[0].MonikerString);
             FinalFrame.NewFrame += new NewFrameEventHandler(FinalFrame_NewFrame);
             FinalFrame.NewFrame -= Handle_New_Frame;
+
+            panelVirtualKeyboard.Parent = this;
+            panelVirtualKeyboard.BringToFront();
+
+            DynamicControls.CreateControls(flpNgBox, flpScrapBox, flowLayoutPanel1, SqlOperations.GetWasteColumnNames(), recordToSave, FinalFrame, imagesList, pictureBox1);
         }
 
         private void Handle_New_Frame(object sender, NewFrameEventArgs eventArgs)
@@ -91,7 +117,7 @@ namespace Kontrola_wizualna_karta_pracy
 
             string failureName = numControl.Name.Split('0')[1];
             Image failureImg = ImagesTools.GetImageByName(imagesList, failureName);
-            //if (failureImg!=null)
+            if (failureImg != null)
             {
                 pictureBox1.Image = failureImg;
             }
@@ -111,37 +137,53 @@ namespace Kontrola_wizualna_karta_pracy
             result += labelGoodQty.Text + ": " + textBoxGoodQty.Text + Environment.NewLine;
             result += Environment.NewLine + "____________________________________________________" + Environment.NewLine;
 
+            string testSummary = "";
             string ngSummary = "";
-            foreach (NumericUpDown num in panelNg.Controls.OfType<NumericUpDown>())
+
+            foreach (object ctrl in flpNgBox.Controls)
             {
-                if (num.Value > 0)
+                if (ctrl is TextBox)
                 {
-                    ngSummary += ((Label)num.Tag).Text + ": " + num.Value + Environment.NewLine;
+                    TextBox box = (TextBox)ctrl;
+                    if (box.Text != "0")
+                    {
+                        if (box.Tag.ToString().ToLower().Contains("test"))
+                        {
+                            testSummary = box.Tag.ToString() + " - " + box.Text;
+                        }
+                        else
+                        {
+                            ngSummary += box.Tag.ToString() + " - " + box.Text;
+                        }
+                    }
                 }
             }
+
             if (ngSummary != "")
             {
-                result += Environment.NewLine + "NG:" + Environment.NewLine+ ngSummary;
+                result += Environment.NewLine + "NG:" + Environment.NewLine + ngSummary;
             }
-
+            result += Environment.NewLine + testSummary;
             string scrapSummary = "";
-            foreach (NumericUpDown num in panelScrap.Controls.OfType<NumericUpDown>())
+            foreach (object ctrl in flpScrapBox.Controls)
             {
-                if (num.Value > 0)
+                if (ctrl is TextBox)
                 {
-                    scrapSummary += ((Label)num.Tag).Text + ": " + num.Value + Environment.NewLine;
+                    TextBox box = (TextBox)ctrl;
+                    if (box.Text != "0")
+                    {
+                        scrapSummary += box.Tag.ToString() + " - " + box.Text;
+                    }
                 }
             }
 
             if (scrapSummary != "")
             {
-                result += Environment.NewLine + "SCRAP:" + Environment.NewLine + scrapSummary;
+                result += Environment.NewLine + Environment.NewLine + "SCRAP:" + Environment.NewLine + scrapSummary;
             }
 
-            if (Ng0Test.Value>0)
-            {
-                result += Environment.NewLine + "TEST NG:" + Ng0Test.Value;
-            }
+            
+            
             return result;
         }
 
@@ -152,27 +194,40 @@ namespace Kontrola_wizualna_karta_pracy
                 summaryForm.ShowDialog();
                 if (summaryForm.DialogResult == DialogResult.OK)
                 {
+                    recordToSave.Data_Czas = DateTime.Now;
                     SqlOperations.SaveRecordToDb(recordToSave);
 
-                    Efficiency.SaveToTetFile(DateTime.Now.ToLongDateString() + ";" + "Model" + ";" + textBoxLotNumber.Text + ";" + textBoxGoodQty.Text);
+                    Efficiency.SaveToTetFile(DateTime.Now.ToString("dd-MM-yyyy") + ";" + "Model" + ";" + textBoxLotNumber.Text + ";" + textBoxGoodQty.Text);
 
                     textBoxLotNumber.Text = "";
                     comboBoxOperator.Items.Clear();
-                    comboBoxOperator.Items.AddRange(SqlOperations.RecentOperatorsList(90).ToArray());
+                    comboBoxOperator.Items.AddRange(SqlOperations.RecentOperatorsList(45).ToArray());
                     textBoxGoodQty.Text = "0";
-                    foreach (NumericUpDown num in panelNg.Controls.OfType<NumericUpDown>())
-                    {
-                        num.Value = 0;
-                    }
+                    labelLotInfo.Text = "Dane zlecenia:";
 
-                    foreach (NumericUpDown num in panelScrap.Controls.OfType<NumericUpDown>())
-                    {
-                        num.Value = 0;
-                    }
+                    Efficiency.AddRecentOrdersToGrid(dataGridViewHistory);
+                    ClearRecordToSave();
+                }
+            }
+        }
 
-                    Ng0Test.Value = 0;
+        private void ClearRecordToSave()
+        {
+            foreach (object control in flpNgBox.Controls)
+            {
+                if (control is TextBox)
+                {
+                    TextBox txtB = (TextBox)control;
+                    txtB.Text = "0";
+                }
+            }
 
-                    Efficiency.AddRecentOrdersToGrid(dataGridView1);
+            foreach (object control in flpScrapBox.Controls)
+            {
+                if (control is TextBox)
+                {
+                    TextBox txtB = (TextBox)control;
+                    txtB.Text = "0";
                 }
             }
         }
@@ -214,7 +269,7 @@ namespace Kontrola_wizualna_karta_pracy
 
         private void button1_Click(object sender, EventArgs e)
         {
-            
+
         }
 
         private void textBoxGoodQty_KeyPress(object sender, KeyPressEventArgs e)
@@ -226,16 +281,13 @@ namespace Kontrola_wizualna_karta_pracy
         private void textBoxGoodQty_Enter(object sender, EventArgs e)
         {
             textBoxGoodQty.SelectAll();
-            virtualKeyboard kbForm = new virtualKeyboard(textBoxGoodQty);
-            kbForm.Location = new System.Drawing.Point(textBoxGoodQty.Location.X, textBoxGoodQty.Location.Y + textBoxGoodQty.Height);
-            kbForm.Show();
+            panelVirtualKeyboard.Visible = true;
+            panelVirtualKeyboard.Location = new System.Drawing.Point(textBoxGoodQty.Location.X + 3, textBoxGoodQty.Location.Y + textBoxGoodQty.Height + 3);
         }
 
         private void textBoxGoodQty_MouseClick(object sender, MouseEventArgs e)
         {
             textBoxGoodQty.SelectAll();
-
-            
         }
 
         private void timerLotToModel_Tick(object sender, EventArgs e)
@@ -273,31 +325,37 @@ namespace Kontrola_wizualna_karta_pracy
 
         private void textBoxLotNumber_TextChanged(object sender, EventArgs e)
         {
-            string model = "";
-            SmtInfo smtIfo;
-            string smtLine = "";
-            string smtDate = "";
-            string connInfo = "";
-
-            lotToModelDictionary.TryGetValue(textBoxLotNumber.Text, out model);
-            smtInfo.TryGetValue(textBoxLotNumber.Text, out smtIfo);
-
-            if (model!=null)
+            if (textBoxLotNumber.Text.Length > 5)
             {
-                connInfo = GetNumberOfConnectors(model);
-            }
+                string lot = textBoxLotNumber.Text;
+                string model = "";
+                SmtInfo smtIfo;
+                string smtLine = "";
+                string smtDate = "";
+                string connInfo = "";
 
-            if (smtIfo != null)
-            {
-                smtDate = smtIfo.CompletitionDate;
-                smtLine = smtIfo.SmtLine;
-            }
+                lotToModelDictionary.TryGetValue(lot, out model);
+                smtInfo.TryGetValue(lot, out smtIfo);
 
-            labelLotInfo.Text = "Model: " + model + Environment.NewLine
-                + "Produkcja: " + smtDate + " " + smtLine + Environment.NewLine;
-            if (connInfo!="")
-            {
-                labelLotInfo.Text += "Ilość złączek: " + connInfo;
+                if (model != null)
+                {
+                    connInfo = GetNumberOfConnectors(model);
+                }
+
+                if (smtIfo != null)
+                {
+                    smtDate = smtIfo.CompletitionDate;
+                    smtLine = smtIfo.SmtLine;
+                    textBoxGoodQty.Text = smtIfo.OrderedQty.ToString();
+                }
+
+                labelLotInfo.Text = "Model: " + model + Environment.NewLine
+                    + "Produkcja: " + smtDate + " " + smtLine + Environment.NewLine;
+                if (connInfo != "")
+                {
+                    labelLotInfo.Text += Environment.NewLine+ "Ilość złączek: " + connInfo;
+                }
+                textBoxLotNumber.Text = lot;
             }
         }
 
@@ -322,7 +380,7 @@ namespace Kontrola_wizualna_karta_pracy
             }
             else
             {
-                
+
                 FinalFrame.Start();
 
                 buttonCamStartStop.Text = "Cam Stop";
@@ -373,7 +431,83 @@ namespace Kontrola_wizualna_karta_pracy
                         }
                     }
                 }
+
+                int goodqty = 0;
+                if (int.TryParse(textBoxGoodQty.Text,out goodqty))
+                {
+                    if (goodqty > 0)
+                    {
+                        textBoxGoodQty.Text = (goodqty - 1).ToString();
+                    }
+                }
+            }
+        }
+
+        private void button13_Click(object sender, EventArgs e)
+        {
+            Button btn = (Button)sender;
+            if (textBoxGoodQty.Text == "0")
+            {
+                textBoxGoodQty.Text = btn.Text;
+            }
+            else
+            {
+                textBoxGoodQty.Text += btn.Text;
+            }
+        }
+
+        private void button11_Click(object sender, EventArgs e)
+        {
+            Button btn = (Button)sender;
+            textBoxGoodQty.Text = "0";
+        }
+
+        private void button12_Click(object sender, EventArgs e)
+        {
+            if (textBoxGoodQty.Text.Length > 1)
+            {
+                textBoxGoodQty.Text = textBoxGoodQty.Text.Substring(0, textBoxGoodQty.Text.Length - 1);
+            }
+            else
+            {
+                textBoxGoodQty.Text = "0";
+            }
+        }
+
+        private void Form1_MouseMove(object sender, MouseEventArgs e)
+        {
+            Debug.WriteLine(GetChildAtPoint(new System.Drawing.Point(e.X, e.Y)).Name);
+        }
+
+        private void timerHideKeyboard_Tick(object sender, EventArgs e)
+        {
+
+            if (panelVirtualKeyboard.Visible)
+            {
+                if (!panelVirtualKeyboard.ClientRectangle.Contains(panelVirtualKeyboard.PointToClient(Cursor.Position)) & !textBoxGoodQty.ClientRectangle.Contains(textBoxGoodQty.PointToClient(Cursor.Position)))
+                {
+                    panelVirtualKeyboard.Visible = false;
+                    this.ActiveControl = pictureBox1;
+                }
+            }
+        }
+
+        private void dataGridViewHistory_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            labelQtySinceShiftStart.Text = LanguangeTranslation.Translate("Ilość od początku zmiany:", radioButtonPolish.Checked) + Efficiency.HowManyInspectedThisShift(dataGridViewHistory) + LanguangeTranslation.Translate("szt", radioButtonPolish.Checked);
+            labelWasteLevel.Text = Efficiency.CalculateWasteThisShift(dataGridViewHistory, radioButtonPolish.Checked) + "%";
+        }
+
+        private void pictureBox1_Paint(object sender, PaintEventArgs e)
+        {
+            if(!FinalFrame.IsRunning)
+            {
+                buttonCamStartStop.Text = "Cam Start";
+            }
+            else
+            {
+                buttonCamStartStop.Text = "Cam Stop";
             }
         }
     }
-    }
+}

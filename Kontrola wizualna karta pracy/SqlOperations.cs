@@ -121,7 +121,7 @@ namespace Kontrola_wizualna_karta_pracy
             SqlCommand command = new SqlCommand();
             command.Connection = conn;
             command.CommandText =
-                @"SELECT DataCzasKoniec,LiniaSMT,NrZlecenia FROM tb_SMT_Karta_Pracy;";
+                @"SELECT DataCzasKoniec,LiniaSMT,NrZlecenia,IloscWykonana FROM tb_SMT_Karta_Pracy;";
 
             SqlDataAdapter adapter = new SqlDataAdapter(command);
             adapter.Fill(sqlTable);
@@ -131,7 +131,13 @@ namespace Kontrola_wizualna_karta_pracy
                 if (result.ContainsKey(row["NrZlecenia"].ToString())) continue;
                 string completitionDate = row["DataCzasKoniec"].ToString();
                 string smtLine = row["LiniaSMT"].ToString();
-                SmtInfo newItem = new SmtInfo(smtLine, completitionDate);
+                int qty = 0;
+                if (!int.TryParse(row["IloscWykonana"].ToString(), out qty))
+                {
+                    qty = 0;
+                }
+
+                SmtInfo newItem = new SmtInfo(smtLine, completitionDate, qty);
                 result.Add(row["NrZlecenia"].ToString(), newItem );
             }
             return result;

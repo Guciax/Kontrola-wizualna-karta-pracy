@@ -34,9 +34,12 @@ namespace Kontrola_wizualna_karta_pracy
                     case "labelOperator": return "Operator";
                     case "labelGoodQty": return "Ilość dobrych";
                     case "buttonSave": return "Zapisz";
+                    case "Ilość od początku zmiany:": return "Ilość od początku zmiany:";
+                    case "szt": return "szt";
 
 
-                default: return null;
+
+                default: return input;
                 }
             }
             else
@@ -45,6 +48,12 @@ namespace Kontrola_wizualna_karta_pracy
             }
 
             return result;
+        }
+
+        public static int NormPerShift(bool langPolish)
+        {
+            if (langPolish) return 2500;
+            else return 3750;
         }
     }
 }

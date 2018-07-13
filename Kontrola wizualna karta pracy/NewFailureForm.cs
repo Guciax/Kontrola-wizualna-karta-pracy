@@ -18,7 +18,6 @@ namespace Kontrola_wizualna_karta_pracy
 {
     public partial class NewFailureForm : Form
     {
-
         FilterInfoCollection CaptureDevice;
         VideoCaptureDevice FinalFrame;
         Bitmap bitmap;
@@ -59,7 +58,7 @@ namespace Kontrola_wizualna_karta_pracy
         {
             CaptureDevice = new FilterInfoCollection(FilterCategory.VideoInputDevice);
             FinalFrame = new VideoCaptureDevice();
-            FinalFrame = new VideoCaptureDevice(CaptureDevice[2].MonikerString);
+            FinalFrame = new VideoCaptureDevice(CaptureDevice[0].MonikerString);
             FinalFrame.NewFrame += new NewFrameEventHandler(FinalFrame_NewFrame);
             FinalFrame.NewFrame -= Handle_New_Frame;
             Thread.Sleep(1000);
@@ -205,6 +204,8 @@ namespace Kontrola_wizualna_karta_pracy
                             stoper.Reset();
                             labelDecodedQr.Text = decoded;
                             btnTakePic.Visible = true;
+                            panelQr.BackColor = Color.Lime;
+
                         }
                         
                     }
@@ -215,13 +216,14 @@ namespace Kontrola_wizualna_karta_pracy
                 }
                 else
                 {
-                    if (stoper.Elapsed.Seconds>15)
+                    if (stoper.Elapsed.Seconds > 15) 
                     {
                         timer1.Stop();
                         stoper.Stop();
                         stoper.Reset();
-                        labelDecodedQr.Text = "Nie znany kod Qr";
+                        labelDecodedQr.Text = "Nie można odczytać kodu, wpisz ręcznie:";
                         btnTakePic.Visible = true;
+                        textBox1.Visible = true;
                     }
                 }
             }
@@ -263,11 +265,16 @@ namespace Kontrola_wizualna_karta_pracy
         {
             var imgFolderPath = ConfigurationManager.AppSettings["ImgPath"] + "\\" + FixedDate + "\\" + LotNumber+"\\";
             System.IO.Directory.CreateDirectory(imgFolderPath);
+            string pcbId = labelDecodedQr.Text;
+            if (textBox1.Text != "") 
+            {
+                pcbId = textBox1.Text;
+            }
             for(int i=0;i<imgList.Count;i++)
             {
                 Image img = imgList[i];
                 var saveBmp = new Bitmap(img);
-                saveBmp.Save(imgFolderPath + labelDecodedQr.Text + "_" + i+".jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
+                saveBmp.Save(imgFolderPath + pcbId + "_" + i + ".jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
             }
         }
     }

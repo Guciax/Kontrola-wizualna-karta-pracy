@@ -72,6 +72,8 @@
   <ItemGroup>
     <Compile Include="controlToDbTranslation.cs" />
     <Compile Include="DataStructures\SmtInfo.cs" />
+    <Compile Include="DateOperations.cs" />
+    <Compile Include="DgvTools.cs" />
     <Compile Include="DynamicControls.cs" />
     <Compile Include="Efficiency.cs" />
     <Compile Include="EfficiencyTools.cs" />
@@ -92,6 +94,12 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RecordToSave.cs" />
+    <Compile Include="SettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SettingsForm.Designer.cs">
+      <DependentUpon>SettingsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="SqlOperations.cs" />
     <Compile Include="SummaryView.cs">
       <SubType>Form</SubType>
@@ -122,6 +130,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="SettingsForm.resx">
+      <DependentUpon>SettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SummaryView.resx">
       <DependentUpon>SummaryView.cs</DependentUpon>
     </EmbeddedResource>
@@ -138,6 +149,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <EmbeddedResource Include="Resources\Open 24 Display St.ttf" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
