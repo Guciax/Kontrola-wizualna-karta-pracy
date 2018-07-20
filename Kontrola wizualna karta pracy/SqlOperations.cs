@@ -143,6 +143,34 @@ namespace Kontrola_wizualna_karta_pracy
             return result;
         }
 
+        public static DataTable DownloadVisInspFromSQL(string[] lots)
+        {
+            DataTable tabletoFill = new DataTable();
+
+            SqlConnection conn = new SqlConnection();
+            conn.ConnectionString = @"Data Source=MSTMS010;Initial Catalog=MES;User Id=mes;Password=mes;";
+
+            SqlCommand command = new SqlCommand();
+            command.Connection = conn;
+            command.CommandText = @"SELECT Id,Data_czas,Operator,iloscDobrych,numerZlecenia,ngBrakLutowia,ngBrakDiodyLed,ngBrakResConn,ngPrzesuniecieLed,ngPrzesuniecieResConn,ngZabrudzenieLed,ngUszkodzenieMechaniczneLed,ngUszkodzenieConn,ngWadaFabrycznaDiody,ngUszkodzonePcb,ngWadaNaklejki,ngSpalonyConn,ngInne,scrapBrakLutowia,scrapBrakDiodyLed,scrapBrakResConn,scrapPrzesuniecieLed,scrapPrzesuniecieResConn,scrapZabrudzenieLed,scrapUszkodzenieMechaniczneLed,scrapUszkodzenieConn,scrapWadaFabrycznaDiody,scrapUszkodzonePcb,scrapWadaNaklejki,scrapSpalonyConn,scrapInne,ngTestElektryczny FROM tb_Kontrola_Wizualna_Karta_Pracy WHERE ";
+
+            for (int i = 0; i < lots.Length; i++)
+            {
+                if (i>0)
+                {
+                    command.CommandText += " OR ";
+                }
+                command.CommandText += "numerZlecenia='" + lots[i] + "'";
+            }
+            command.CommandText += ";";
+
+            SqlDataAdapter adapter = new SqlDataAdapter(command);
+
+            adapter.Fill(tabletoFill);
+
+            return tabletoFill;
+        }
+
         public static string[] GetWasteColumnNames()
         {
 

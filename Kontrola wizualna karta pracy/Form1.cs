@@ -39,6 +39,8 @@ namespace Kontrola_wizualna_karta_pracy
             System.Runtime.InteropServices.Marshal.FreeCoTaskMem(fontPtr);
 
             myFont = new Font(fonts.Families[0], 56.0F);
+
+            recordToSaceCalculation = new RecordToSaveCalculations(recordToSave);
         }
         List<Image> imagesList = new List<Image>();
         RecordToSave recordToSave = new RecordToSave("", 0, "", DateTime.Now);
@@ -47,11 +49,14 @@ namespace Kontrola_wizualna_karta_pracy
         FilterInfoCollection CaptureDevice;
         VideoCaptureDevice FinalFrame;
         Bitmap bitmap;
+        List<WasteDataStructure> inspectionData = new List<WasteDataStructure>();
+        Dictionary<string, string> lotModelDict = new Dictionary<string, string>();
 
         [System.Runtime.InteropServices.DllImport("gdi32.dll")]
         private static extern IntPtr AddFontMemResourceEx(IntPtr pbFont, uint cbFont,
             IntPtr pdv, [System.Runtime.InteropServices.In] ref uint pcFonts);
         Font myFont;
+        private RecordToSaveCalculations recordToSaceCalculation;
         private PrivateFontCollection fonts = new PrivateFontCollection();
 
         private void Form1_Load(object sender, EventArgs e)
@@ -68,6 +73,7 @@ namespace Kontrola_wizualna_karta_pracy
             Debug.WriteLine(CaptureDevice[0].ToString());
 
             textBoxLotNumber.DataBindings.Add("Text", recordToSave, "NumerZlecenia", false, DataSourceUpdateMode.OnPropertyChanged);
+            textBoxLotNumber.Text = "Numer Zlecenia";
             comboBoxOperator.DataBindings.Add("Text", recordToSave, "Operator", false, DataSourceUpdateMode.OnPropertyChanged);
             textBoxGoodQty.DataBindings.Add("Text", recordToSave, "IloscDobrych", false, DataSourceUpdateMode.OnPropertyChanged);
 
@@ -75,7 +81,7 @@ namespace Kontrola_wizualna_karta_pracy
             lotToModelDictionary = SqlOperations.GetLotToModelDictionary();
             smtInfo = SqlOperations.GetSmtInfo();
 
-            
+            CalculateWasteAndEff();
 
             FinalFrame = new VideoCaptureDevice();
             FinalFrame = new VideoCaptureDevice(CaptureDevice[0].MonikerString);
@@ -86,6 +92,34 @@ namespace Kontrola_wizualna_karta_pracy
             panelVirtualKeyboard.BringToFront();
 
             DynamicControls.CreateControls(flpNgBox, flpScrapBox, flowLayoutPanel1, SqlOperations.GetWasteColumnNames(), recordToSave, FinalFrame, imagesList, pictureBox1);
+
+            Ng0BWadyLutowia.DataBindings.Add("Value", recordToSave, "NgBrakLutowia", false, DataSourceUpdateMode.OnPropertyChanged);
+            Ng0BrakDiodyLed.DataBindings.Add("Value", recordToSave, "NgBrakDiodyLed", false, DataSourceUpdateMode.OnPropertyChanged);
+            Ng0BrakResConn.DataBindings.Add("Value", recordToSave, "NgBrakResConn", false, DataSourceUpdateMode.OnPropertyChanged);
+            Ng0PrzesuniecieDiodyLed.DataBindings.Add("Value", recordToSave, "NgPrzesuniecieLed", false, DataSourceUpdateMode.OnPropertyChanged);
+            Ng0PrzesuniecieResConn.DataBindings.Add("Value", recordToSave, "NgPrzesuniecieResConn", false, DataSourceUpdateMode.OnPropertyChanged);
+            Ng0ZabrudzonaDiodaLed.DataBindings.Add("Value", recordToSave, "NgZabrudzenieLed", false, DataSourceUpdateMode.OnPropertyChanged);
+            Ng0UszkodzenieDiodyLed.DataBindings.Add("Value", recordToSave, "NgUszkodzenieMechaniczneLed", false, DataSourceUpdateMode.OnPropertyChanged);
+            Ng0UszkodzenieConn.DataBindings.Add("Value", recordToSave, "NgUszkodzenieConn", false, DataSourceUpdateMode.OnPropertyChanged);
+            Ng0WadaFbrycznaLed.DataBindings.Add("Value", recordToSave, "NgWadaFabrycznaDiody", false, DataSourceUpdateMode.OnPropertyChanged);
+            Ng0UszkodzeniePcb.DataBindings.Add("Value", recordToSave, "NgUszkodzonePcb", false, DataSourceUpdateMode.OnPropertyChanged);
+            Ng0WadaNaklejki.DataBindings.Add("Value", recordToSave, "NgWadaNaklejki", false, DataSourceUpdateMode.OnPropertyChanged);
+            Ng0SpalonyConn.DataBindings.Add("Value", recordToSave, "NgSpalonyConn", false, DataSourceUpdateMode.OnPropertyChanged);
+            Ng0Inne.DataBindings.Add("Value", recordToSave, "NgInne", false, DataSourceUpdateMode.OnPropertyChanged);
+            Scrap0WadyLutowia.DataBindings.Add("Value", recordToSave, "ScrapBrakLutowia", false, DataSourceUpdateMode.OnPropertyChanged);
+            Scrap0BrakDiodyLed.DataBindings.Add("Value", recordToSave, "ScrapBrakDiodyLed", false, DataSourceUpdateMode.OnPropertyChanged);
+            Scrap0BrakResConn.DataBindings.Add("Value", recordToSave, "ScrapBrakResConn", false, DataSourceUpdateMode.OnPropertyChanged);
+            Scrap0PrzesuniecieDiodyLed.DataBindings.Add("Value", recordToSave, "ScrapPrzesuniecieLed", false, DataSourceUpdateMode.OnPropertyChanged);
+            Scrap0PrzesuniecieResConn.DataBindings.Add("Value", recordToSave, "ScrapPrzesuniecieResConn", false, DataSourceUpdateMode.OnPropertyChanged);
+            Scrap0ZabrudzonaDiodaLed.DataBindings.Add("Value", recordToSave, "ScrapZabrudzenieLed", false, DataSourceUpdateMode.OnPropertyChanged);
+            Scrap0UszkodzenieDiodyLed.DataBindings.Add("Value", recordToSave, "ScrapUszkodzenieMechaniczneLed", false, DataSourceUpdateMode.OnPropertyChanged);
+            Scrap0UszkodzenieConn.DataBindings.Add("Value", recordToSave, "ScrapUszkodzenieConn", false, DataSourceUpdateMode.OnPropertyChanged);
+            Scrap0WadaFabrycznaLed.DataBindings.Add("Value", recordToSave, "ScrapWadaFabrycznaDiody", false, DataSourceUpdateMode.OnPropertyChanged);
+            Scrap0UszkodzeniePcb.DataBindings.Add("Value", recordToSave, "ScrapUszkodzonePcb", false, DataSourceUpdateMode.OnPropertyChanged);
+            Scrap0WadaNaklejki.DataBindings.Add("Value", recordToSave, "ScrapWadaNaklejki", false, DataSourceUpdateMode.OnPropertyChanged);
+            Scrap0SpalonyConn.DataBindings.Add("Value", recordToSave, "ScrapSpalonyConn", false, DataSourceUpdateMode.OnPropertyChanged);
+            Scrap0Inne.DataBindings.Add("Value", recordToSave, "ScrapInne", false, DataSourceUpdateMode.OnPropertyChanged);
+            Ng0Test.DataBindings.Add("Value", recordToSave, "NgTestElektryczny", false, DataSourceUpdateMode.OnPropertyChanged);
         }
 
         private void Handle_New_Frame(object sender, NewFrameEventArgs eventArgs)
@@ -149,11 +183,11 @@ namespace Kontrola_wizualna_karta_pracy
                     {
                         if (box.Tag.ToString().ToLower().Contains("test"))
                         {
-                            testSummary = box.Tag.ToString() + " - " + box.Text;
+                            testSummary = box.Tag.ToString() + " - " + box.Text+Environment.NewLine;
                         }
                         else
                         {
-                            ngSummary += box.Tag.ToString() + " - " + box.Text;
+                            ngSummary += box.Tag.ToString() + " - " + box.Text + Environment.NewLine;
                         }
                     }
                 }
@@ -172,7 +206,7 @@ namespace Kontrola_wizualna_karta_pracy
                     TextBox box = (TextBox)ctrl;
                     if (box.Text != "0")
                     {
-                        scrapSummary += box.Tag.ToString() + " - " + box.Text;
+                        scrapSummary += box.Tag.ToString() + " - " + box.Text + Environment.NewLine;
                     }
                 }
             }
@@ -182,8 +216,6 @@ namespace Kontrola_wizualna_karta_pracy
                 result += Environment.NewLine + Environment.NewLine + "SCRAP:" + Environment.NewLine + scrapSummary;
             }
 
-            
-            
             return result;
         }
 
@@ -197,7 +229,15 @@ namespace Kontrola_wizualna_karta_pracy
                     recordToSave.Data_Czas = DateTime.Now;
                     SqlOperations.SaveRecordToDb(recordToSave);
 
-                    Efficiency.SaveToTetFile(DateTime.Now.ToString("dd-MM-yyyy") + ";" + "Model" + ";" + textBoxLotNumber.Text + ";" + textBoxGoodQty.Text);
+                    int allNg = 0;
+
+                    string lot = textBoxLotNumber.Text;
+                    string model = "";
+
+                    lotToModelDictionary.TryGetValue(lot, out model);
+
+
+                    Efficiency.SaveToTetFile(DateTime.Now.ToString("HH:mm dd-MMM") + ";" + model + ";" + textBoxLotNumber.Text + ";" + textBoxGoodQty.Text+";"+ recordToSaceCalculation.GetAllNg());
 
                     textBoxLotNumber.Text = "";
                     comboBoxOperator.Items.Clear();
@@ -205,7 +245,8 @@ namespace Kontrola_wizualna_karta_pracy
                     textBoxGoodQty.Text = "0";
                     labelLotInfo.Text = "Dane zlecenia:";
 
-                    Efficiency.AddRecentOrdersToGrid(dataGridViewHistory);
+                    CalculateWasteAndEff();
+
                     ClearRecordToSave();
                 }
             }
@@ -495,7 +536,8 @@ namespace Kontrola_wizualna_karta_pracy
         private void dataGridViewHistory_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
             labelQtySinceShiftStart.Text = LanguangeTranslation.Translate("Ilość od początku zmiany:", radioButtonPolish.Checked) + Efficiency.HowManyInspectedThisShift(dataGridViewHistory) + LanguangeTranslation.Translate("szt", radioButtonPolish.Checked);
-            labelWasteLevel.Text = Efficiency.CalculateWasteThisShift(dataGridViewHistory, radioButtonPolish.Checked) + "%";
+            //labelWasteLevel.Text = Efficiency.CalculateEfficiencyThisShift(dataGridViewHistory, radioButtonPolish.Checked) + "%";
+            labelWasteLevel.Text = Efficiency.CalculateWasteThisShift(dataGridViewHistory)+"%";
         }
 
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
@@ -508,6 +550,44 @@ namespace Kontrola_wizualna_karta_pracy
             {
                 buttonCamStartStop.Text = "Cam Stop";
             }
+        }
+
+        private void button14_Click(object sender, EventArgs e)
+        {
+            App.RunOrBringToFront("MATCH-inger");
+        }
+
+        private void textBoxLotNumber_Enter(object sender, EventArgs e)
+        {
+            if (textBoxLotNumber.ForeColor == Color.Silver)
+            {
+                textBoxLotNumber.Text = "";
+                textBoxLotNumber.ForeColor = Color.Black;
+            }
+        }
+
+        private void textBoxLotNumber_Leave(object sender, EventArgs e)
+        {
+            if (textBoxLotNumber.Text.Trim()=="")
+            {
+                textBoxLotNumber.Text = "Numer Zlecenia";
+                textBoxLotNumber.ForeColor = Color.Silver;
+            }
+        }
+
+        private void CalculateWasteAndEff()
+        {
+            Efficiency.AddRecentOrdersToGrid(dataGridViewHistory, ref lotModelDict);
+            List<string> inspectedLots = new List<string>();
+            foreach (DataGridViewRow row in dataGridViewHistory.Rows)
+            {
+                inspectedLots.Add(row.Cells["Zlecenie"].Value.ToString());
+            }
+
+            DataTable inspectionTable = SqlOperations.DownloadVisInspFromSQL(inspectedLots.ToArray());
+            inspectionData = WasteCalculation.LoadData(inspectionTable, lotModelDict);
+            Charting.DrawChartWasteReasons(inspectionData, chart1);
+            labelWasteLevel.Text = Efficiency.CalculateWasteThisShift(dataGridViewHistory)+"%";
         }
     }
 }

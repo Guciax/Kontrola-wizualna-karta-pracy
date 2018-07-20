@@ -29,6 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.textBoxLotNumber = new System.Windows.Forms.TextBox();
             this.labelLotNo = new System.Windows.Forms.Label();
             this.labelGoodQty = new System.Windows.Forms.Label();
@@ -120,8 +123,15 @@
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.panelWasteLevel = new System.Windows.Forms.Panel();
             this.labelWasteLevel = new System.Windows.Forms.Label();
-            this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.button14 = new System.Windows.Forms.Button();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.panel4 = new System.Windows.Forms.Panel();
+            this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.label4 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.Ng0BWadyLutowia)).BeginInit();
             this.panelNg.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Ng0UszkodzenieConn)).BeginInit();
@@ -161,25 +171,30 @@
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
             this.panelWasteLevel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.panel2.SuspendLayout();
+            this.panel4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.SuspendLayout();
             // 
             // textBoxLotNumber
             // 
             this.textBoxLotNumber.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.textBoxLotNumber.Location = new System.Drawing.Point(4, 27);
+            this.textBoxLotNumber.ForeColor = System.Drawing.Color.Silver;
+            this.textBoxLotNumber.Location = new System.Drawing.Point(6, 42);
             this.textBoxLotNumber.Name = "textBoxLotNumber";
             this.textBoxLotNumber.Size = new System.Drawing.Size(200, 23);
             this.textBoxLotNumber.TabIndex = 0;
             this.textBoxLotNumber.Text = "123456";
             this.textBoxLotNumber.TextChanged += new System.EventHandler(this.textBoxLotNumber_TextChanged);
+            this.textBoxLotNumber.Enter += new System.EventHandler(this.textBoxLotNumber_Enter);
+            this.textBoxLotNumber.Leave += new System.EventHandler(this.textBoxLotNumber_Leave);
             // 
             // labelLotNo
             // 
             this.labelLotNo.AutoSize = true;
             this.labelLotNo.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelLotNo.Location = new System.Drawing.Point(209, 30);
+            this.labelLotNo.Location = new System.Drawing.Point(3, 24);
             this.labelLotNo.Name = "labelLotNo";
             this.labelLotNo.Size = new System.Drawing.Size(106, 17);
             this.labelLotNo.TabIndex = 1;
@@ -189,7 +204,7 @@
             // 
             this.labelGoodQty.AutoSize = true;
             this.labelGoodQty.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelGoodQty.Location = new System.Drawing.Point(209, 81);
+            this.labelGoodQty.Location = new System.Drawing.Point(3, 115);
             this.labelGoodQty.Name = "labelGoodQty";
             this.labelGoodQty.Size = new System.Drawing.Size(91, 17);
             this.labelGoodQty.TabIndex = 3;
@@ -198,7 +213,7 @@
             // textBoxGoodQty
             // 
             this.textBoxGoodQty.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.textBoxGoodQty.Location = new System.Drawing.Point(4, 78);
+            this.textBoxGoodQty.Location = new System.Drawing.Point(6, 132);
             this.textBoxGoodQty.Name = "textBoxGoodQty";
             this.textBoxGoodQty.Size = new System.Drawing.Size(200, 23);
             this.textBoxGoodQty.TabIndex = 2;
@@ -209,120 +224,120 @@
             // labelSolder
             // 
             this.labelSolder.AutoSize = true;
-            this.labelSolder.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelSolder.Location = new System.Drawing.Point(1196, 297);
+            this.labelSolder.Font = new System.Drawing.Font("Arial Narrow", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.labelSolder.Location = new System.Drawing.Point(-1, 58);
             this.labelSolder.Name = "labelSolder";
-            this.labelSolder.Size = new System.Drawing.Size(87, 20);
+            this.labelSolder.Size = new System.Drawing.Size(72, 17);
             this.labelSolder.TabIndex = 4;
             this.labelSolder.Text = "Wady lutowia";
             // 
             // labelMissingLed
             // 
             this.labelMissingLed.AutoSize = true;
-            this.labelMissingLed.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelMissingLed.Location = new System.Drawing.Point(1196, 324);
+            this.labelMissingLed.Font = new System.Drawing.Font("Arial Narrow", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.labelMissingLed.Location = new System.Drawing.Point(-1, 85);
             this.labelMissingLed.Name = "labelMissingLed";
-            this.labelMissingLed.Size = new System.Drawing.Size(215, 20);
+            this.labelMissingLed.Size = new System.Drawing.Size(177, 17);
             this.labelMissingLed.TabIndex = 5;
             this.labelMissingLed.Text = "Brak LED/polaryzacja/podniesiona";
             // 
             // labelMissingRes
             // 
             this.labelMissingRes.AutoSize = true;
-            this.labelMissingRes.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelMissingRes.Location = new System.Drawing.Point(1196, 351);
+            this.labelMissingRes.Font = new System.Drawing.Font("Arial Narrow", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.labelMissingRes.Location = new System.Drawing.Point(-1, 112);
             this.labelMissingRes.Name = "labelMissingRes";
-            this.labelMissingRes.Size = new System.Drawing.Size(108, 20);
+            this.labelMissingRes.Size = new System.Drawing.Size(95, 17);
             this.labelMissingRes.TabIndex = 6;
             this.labelMissingRes.Text = "Brak RES/CONN";
             // 
             // labelDirtyLed
             // 
             this.labelDirtyLed.AutoSize = true;
-            this.labelDirtyLed.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelDirtyLed.Location = new System.Drawing.Point(1196, 538);
+            this.labelDirtyLed.Font = new System.Drawing.Font("Arial Narrow", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.labelDirtyLed.Location = new System.Drawing.Point(-1, 299);
             this.labelDirtyLed.Name = "labelDirtyLed";
-            this.labelDirtyLed.Size = new System.Drawing.Size(146, 20);
+            this.labelDirtyLed.Size = new System.Drawing.Size(120, 17);
             this.labelDirtyLed.TabIndex = 7;
             this.labelDirtyLed.Text = "Zabrudzona dioda LED";
             // 
             // labelDmgLed
             // 
             this.labelDmgLed.AutoSize = true;
-            this.labelDmgLed.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelDmgLed.Location = new System.Drawing.Point(1196, 432);
+            this.labelDmgLed.Font = new System.Drawing.Font("Arial Narrow", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.labelDmgLed.Location = new System.Drawing.Point(-1, 193);
             this.labelDmgLed.Name = "labelDmgLed";
-            this.labelDmgLed.Size = new System.Drawing.Size(200, 20);
+            this.labelDmgLed.Size = new System.Drawing.Size(166, 17);
             this.labelDmgLed.TabIndex = 8;
             this.labelDmgLed.Text = "Uszkodzenie mechaniczne LED";
             // 
             // labelDmgPcb
             // 
             this.labelDmgPcb.AutoSize = true;
-            this.labelDmgPcb.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelDmgPcb.Location = new System.Drawing.Point(1196, 513);
+            this.labelDmgPcb.Font = new System.Drawing.Font("Arial Narrow", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.labelDmgPcb.Location = new System.Drawing.Point(-1, 274);
             this.labelDmgPcb.Name = "labelDmgPcb";
-            this.labelDmgPcb.Size = new System.Drawing.Size(119, 20);
+            this.labelDmgPcb.Size = new System.Drawing.Size(99, 17);
             this.labelDmgPcb.TabIndex = 9;
             this.labelDmgPcb.Text = "Uszkodzenie PCB";
             // 
             // labelShiftedLed
             // 
             this.labelShiftedLed.AutoSize = true;
-            this.labelShiftedLed.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelShiftedLed.Location = new System.Drawing.Point(1196, 378);
+            this.labelShiftedLed.Font = new System.Drawing.Font("Arial Narrow", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.labelShiftedLed.Location = new System.Drawing.Point(-1, 139);
             this.labelShiftedLed.Name = "labelShiftedLed";
-            this.labelShiftedLed.Size = new System.Drawing.Size(154, 20);
+            this.labelShiftedLed.Size = new System.Drawing.Size(126, 17);
             this.labelShiftedLed.TabIndex = 10;
             this.labelShiftedLed.Text = "Przesunięcie diody LED";
             // 
             // labelShiftedRes
             // 
             this.labelShiftedRes.AutoSize = true;
-            this.labelShiftedRes.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelShiftedRes.Location = new System.Drawing.Point(1196, 405);
+            this.labelShiftedRes.Font = new System.Drawing.Font("Arial Narrow", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.labelShiftedRes.Location = new System.Drawing.Point(-1, 166);
             this.labelShiftedRes.Name = "labelShiftedRes";
-            this.labelShiftedRes.Size = new System.Drawing.Size(159, 20);
+            this.labelShiftedRes.Size = new System.Drawing.Size(135, 17);
             this.labelShiftedRes.TabIndex = 11;
             this.labelShiftedRes.Text = "Przesunięcie RES/CONN";
             // 
             // labelOther
             // 
             this.labelOther.AutoSize = true;
-            this.labelOther.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelOther.Location = new System.Drawing.Point(1196, 594);
+            this.labelOther.Font = new System.Drawing.Font("Arial Narrow", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.labelOther.Location = new System.Drawing.Point(-1, 355);
             this.labelOther.Name = "labelOther";
-            this.labelOther.Size = new System.Drawing.Size(34, 20);
+            this.labelOther.Size = new System.Drawing.Size(29, 17);
             this.labelOther.TabIndex = 12;
             this.labelOther.Text = "Inne";
             // 
             // labelLabel
             // 
             this.labelLabel.AutoSize = true;
-            this.labelLabel.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelLabel.Location = new System.Drawing.Point(1196, 270);
+            this.labelLabel.Font = new System.Drawing.Font("Arial Narrow", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.labelLabel.Location = new System.Drawing.Point(-1, 31);
             this.labelLabel.Name = "labelLabel";
-            this.labelLabel.Size = new System.Drawing.Size(92, 20);
+            this.labelLabel.Size = new System.Drawing.Size(76, 17);
             this.labelLabel.TabIndex = 13;
             this.labelLabel.Text = "Wada naklejki";
             // 
             // labelBadLed
             // 
             this.labelBadLed.AutoSize = true;
-            this.labelBadLed.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelBadLed.Location = new System.Drawing.Point(1196, 567);
+            this.labelBadLed.Font = new System.Drawing.Font("Arial Narrow", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.labelBadLed.Location = new System.Drawing.Point(-1, 328);
             this.labelBadLed.Name = "labelBadLed";
-            this.labelBadLed.Size = new System.Drawing.Size(171, 20);
+            this.labelBadLed.Size = new System.Drawing.Size(142, 17);
             this.labelBadLed.TabIndex = 14;
             this.labelBadLed.Text = "Wada fabryczna diody LED";
             // 
             // Ng0BWadyLutowia
             // 
-            this.Ng0BWadyLutowia.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.Ng0BWadyLutowia.Location = new System.Drawing.Point(6, 56);
+            this.Ng0BWadyLutowia.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.Ng0BWadyLutowia.Location = new System.Drawing.Point(2, 56);
             this.Ng0BWadyLutowia.Name = "Ng0BWadyLutowia";
             this.Ng0BWadyLutowia.ReadOnly = true;
-            this.Ng0BWadyLutowia.Size = new System.Drawing.Size(67, 26);
+            this.Ng0BWadyLutowia.Size = new System.Drawing.Size(50, 23);
             this.Ng0BWadyLutowia.TabIndex = 15;
             this.Ng0BWadyLutowia.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.Ng0BWadyLutowia.Enter += new System.EventHandler(this.numUpDownEnter);
@@ -331,11 +346,11 @@
             // 
             this.label14.AutoSize = true;
             this.label14.BackColor = System.Drawing.Color.Red;
-            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.label14.ForeColor = System.Drawing.Color.White;
-            this.label14.Location = new System.Drawing.Point(16, 5);
+            this.label14.Location = new System.Drawing.Point(12, 7);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(40, 24);
+            this.label14.Size = new System.Drawing.Size(31, 17);
             this.label14.TabIndex = 17;
             this.label14.Text = "NG";
             // 
@@ -343,11 +358,11 @@
             // 
             this.label15.AutoSize = true;
             this.label15.BackColor = System.Drawing.Color.Black;
-            this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.label15.ForeColor = System.Drawing.Color.White;
-            this.label15.Location = new System.Drawing.Point(3, 6);
+            this.label15.Location = new System.Drawing.Point(-2, 6);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(78, 24);
+            this.label15.Size = new System.Drawing.Size(59, 17);
             this.label15.TabIndex = 18;
             this.label15.Text = "SCRAP";
             // 
@@ -368,137 +383,137 @@
             this.panelNg.Controls.Add(this.Ng0PrzesuniecieDiodyLed);
             this.panelNg.Controls.Add(this.Ng0WadaFbrycznaLed);
             this.panelNg.Controls.Add(this.Ng0UszkodzeniePcb);
-            this.panelNg.Location = new System.Drawing.Point(1030, 239);
+            this.panelNg.Location = new System.Drawing.Point(1, 1);
             this.panelNg.Name = "panelNg";
-            this.panelNg.Size = new System.Drawing.Size(80, 387);
+            this.panelNg.Size = new System.Drawing.Size(53, 387);
             this.panelNg.TabIndex = 19;
             // 
             // Ng0UszkodzenieConn
             // 
-            this.Ng0UszkodzenieConn.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.Ng0UszkodzenieConn.Location = new System.Drawing.Point(6, 218);
+            this.Ng0UszkodzenieConn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.Ng0UszkodzenieConn.Location = new System.Drawing.Point(2, 218);
             this.Ng0UszkodzenieConn.Name = "Ng0UszkodzenieConn";
             this.Ng0UszkodzenieConn.ReadOnly = true;
-            this.Ng0UszkodzenieConn.Size = new System.Drawing.Size(67, 26);
+            this.Ng0UszkodzenieConn.Size = new System.Drawing.Size(50, 23);
             this.Ng0UszkodzenieConn.TabIndex = 32;
             this.Ng0UszkodzenieConn.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.Ng0UszkodzenieConn.Enter += new System.EventHandler(this.numUpDownEnter);
             // 
             // Ng0SpalonyConn
             // 
-            this.Ng0SpalonyConn.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.Ng0SpalonyConn.Location = new System.Drawing.Point(6, 245);
+            this.Ng0SpalonyConn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.Ng0SpalonyConn.Location = new System.Drawing.Point(2, 245);
             this.Ng0SpalonyConn.Name = "Ng0SpalonyConn";
             this.Ng0SpalonyConn.ReadOnly = true;
-            this.Ng0SpalonyConn.Size = new System.Drawing.Size(67, 26);
+            this.Ng0SpalonyConn.Size = new System.Drawing.Size(50, 23);
             this.Ng0SpalonyConn.TabIndex = 31;
             this.Ng0SpalonyConn.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // Ng0WadaNaklejki
             // 
-            this.Ng0WadaNaklejki.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.Ng0WadaNaklejki.Location = new System.Drawing.Point(6, 29);
+            this.Ng0WadaNaklejki.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.Ng0WadaNaklejki.Location = new System.Drawing.Point(2, 29);
             this.Ng0WadaNaklejki.Name = "Ng0WadaNaklejki";
             this.Ng0WadaNaklejki.ReadOnly = true;
-            this.Ng0WadaNaklejki.Size = new System.Drawing.Size(67, 26);
+            this.Ng0WadaNaklejki.Size = new System.Drawing.Size(50, 23);
             this.Ng0WadaNaklejki.TabIndex = 30;
             this.Ng0WadaNaklejki.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.Ng0WadaNaklejki.Enter += new System.EventHandler(this.numUpDownEnter);
             // 
             // Ng0Inne
             // 
-            this.Ng0Inne.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.Ng0Inne.Location = new System.Drawing.Point(6, 353);
+            this.Ng0Inne.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.Ng0Inne.Location = new System.Drawing.Point(2, 353);
             this.Ng0Inne.Name = "Ng0Inne";
             this.Ng0Inne.ReadOnly = true;
-            this.Ng0Inne.Size = new System.Drawing.Size(67, 26);
+            this.Ng0Inne.Size = new System.Drawing.Size(50, 23);
             this.Ng0Inne.TabIndex = 29;
             this.Ng0Inne.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.Ng0Inne.Enter += new System.EventHandler(this.numUpDownEnter);
             // 
             // Ng0BrakDiodyLed
             // 
-            this.Ng0BrakDiodyLed.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.Ng0BrakDiodyLed.Location = new System.Drawing.Point(6, 83);
+            this.Ng0BrakDiodyLed.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.Ng0BrakDiodyLed.Location = new System.Drawing.Point(2, 83);
             this.Ng0BrakDiodyLed.Name = "Ng0BrakDiodyLed";
             this.Ng0BrakDiodyLed.ReadOnly = true;
-            this.Ng0BrakDiodyLed.Size = new System.Drawing.Size(67, 26);
+            this.Ng0BrakDiodyLed.Size = new System.Drawing.Size(50, 23);
             this.Ng0BrakDiodyLed.TabIndex = 21;
             this.Ng0BrakDiodyLed.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // Ng0BrakResConn
             // 
-            this.Ng0BrakResConn.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.Ng0BrakResConn.Location = new System.Drawing.Point(6, 110);
+            this.Ng0BrakResConn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.Ng0BrakResConn.Location = new System.Drawing.Point(2, 110);
             this.Ng0BrakResConn.Name = "Ng0BrakResConn";
             this.Ng0BrakResConn.ReadOnly = true;
-            this.Ng0BrakResConn.Size = new System.Drawing.Size(67, 26);
+            this.Ng0BrakResConn.Size = new System.Drawing.Size(50, 23);
             this.Ng0BrakResConn.TabIndex = 22;
             this.Ng0BrakResConn.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.Ng0BrakResConn.Enter += new System.EventHandler(this.numUpDownEnter);
             // 
             // Ng0PrzesuniecieResConn
             // 
-            this.Ng0PrzesuniecieResConn.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.Ng0PrzesuniecieResConn.Location = new System.Drawing.Point(6, 164);
+            this.Ng0PrzesuniecieResConn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.Ng0PrzesuniecieResConn.Location = new System.Drawing.Point(2, 164);
             this.Ng0PrzesuniecieResConn.Name = "Ng0PrzesuniecieResConn";
             this.Ng0PrzesuniecieResConn.ReadOnly = true;
-            this.Ng0PrzesuniecieResConn.Size = new System.Drawing.Size(67, 26);
+            this.Ng0PrzesuniecieResConn.Size = new System.Drawing.Size(50, 23);
             this.Ng0PrzesuniecieResConn.TabIndex = 28;
             this.Ng0PrzesuniecieResConn.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.Ng0PrzesuniecieResConn.Enter += new System.EventHandler(this.numUpDownEnter);
             // 
             // Ng0ZabrudzonaDiodaLed
             // 
-            this.Ng0ZabrudzonaDiodaLed.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.Ng0ZabrudzonaDiodaLed.Location = new System.Drawing.Point(6, 299);
+            this.Ng0ZabrudzonaDiodaLed.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.Ng0ZabrudzonaDiodaLed.Location = new System.Drawing.Point(2, 299);
             this.Ng0ZabrudzonaDiodaLed.Name = "Ng0ZabrudzonaDiodaLed";
             this.Ng0ZabrudzonaDiodaLed.ReadOnly = true;
-            this.Ng0ZabrudzonaDiodaLed.Size = new System.Drawing.Size(67, 26);
+            this.Ng0ZabrudzonaDiodaLed.Size = new System.Drawing.Size(50, 23);
             this.Ng0ZabrudzonaDiodaLed.TabIndex = 23;
             this.Ng0ZabrudzonaDiodaLed.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.Ng0ZabrudzonaDiodaLed.Enter += new System.EventHandler(this.numUpDownEnter);
             // 
             // Ng0UszkodzenieDiodyLed
             // 
-            this.Ng0UszkodzenieDiodyLed.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.Ng0UszkodzenieDiodyLed.Location = new System.Drawing.Point(6, 191);
+            this.Ng0UszkodzenieDiodyLed.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.Ng0UszkodzenieDiodyLed.Location = new System.Drawing.Point(2, 191);
             this.Ng0UszkodzenieDiodyLed.Name = "Ng0UszkodzenieDiodyLed";
             this.Ng0UszkodzenieDiodyLed.ReadOnly = true;
-            this.Ng0UszkodzenieDiodyLed.Size = new System.Drawing.Size(67, 26);
+            this.Ng0UszkodzenieDiodyLed.Size = new System.Drawing.Size(50, 23);
             this.Ng0UszkodzenieDiodyLed.TabIndex = 24;
             this.Ng0UszkodzenieDiodyLed.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.Ng0UszkodzenieDiodyLed.Enter += new System.EventHandler(this.numUpDownEnter);
             // 
             // Ng0PrzesuniecieDiodyLed
             // 
-            this.Ng0PrzesuniecieDiodyLed.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.Ng0PrzesuniecieDiodyLed.Location = new System.Drawing.Point(6, 137);
+            this.Ng0PrzesuniecieDiodyLed.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.Ng0PrzesuniecieDiodyLed.Location = new System.Drawing.Point(2, 137);
             this.Ng0PrzesuniecieDiodyLed.Name = "Ng0PrzesuniecieDiodyLed";
             this.Ng0PrzesuniecieDiodyLed.ReadOnly = true;
-            this.Ng0PrzesuniecieDiodyLed.Size = new System.Drawing.Size(67, 26);
+            this.Ng0PrzesuniecieDiodyLed.Size = new System.Drawing.Size(50, 23);
             this.Ng0PrzesuniecieDiodyLed.TabIndex = 27;
             this.Ng0PrzesuniecieDiodyLed.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.Ng0PrzesuniecieDiodyLed.Enter += new System.EventHandler(this.numUpDownEnter);
             // 
             // Ng0WadaFbrycznaLed
             // 
-            this.Ng0WadaFbrycznaLed.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.Ng0WadaFbrycznaLed.Location = new System.Drawing.Point(6, 326);
+            this.Ng0WadaFbrycznaLed.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.Ng0WadaFbrycznaLed.Location = new System.Drawing.Point(2, 326);
             this.Ng0WadaFbrycznaLed.Name = "Ng0WadaFbrycznaLed";
             this.Ng0WadaFbrycznaLed.ReadOnly = true;
-            this.Ng0WadaFbrycznaLed.Size = new System.Drawing.Size(67, 26);
+            this.Ng0WadaFbrycznaLed.Size = new System.Drawing.Size(50, 23);
             this.Ng0WadaFbrycznaLed.TabIndex = 25;
             this.Ng0WadaFbrycznaLed.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.Ng0WadaFbrycznaLed.Enter += new System.EventHandler(this.numUpDownEnter);
             // 
             // Ng0UszkodzeniePcb
             // 
-            this.Ng0UszkodzeniePcb.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.Ng0UszkodzeniePcb.Location = new System.Drawing.Point(6, 272);
+            this.Ng0UszkodzeniePcb.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.Ng0UszkodzeniePcb.Location = new System.Drawing.Point(2, 272);
             this.Ng0UszkodzeniePcb.Name = "Ng0UszkodzeniePcb";
             this.Ng0UszkodzeniePcb.ReadOnly = true;
-            this.Ng0UszkodzeniePcb.Size = new System.Drawing.Size(67, 26);
+            this.Ng0UszkodzeniePcb.Size = new System.Drawing.Size(50, 23);
             this.Ng0UszkodzeniePcb.TabIndex = 26;
             this.Ng0UszkodzeniePcb.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.Ng0UszkodzeniePcb.Enter += new System.EventHandler(this.numUpDownEnter);
@@ -520,150 +535,150 @@
             this.panelScrap.Controls.Add(this.Scrap0UszkodzenieDiodyLed);
             this.panelScrap.Controls.Add(this.Scrap0WadaFabrycznaLed);
             this.panelScrap.Controls.Add(this.Scrap0UszkodzeniePcb);
-            this.panelScrap.Location = new System.Drawing.Point(1110, 239);
+            this.panelScrap.Location = new System.Drawing.Point(56, 1);
             this.panelScrap.Name = "panelScrap";
-            this.panelScrap.Size = new System.Drawing.Size(80, 387);
+            this.panelScrap.Size = new System.Drawing.Size(53, 387);
             this.panelScrap.TabIndex = 20;
             // 
             // Scrap0UszkodzenieConn
             // 
-            this.Scrap0UszkodzenieConn.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.Scrap0UszkodzenieConn.Location = new System.Drawing.Point(7, 218);
+            this.Scrap0UszkodzenieConn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.Scrap0UszkodzenieConn.Location = new System.Drawing.Point(2, 218);
             this.Scrap0UszkodzenieConn.Name = "Scrap0UszkodzenieConn";
             this.Scrap0UszkodzenieConn.ReadOnly = true;
-            this.Scrap0UszkodzenieConn.Size = new System.Drawing.Size(67, 26);
+            this.Scrap0UszkodzenieConn.Size = new System.Drawing.Size(50, 23);
             this.Scrap0UszkodzenieConn.TabIndex = 42;
             this.Scrap0UszkodzenieConn.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.Scrap0UszkodzenieConn.Enter += new System.EventHandler(this.numUpDownEnter);
             // 
             // Scrap0SpalonyConn
             // 
-            this.Scrap0SpalonyConn.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.Scrap0SpalonyConn.Location = new System.Drawing.Point(7, 245);
+            this.Scrap0SpalonyConn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.Scrap0SpalonyConn.Location = new System.Drawing.Point(2, 245);
             this.Scrap0SpalonyConn.Name = "Scrap0SpalonyConn";
             this.Scrap0SpalonyConn.ReadOnly = true;
-            this.Scrap0SpalonyConn.Size = new System.Drawing.Size(67, 26);
+            this.Scrap0SpalonyConn.Size = new System.Drawing.Size(50, 23);
             this.Scrap0SpalonyConn.TabIndex = 32;
             this.Scrap0SpalonyConn.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.Scrap0SpalonyConn.Enter += new System.EventHandler(this.numUpDownEnter);
             // 
             // Scrap0WadaNaklejki
             // 
-            this.Scrap0WadaNaklejki.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.Scrap0WadaNaklejki.Location = new System.Drawing.Point(7, 29);
+            this.Scrap0WadaNaklejki.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.Scrap0WadaNaklejki.Location = new System.Drawing.Point(2, 29);
             this.Scrap0WadaNaklejki.Name = "Scrap0WadaNaklejki";
             this.Scrap0WadaNaklejki.ReadOnly = true;
-            this.Scrap0WadaNaklejki.Size = new System.Drawing.Size(67, 26);
+            this.Scrap0WadaNaklejki.Size = new System.Drawing.Size(50, 23);
             this.Scrap0WadaNaklejki.TabIndex = 31;
             this.Scrap0WadaNaklejki.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.Scrap0WadaNaklejki.Enter += new System.EventHandler(this.numUpDownEnter);
             // 
             // Scrap0Inne
             // 
-            this.Scrap0Inne.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.Scrap0Inne.Location = new System.Drawing.Point(7, 353);
+            this.Scrap0Inne.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.Scrap0Inne.Location = new System.Drawing.Point(2, 353);
             this.Scrap0Inne.Name = "Scrap0Inne";
             this.Scrap0Inne.ReadOnly = true;
-            this.Scrap0Inne.Size = new System.Drawing.Size(67, 26);
+            this.Scrap0Inne.Size = new System.Drawing.Size(50, 23);
             this.Scrap0Inne.TabIndex = 41;
             this.Scrap0Inne.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.Scrap0Inne.Enter += new System.EventHandler(this.numUpDownEnter);
             // 
             // Scrap0WadyLutowia
             // 
-            this.Scrap0WadyLutowia.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.Scrap0WadyLutowia.Location = new System.Drawing.Point(7, 56);
+            this.Scrap0WadyLutowia.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.Scrap0WadyLutowia.Location = new System.Drawing.Point(2, 56);
             this.Scrap0WadyLutowia.Name = "Scrap0WadyLutowia";
             this.Scrap0WadyLutowia.ReadOnly = true;
-            this.Scrap0WadyLutowia.Size = new System.Drawing.Size(67, 26);
+            this.Scrap0WadyLutowia.Size = new System.Drawing.Size(50, 23);
             this.Scrap0WadyLutowia.TabIndex = 32;
             this.Scrap0WadyLutowia.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.Scrap0WadyLutowia.Enter += new System.EventHandler(this.numUpDownEnter);
             // 
             // Scrap0BrakDiodyLed
             // 
-            this.Scrap0BrakDiodyLed.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.Scrap0BrakDiodyLed.Location = new System.Drawing.Point(7, 83);
+            this.Scrap0BrakDiodyLed.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.Scrap0BrakDiodyLed.Location = new System.Drawing.Point(2, 83);
             this.Scrap0BrakDiodyLed.Name = "Scrap0BrakDiodyLed";
             this.Scrap0BrakDiodyLed.ReadOnly = true;
-            this.Scrap0BrakDiodyLed.Size = new System.Drawing.Size(67, 26);
+            this.Scrap0BrakDiodyLed.Size = new System.Drawing.Size(50, 23);
             this.Scrap0BrakDiodyLed.TabIndex = 33;
             this.Scrap0BrakDiodyLed.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.Scrap0BrakDiodyLed.Enter += new System.EventHandler(this.numUpDownEnter);
             // 
             // Scrap0PrzesuniecieResConn
             // 
-            this.Scrap0PrzesuniecieResConn.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.Scrap0PrzesuniecieResConn.Location = new System.Drawing.Point(7, 164);
+            this.Scrap0PrzesuniecieResConn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.Scrap0PrzesuniecieResConn.Location = new System.Drawing.Point(2, 164);
             this.Scrap0PrzesuniecieResConn.Name = "Scrap0PrzesuniecieResConn";
             this.Scrap0PrzesuniecieResConn.ReadOnly = true;
-            this.Scrap0PrzesuniecieResConn.Size = new System.Drawing.Size(67, 26);
+            this.Scrap0PrzesuniecieResConn.Size = new System.Drawing.Size(50, 23);
             this.Scrap0PrzesuniecieResConn.TabIndex = 40;
             this.Scrap0PrzesuniecieResConn.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.Scrap0PrzesuniecieResConn.Enter += new System.EventHandler(this.numUpDownEnter);
             // 
             // Scrap0BrakResConn
             // 
-            this.Scrap0BrakResConn.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.Scrap0BrakResConn.Location = new System.Drawing.Point(7, 110);
+            this.Scrap0BrakResConn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.Scrap0BrakResConn.Location = new System.Drawing.Point(2, 110);
             this.Scrap0BrakResConn.Name = "Scrap0BrakResConn";
             this.Scrap0BrakResConn.ReadOnly = true;
-            this.Scrap0BrakResConn.Size = new System.Drawing.Size(67, 26);
+            this.Scrap0BrakResConn.Size = new System.Drawing.Size(50, 23);
             this.Scrap0BrakResConn.TabIndex = 34;
             this.Scrap0BrakResConn.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.Scrap0BrakResConn.Enter += new System.EventHandler(this.numUpDownEnter);
             // 
             // Scrap0ZabrudzonaDiodaLed
             // 
-            this.Scrap0ZabrudzonaDiodaLed.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.Scrap0ZabrudzonaDiodaLed.Location = new System.Drawing.Point(7, 299);
+            this.Scrap0ZabrudzonaDiodaLed.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.Scrap0ZabrudzonaDiodaLed.Location = new System.Drawing.Point(2, 299);
             this.Scrap0ZabrudzonaDiodaLed.Name = "Scrap0ZabrudzonaDiodaLed";
             this.Scrap0ZabrudzonaDiodaLed.ReadOnly = true;
-            this.Scrap0ZabrudzonaDiodaLed.Size = new System.Drawing.Size(67, 26);
+            this.Scrap0ZabrudzonaDiodaLed.Size = new System.Drawing.Size(50, 23);
             this.Scrap0ZabrudzonaDiodaLed.TabIndex = 35;
             this.Scrap0ZabrudzonaDiodaLed.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.Scrap0ZabrudzonaDiodaLed.Enter += new System.EventHandler(this.numUpDownEnter);
             // 
             // Scrap0PrzesuniecieDiodyLed
             // 
-            this.Scrap0PrzesuniecieDiodyLed.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.Scrap0PrzesuniecieDiodyLed.Location = new System.Drawing.Point(7, 137);
+            this.Scrap0PrzesuniecieDiodyLed.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.Scrap0PrzesuniecieDiodyLed.Location = new System.Drawing.Point(2, 137);
             this.Scrap0PrzesuniecieDiodyLed.Name = "Scrap0PrzesuniecieDiodyLed";
             this.Scrap0PrzesuniecieDiodyLed.ReadOnly = true;
-            this.Scrap0PrzesuniecieDiodyLed.Size = new System.Drawing.Size(67, 26);
+            this.Scrap0PrzesuniecieDiodyLed.Size = new System.Drawing.Size(50, 23);
             this.Scrap0PrzesuniecieDiodyLed.TabIndex = 39;
             this.Scrap0PrzesuniecieDiodyLed.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.Scrap0PrzesuniecieDiodyLed.Enter += new System.EventHandler(this.numUpDownEnter);
             // 
             // Scrap0UszkodzenieDiodyLed
             // 
-            this.Scrap0UszkodzenieDiodyLed.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.Scrap0UszkodzenieDiodyLed.Location = new System.Drawing.Point(7, 191);
+            this.Scrap0UszkodzenieDiodyLed.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.Scrap0UszkodzenieDiodyLed.Location = new System.Drawing.Point(2, 191);
             this.Scrap0UszkodzenieDiodyLed.Name = "Scrap0UszkodzenieDiodyLed";
             this.Scrap0UszkodzenieDiodyLed.ReadOnly = true;
-            this.Scrap0UszkodzenieDiodyLed.Size = new System.Drawing.Size(67, 26);
+            this.Scrap0UszkodzenieDiodyLed.Size = new System.Drawing.Size(50, 23);
             this.Scrap0UszkodzenieDiodyLed.TabIndex = 36;
             this.Scrap0UszkodzenieDiodyLed.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.Scrap0UszkodzenieDiodyLed.Enter += new System.EventHandler(this.numUpDownEnter);
             // 
             // Scrap0WadaFabrycznaLed
             // 
-            this.Scrap0WadaFabrycznaLed.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.Scrap0WadaFabrycznaLed.Location = new System.Drawing.Point(7, 326);
+            this.Scrap0WadaFabrycznaLed.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.Scrap0WadaFabrycznaLed.Location = new System.Drawing.Point(2, 326);
             this.Scrap0WadaFabrycznaLed.Name = "Scrap0WadaFabrycznaLed";
             this.Scrap0WadaFabrycznaLed.ReadOnly = true;
-            this.Scrap0WadaFabrycznaLed.Size = new System.Drawing.Size(67, 26);
+            this.Scrap0WadaFabrycznaLed.Size = new System.Drawing.Size(50, 23);
             this.Scrap0WadaFabrycznaLed.TabIndex = 37;
             this.Scrap0WadaFabrycznaLed.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.Scrap0WadaFabrycznaLed.Enter += new System.EventHandler(this.numUpDownEnter);
             // 
             // Scrap0UszkodzeniePcb
             // 
-            this.Scrap0UszkodzeniePcb.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.Scrap0UszkodzeniePcb.Location = new System.Drawing.Point(7, 272);
+            this.Scrap0UszkodzeniePcb.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.Scrap0UszkodzeniePcb.Location = new System.Drawing.Point(2, 272);
             this.Scrap0UszkodzeniePcb.Name = "Scrap0UszkodzeniePcb";
             this.Scrap0UszkodzeniePcb.ReadOnly = true;
-            this.Scrap0UszkodzeniePcb.Size = new System.Drawing.Size(67, 26);
+            this.Scrap0UszkodzeniePcb.Size = new System.Drawing.Size(50, 23);
             this.Scrap0UszkodzeniePcb.TabIndex = 38;
             this.Scrap0UszkodzeniePcb.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.Scrap0UszkodzeniePcb.Enter += new System.EventHandler(this.numUpDownEnter);
@@ -673,30 +688,30 @@
             this.panel3.BackColor = System.Drawing.Color.Navy;
             this.panel3.Controls.Add(this.label16);
             this.panel3.Controls.Add(this.Ng0Test);
-            this.panel3.Location = new System.Drawing.Point(1111, 626);
+            this.panel3.Location = new System.Drawing.Point(56, 388);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(80, 60);
+            this.panel3.Size = new System.Drawing.Size(53, 60);
             this.panel3.TabIndex = 42;
             // 
             // label16
             // 
             this.label16.AutoSize = true;
             this.label16.BackColor = System.Drawing.Color.Navy;
-            this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.label16.ForeColor = System.Drawing.Color.White;
-            this.label16.Location = new System.Drawing.Point(9, 1);
+            this.label16.Location = new System.Drawing.Point(-1, 1);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(53, 20);
+            this.label16.Size = new System.Drawing.Size(48, 17);
             this.label16.TabIndex = 43;
             this.label16.Text = "TEST";
             // 
             // Ng0Test
             // 
-            this.Ng0Test.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.Ng0Test.Location = new System.Drawing.Point(7, 22);
+            this.Ng0Test.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.Ng0Test.Location = new System.Drawing.Point(2, 22);
             this.Ng0Test.Name = "Ng0Test";
             this.Ng0Test.ReadOnly = true;
-            this.Ng0Test.Size = new System.Drawing.Size(67, 32);
+            this.Ng0Test.Size = new System.Drawing.Size(50, 23);
             this.Ng0Test.TabIndex = 32;
             this.Ng0Test.Enter += new System.EventHandler(this.numUpDownEnter);
             // 
@@ -704,7 +719,7 @@
             // 
             this.labelOperator.AutoSize = true;
             this.labelOperator.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelOperator.Location = new System.Drawing.Point(209, 55);
+            this.labelOperator.Location = new System.Drawing.Point(3, 66);
             this.labelOperator.Name = "labelOperator";
             this.labelOperator.Size = new System.Drawing.Size(65, 17);
             this.labelOperator.TabIndex = 43;
@@ -714,7 +729,7 @@
             // 
             this.comboBoxOperator.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.comboBoxOperator.FormattingEnabled = true;
-            this.comboBoxOperator.Location = new System.Drawing.Point(4, 52);
+            this.comboBoxOperator.Location = new System.Drawing.Point(6, 83);
             this.comboBoxOperator.Name = "comboBoxOperator";
             this.comboBoxOperator.Size = new System.Drawing.Size(200, 24);
             this.comboBoxOperator.TabIndex = 44;
@@ -724,18 +739,17 @@
             this.panel6.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel6.Controls.Add(this.tableLayoutPanel1);
             this.panel6.Controls.Add(this.buttonAddFailure);
-            this.panel6.Controls.Add(this.panel1);
             this.panel6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel6.Location = new System.Drawing.Point(3, 253);
+            this.panel6.Location = new System.Drawing.Point(3, 403);
             this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(326, 514);
+            this.panel6.Size = new System.Drawing.Size(250, 655);
             this.panel6.TabIndex = 48;
             // 
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.ColumnCount = 3;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 200F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.Controls.Add(this.flpNgBox, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel1, 1, 0);
@@ -745,7 +759,7 @@
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(324, 400);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(248, 614);
             this.tableLayoutPanel1.TabIndex = 47;
             // 
             // flpNgBox
@@ -756,7 +770,7 @@
             this.flpNgBox.Location = new System.Drawing.Point(0, 0);
             this.flpNgBox.Margin = new System.Windows.Forms.Padding(0);
             this.flpNgBox.Name = "flpNgBox";
-            this.flpNgBox.Size = new System.Drawing.Size(62, 400);
+            this.flpNgBox.Size = new System.Drawing.Size(49, 614);
             this.flpNgBox.TabIndex = 2;
             // 
             // flowLayoutPanel1
@@ -764,10 +778,10 @@
             this.flowLayoutPanel1.BackColor = System.Drawing.Color.White;
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel1.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(62, 0);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(49, 0);
             this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(200, 400);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(150, 614);
             this.flowLayoutPanel1.TabIndex = 4;
             // 
             // flpScrapBox
@@ -775,10 +789,10 @@
             this.flpScrapBox.BackColor = System.Drawing.Color.Black;
             this.flpScrapBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flpScrapBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.flpScrapBox.Location = new System.Drawing.Point(262, 0);
+            this.flpScrapBox.Location = new System.Drawing.Point(199, 0);
             this.flpScrapBox.Margin = new System.Windows.Forms.Padding(0);
             this.flpScrapBox.Name = "flpScrapBox";
-            this.flpScrapBox.Size = new System.Drawing.Size(62, 400);
+            this.flpScrapBox.Size = new System.Drawing.Size(49, 614);
             this.flpScrapBox.TabIndex = 3;
             // 
             // buttonAddFailure
@@ -787,9 +801,9 @@
             this.buttonAddFailure.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.buttonAddFailure.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.buttonAddFailure.ForeColor = System.Drawing.Color.White;
-            this.buttonAddFailure.Location = new System.Drawing.Point(0, 400);
+            this.buttonAddFailure.Location = new System.Drawing.Point(0, 614);
             this.buttonAddFailure.Name = "buttonAddFailure";
-            this.buttonAddFailure.Size = new System.Drawing.Size(324, 39);
+            this.buttonAddFailure.Size = new System.Drawing.Size(248, 39);
             this.buttonAddFailure.TabIndex = 51;
             this.buttonAddFailure.Text = "Dodaj";
             this.buttonAddFailure.UseVisualStyleBackColor = false;
@@ -797,21 +811,22 @@
             // 
             // panel1
             // 
-            this.panel1.BackColor = System.Drawing.Color.LawnGreen;
+            this.panel1.BackColor = System.Drawing.Color.Lime;
+            this.panel1.Controls.Add(this.label3);
             this.panel1.Controls.Add(this.label21);
             this.panel1.Controls.Add(this.labelQtySinceShiftStart);
             this.panel1.Controls.Add(this.label23);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 439);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(3, 356);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(324, 73);
+            this.panel1.Size = new System.Drawing.Size(223, 347);
             this.panel1.TabIndex = 50;
             // 
             // label21
             // 
             this.label21.AutoSize = true;
             this.label21.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label21.Location = new System.Drawing.Point(48, 25);
+            this.label21.Location = new System.Drawing.Point(44, 75);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(179, 24);
             this.label21.TabIndex = 47;
@@ -821,7 +836,7 @@
             // 
             this.labelQtySinceShiftStart.AutoSize = true;
             this.labelQtySinceShiftStart.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelQtySinceShiftStart.Location = new System.Drawing.Point(7, 0);
+            this.labelQtySinceShiftStart.Location = new System.Drawing.Point(3, 50);
             this.labelQtySinceShiftStart.Name = "labelQtySinceShiftStart";
             this.labelQtySinceShiftStart.Size = new System.Drawing.Size(224, 24);
             this.labelQtySinceShiftStart.TabIndex = 48;
@@ -831,7 +846,7 @@
             // 
             this.label23.AutoSize = true;
             this.label23.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label23.Location = new System.Drawing.Point(106, 48);
+            this.label23.Location = new System.Drawing.Point(102, 98);
             this.label23.Name = "label23";
             this.label23.Size = new System.Drawing.Size(121, 24);
             this.label23.TabIndex = 49;
@@ -845,40 +860,40 @@
             this.dataGridViewHistory.AllowUserToResizeRows = false;
             this.dataGridViewHistory.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewHistory.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridViewHistory.Location = new System.Drawing.Point(3, 773);
+            this.dataGridViewHistory.Location = new System.Drawing.Point(3, 709);
             this.dataGridViewHistory.Name = "dataGridViewHistory";
             this.dataGridViewHistory.RowHeadersVisible = false;
-            this.dataGridViewHistory.Size = new System.Drawing.Size(326, 285);
+            this.dataGridViewHistory.Size = new System.Drawing.Size(223, 349);
             this.dataGridViewHistory.TabIndex = 46;
             this.dataGridViewHistory.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dataGridViewHistory_DataBindingComplete);
             // 
             // labelElecTest
             // 
             this.labelElecTest.AutoSize = true;
-            this.labelElecTest.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelElecTest.Location = new System.Drawing.Point(1196, 654);
+            this.labelElecTest.Font = new System.Drawing.Font("Arial Narrow", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.labelElecTest.Location = new System.Drawing.Point(-1, 415);
             this.labelElecTest.Name = "labelElecTest";
-            this.labelElecTest.Size = new System.Drawing.Size(106, 20);
+            this.labelElecTest.Size = new System.Drawing.Size(88, 17);
             this.labelElecTest.TabIndex = 45;
             this.labelElecTest.Text = "Test elektryczny";
             // 
             // labelBurnedConn
             // 
             this.labelBurnedConn.AutoSize = true;
-            this.labelBurnedConn.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelBurnedConn.Location = new System.Drawing.Point(1196, 486);
+            this.labelBurnedConn.Font = new System.Drawing.Font("Arial Narrow", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.labelBurnedConn.Location = new System.Drawing.Point(-1, 247);
             this.labelBurnedConn.Name = "labelBurnedConn";
-            this.labelBurnedConn.Size = new System.Drawing.Size(99, 20);
+            this.labelBurnedConn.Size = new System.Drawing.Size(84, 17);
             this.labelBurnedConn.TabIndex = 44;
             this.labelBurnedConn.Text = "Spalony CONN";
             // 
             // labelDmgConn
             // 
             this.labelDmgConn.AutoSize = true;
-            this.labelDmgConn.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelDmgConn.Location = new System.Drawing.Point(1196, 459);
+            this.labelDmgConn.Font = new System.Drawing.Font("Arial Narrow", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.labelDmgConn.Location = new System.Drawing.Point(-1, 220);
             this.labelDmgConn.Name = "labelDmgConn";
-            this.labelDmgConn.Size = new System.Drawing.Size(212, 20);
+            this.labelDmgConn.Size = new System.Drawing.Size(177, 17);
             this.labelDmgConn.TabIndex = 43;
             this.labelDmgConn.Text = "Uszkodzenie mechaniczne CONN";
             // 
@@ -900,7 +915,7 @@
             this.panel5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel5.Location = new System.Drawing.Point(3, 3);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(326, 244);
+            this.panel5.Size = new System.Drawing.Size(250, 394);
             this.panel5.TabIndex = 47;
             // 
             // panelVirtualKeyboard
@@ -1076,7 +1091,7 @@
             // 
             this.labelLotInfo.AutoSize = true;
             this.labelLotInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelLotInfo.Location = new System.Drawing.Point(3, 104);
+            this.labelLotInfo.Location = new System.Drawing.Point(7, 166);
             this.labelLotInfo.Name = "labelLotInfo";
             this.labelLotInfo.Size = new System.Drawing.Size(102, 17);
             this.labelLotInfo.TabIndex = 53;
@@ -1084,9 +1099,9 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(243, 3);
+            this.button1.Location = new System.Drawing.Point(141, 4);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(78, 23);
+            this.button1.Size = new System.Drawing.Size(65, 23);
             this.button1.TabIndex = 52;
             this.button1.Text = "Debug stuff";
             this.button1.UseVisualStyleBackColor = true;
@@ -1117,12 +1132,12 @@
             // buttonSave
             // 
             this.buttonSave.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.buttonSave.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.buttonSave.Location = new System.Drawing.Point(0, 213);
+            this.buttonSave.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.buttonSave.Location = new System.Drawing.Point(0, 338);
             this.buttonSave.Name = "buttonSave";
-            this.buttonSave.Size = new System.Drawing.Size(324, 29);
+            this.buttonSave.Size = new System.Drawing.Size(248, 54);
             this.buttonSave.TabIndex = 45;
-            this.buttonSave.Text = "Zapisz";
+            this.buttonSave.Text = "ZAPISZ";
             this.buttonSave.UseVisualStyleBackColor = true;
             this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
             // 
@@ -1148,19 +1163,18 @@
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel2.Controls.Add(this.panel5, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.panel6, 0, 1);
-            this.tableLayoutPanel2.Controls.Add(this.dataGridViewHistory, 0, 2);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Left;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-            this.tableLayoutPanel2.RowCount = 3;
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 250F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 520F));
+            this.tableLayoutPanel2.RowCount = 2;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 400F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(332, 1061);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(256, 1061);
             this.tableLayoutPanel2.TabIndex = 49;
             // 
             // timerHideKeyboard
             // 
+            this.timerHideKeyboard.Enabled = true;
             this.timerHideKeyboard.Interval = 500;
             this.timerHideKeyboard.Tick += new System.EventHandler(this.timerHideKeyboard_Tick);
             // 
@@ -1170,83 +1184,165 @@
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel3.Controls.Add(this.panelWasteLevel, 0, 0);
-            this.tableLayoutPanel3.Controls.Add(this.dataGridView2, 0, 1);
+            this.tableLayoutPanel3.Controls.Add(this.dataGridViewHistory, 0, 2);
+            this.tableLayoutPanel3.Controls.Add(this.panel1, 0, 1);
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Right;
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(1243, 0);
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(1214, 0);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 3;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(200, 1061);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(229, 1061);
             this.tableLayoutPanel3.TabIndex = 55;
             // 
             // panelWasteLevel
             // 
             this.panelWasteLevel.BackColor = System.Drawing.Color.Lime;
+            this.panelWasteLevel.Controls.Add(this.label4);
+            this.panelWasteLevel.Controls.Add(this.chart1);
+            this.panelWasteLevel.Controls.Add(this.label2);
+            this.panelWasteLevel.Controls.Add(this.label1);
             this.panelWasteLevel.Controls.Add(this.labelWasteLevel);
             this.panelWasteLevel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelWasteLevel.Location = new System.Drawing.Point(3, 3);
             this.panelWasteLevel.Name = "panelWasteLevel";
-            this.panelWasteLevel.Size = new System.Drawing.Size(194, 347);
+            this.panelWasteLevel.Size = new System.Drawing.Size(223, 347);
             this.panelWasteLevel.TabIndex = 0;
             // 
             // labelWasteLevel
             // 
             this.labelWasteLevel.AutoSize = true;
             this.labelWasteLevel.Font = new System.Drawing.Font("Verdana", 25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelWasteLevel.Location = new System.Drawing.Point(13, 31);
+            this.labelWasteLevel.Location = new System.Drawing.Point(7, 53);
             this.labelWasteLevel.Name = "labelWasteLevel";
             this.labelWasteLevel.Size = new System.Drawing.Size(111, 41);
             this.labelWasteLevel.TabIndex = 0;
             this.labelWasteLevel.Text = "0,5%";
             // 
-            // dataGridView2
-            // 
-            this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView2.Location = new System.Drawing.Point(3, 356);
-            this.dataGridView2.Name = "dataGridView2";
-            this.dataGridView2.Size = new System.Drawing.Size(194, 347);
-            this.dataGridView2.TabIndex = 1;
-            // 
             // pictureBox1
             // 
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox1.Location = new System.Drawing.Point(332, 0);
+            this.pictureBox1.Location = new System.Drawing.Point(256, 0);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(911, 1061);
+            this.pictureBox1.Size = new System.Drawing.Size(958, 1061);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 45;
             this.pictureBox1.TabStop = false;
             this.pictureBox1.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox1_Paint);
+            // 
+            // button14
+            // 
+            this.button14.Location = new System.Drawing.Point(400, 8);
+            this.button14.Name = "button14";
+            this.button14.Size = new System.Drawing.Size(56, 49);
+            this.button14.TabIndex = 56;
+            this.button14.Text = "Matchinger";
+            this.button14.UseVisualStyleBackColor = true;
+            this.button14.Click += new System.EventHandler(this.button14_Click);
+            // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.labelLabel);
+            this.panel2.Controls.Add(this.labelShiftedRes);
+            this.panel2.Controls.Add(this.labelMissingRes);
+            this.panel2.Controls.Add(this.labelDmgLed);
+            this.panel2.Controls.Add(this.labelSolder);
+            this.panel2.Controls.Add(this.labelDmgPcb);
+            this.panel2.Controls.Add(this.labelDirtyLed);
+            this.panel2.Controls.Add(this.labelBadLed);
+            this.panel2.Controls.Add(this.labelOther);
+            this.panel2.Controls.Add(this.labelElecTest);
+            this.panel2.Controls.Add(this.labelShiftedLed);
+            this.panel2.Controls.Add(this.labelBurnedConn);
+            this.panel2.Controls.Add(this.labelMissingLed);
+            this.panel2.Controls.Add(this.labelDmgConn);
+            this.panel2.Location = new System.Drawing.Point(110, 0);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(179, 449);
+            this.panel2.TabIndex = 57;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.label1.Location = new System.Drawing.Point(3, 34);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(153, 20);
+            this.label1.TabIndex = 49;
+            this.label1.Text = "od początku zmiany:";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.label2.Location = new System.Drawing.Point(3, 2);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(102, 29);
+            this.label2.TabIndex = 50;
+            this.label2.Text = "ODPAD";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.label3.Location = new System.Drawing.Point(3, 2);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(174, 29);
+            this.label3.TabIndex = 51;
+            this.label3.Text = "WYDAJNOŚĆ";
+            // 
+            // panel4
+            // 
+            this.panel4.Controls.Add(this.panelNg);
+            this.panel4.Controls.Add(this.panel2);
+            this.panel4.Controls.Add(this.panelScrap);
+            this.panel4.Controls.Add(this.panel3);
+            this.panel4.Location = new System.Drawing.Point(262, 403);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(292, 468);
+            this.panel4.TabIndex = 58;
+            // 
+            // chart1
+            // 
+            this.chart1.BackColor = System.Drawing.Color.Transparent;
+            chartArea4.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea4);
+            this.chart1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            legend4.Name = "Legend1";
+            this.chart1.Legends.Add(legend4);
+            this.chart1.Location = new System.Drawing.Point(0, 107);
+            this.chart1.Name = "chart1";
+            series4.ChartArea = "ChartArea1";
+            series4.Legend = "Legend1";
+            series4.Name = "Series1";
+            this.chart1.Series.Add(series4);
+            this.chart1.Size = new System.Drawing.Size(223, 240);
+            this.chart1.TabIndex = 51;
+            this.chart1.Text = "chart1";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.label4.Location = new System.Drawing.Point(3, 97);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(109, 20);
+            this.label4.TabIndex = 52;
+            this.label4.Text = "Odpad TOP 5:";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1443, 1061);
+            this.Controls.Add(this.panel4);
+            this.Controls.Add(this.button14);
             this.Controls.Add(this.buttonCamStartStop);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.tableLayoutPanel3);
             this.Controls.Add(this.tableLayoutPanel2);
-            this.Controls.Add(this.labelElecTest);
-            this.Controls.Add(this.labelBurnedConn);
-            this.Controls.Add(this.labelDmgConn);
-            this.Controls.Add(this.panelScrap);
-            this.Controls.Add(this.labelMissingLed);
-            this.Controls.Add(this.labelShiftedLed);
-            this.Controls.Add(this.panelNg);
-            this.Controls.Add(this.labelOther);
-            this.Controls.Add(this.labelBadLed);
-            this.Controls.Add(this.panel3);
-            this.Controls.Add(this.labelDirtyLed);
-            this.Controls.Add(this.labelLabel);
-            this.Controls.Add(this.labelDmgPcb);
-            this.Controls.Add(this.labelSolder);
-            this.Controls.Add(this.labelDmgLed);
-            this.Controls.Add(this.labelMissingRes);
-            this.Controls.Add(this.labelShiftedRes);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "Form1";
             this.Text = "Form1";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
@@ -1298,10 +1394,12 @@
             this.tableLayoutPanel3.ResumeLayout(false);
             this.panelWasteLevel.ResumeLayout(false);
             this.panelWasteLevel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
+            this.panel4.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -1400,7 +1498,14 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
         private System.Windows.Forms.Panel panelWasteLevel;
         private System.Windows.Forms.Label labelWasteLevel;
-        private System.Windows.Forms.DataGridView dataGridView2;
+        private System.Windows.Forms.Button button14;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Panel panel4;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
+        private System.Windows.Forms.Label label4;
     }
 }
 

@@ -47,5 +47,81 @@ namespace Kontrola_wizualna_karta_pracy
                 }
             }
         }
+
+        public static dateShiftNo whatDayShiftIsit(DateTime inputDate)
+        {
+            int hourNow = inputDate.Hour;
+            DateTime resultDate = new DateTime();
+            int resultShift = 0;
+
+            if (hourNow < 6)
+            {
+                resultDate = new DateTime(inputDate.Date.AddDays(-1).Year, inputDate.Date.AddDays(-1).Month, inputDate.Date.AddDays(-1).Day, 22, 0, 0);
+                resultShift = 3;
+            }
+
+            else if (hourNow < 14)
+            {
+                resultDate = new DateTime(inputDate.Date.Year, inputDate.Date.Month, inputDate.Date.Day, 6, 0, 0);
+                resultShift = 1;
+            }
+
+            else if (hourNow < 22)
+            {
+                resultDate = new DateTime(inputDate.Date.Year, inputDate.Date.Month, inputDate.Date.Day, 14, 0, 0);
+                resultShift = 2;
+            }
+
+            else
+            {
+                resultDate = new DateTime(inputDate.Date.Year, inputDate.Date.Month, inputDate.Date.Day, 22, 0, 0);
+                resultShift = 3;
+            }
+
+            dateShiftNo result = new dateShiftNo();
+            result.fixedDate = resultDate;
+            result.shift = resultShift;
+
+            return result;
+        }
+
+        public static DateTime ParseExact(string date)
+        {
+            try
+            {
+                if (date.Contains("-"))
+                    return DateTime.ParseExact(date, "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.CurrentCulture, System.Globalization.DateTimeStyles.None);
+                if (date.Contains(@"/"))
+                    return DateTime.ParseExact(date, "MM/dd/yyyy HH:mm:ss", System.Globalization.CultureInfo.CurrentCulture, System.Globalization.DateTimeStyles.None);
+                else
+                    return DateTime.ParseExact(date, "dd.MM.yyyy HH:mm:ss", System.Globalization.CultureInfo.CurrentCulture, System.Globalization.DateTimeStyles.None);
+            }
+            catch (Exception e)
+            {
+                return new DateTime(1900, 1, 1);
+            }
+        }
+
+        public class dateShiftNo
+        {
+            public DateTime fixedDate { get; set; }
+            public int shift { get; set; }
+
+            public override bool Equals(object obj)
+            {
+                dateShiftNo dateItem = obj as dateShiftNo;
+
+                return dateItem.fixedDate == this.fixedDate;
+            }
+
+            public override int GetHashCode()
+            {
+                // Which is preferred?
+
+                //return base.GetHashCode();
+
+                return this.fixedDate.GetHashCode();
+            }
+        }
     }
 }

@@ -53,6 +53,7 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -70,13 +71,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App.cs" />
+    <Compile Include="Charting.cs" />
     <Compile Include="controlToDbTranslation.cs" />
     <Compile Include="DataStructures\SmtInfo.cs" />
     <Compile Include="DateOperations.cs" />
     <Compile Include="DgvTools.cs" />
     <Compile Include="DynamicControls.cs" />
     <Compile Include="Efficiency.cs" />
-    <Compile Include="EfficiencyTools.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -84,6 +86,7 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="ImagesTools.cs" />
+    <Compile Include="WasteCalculation.cs" />
     <Compile Include="LanguangeTranslation.cs" />
     <Compile Include="NewFailureForm.cs">
       <SubType>Form</SubType>
@@ -94,6 +97,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RecordToSave.cs" />
+    <Compile Include="RecordToSaveCalculations.cs" />
     <Compile Include="SettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -114,6 +118,7 @@
     <Compile Include="virtualKeyboard.Designer.cs">
       <DependentUpon>virtualKeyboard.cs</DependentUpon>
     </Compile>
+    <Compile Include="WasteDataStructure.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
