@@ -54,33 +54,35 @@ namespace Kontrola_wizualna_karta_pracy
             DateTime resultDate = new DateTime();
             int resultShift = 0;
 
-            if (hourNow < 6)
-            {
-                resultDate = new DateTime(inputDate.Date.AddDays(-1).Year, inputDate.Date.AddDays(-1).Month, inputDate.Date.AddDays(-1).Day, 22, 0, 0);
-                resultShift = 3;
-            }
+                if (hourNow < 6)
+                {
+                    resultDate = new DateTime(inputDate.Date.AddDays(-1).Year, inputDate.Date.AddDays(-1).Month, inputDate.Date.AddDays(-1).Day, 22, 0, 0);
+                    resultShift = 3;
+                }
 
-            else if (hourNow < 14)
-            {
-                resultDate = new DateTime(inputDate.Date.Year, inputDate.Date.Month, inputDate.Date.Day, 6, 0, 0);
-                resultShift = 1;
-            }
+                else if (hourNow < 14)
+                {
+                    resultDate = new DateTime(inputDate.Date.Year, inputDate.Date.Month, inputDate.Date.Day, 6, 0, 0);
+                    resultShift = 1;
+                }
 
-            else if (hourNow < 22)
-            {
-                resultDate = new DateTime(inputDate.Date.Year, inputDate.Date.Month, inputDate.Date.Day, 14, 0, 0);
-                resultShift = 2;
-            }
+                else if (hourNow < 22)
+                {
+                    resultDate = new DateTime(inputDate.Date.Year, inputDate.Date.Month, inputDate.Date.Day, 14, 0, 0);
+                    resultShift = 2;
+                }
 
-            else
-            {
-                resultDate = new DateTime(inputDate.Date.Year, inputDate.Date.Month, inputDate.Date.Day, 22, 0, 0);
-                resultShift = 3;
-            }
+                else
+                {
+                    resultDate = new DateTime(inputDate.Date.Year, inputDate.Date.Month, inputDate.Date.Day, 22, 0, 0);
+                    resultShift = 3;
+                }
+            
+
 
             dateShiftNo result = new dateShiftNo();
-            result.fixedDate = resultDate;
-            result.shift = resultShift;
+            result.shiftStartDate = resultDate;
+            result.shiftNumber = resultShift;
 
             return result;
         }
@@ -104,14 +106,14 @@ namespace Kontrola_wizualna_karta_pracy
 
         public class dateShiftNo
         {
-            public DateTime fixedDate { get; set; }
-            public int shift { get; set; }
+            public DateTime shiftStartDate { get; set; }
+            public int shiftNumber { get; set; }
 
             public override bool Equals(object obj)
             {
                 dateShiftNo dateItem = obj as dateShiftNo;
 
-                return dateItem.fixedDate == this.fixedDate;
+                return dateItem.shiftStartDate == this.shiftStartDate;
             }
 
             public override int GetHashCode()
@@ -120,7 +122,7 @@ namespace Kontrola_wizualna_karta_pracy
 
                 //return base.GetHashCode();
 
-                return this.fixedDate.GetHashCode();
+                return this.shiftStartDate.GetHashCode();
             }
         }
     }

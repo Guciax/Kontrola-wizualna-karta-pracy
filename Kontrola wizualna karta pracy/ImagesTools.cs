@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -19,6 +20,8 @@ namespace Kontrola_wizualna_karta_pracy
 
             foreach (var file in files)
             {
+                Debug.WriteLine("Image: "+file.Name);
+
                 string ext = Path.GetExtension(file.Name);
                 if (!extensionFilter.Contains(ext)) continue;
                 Image newImg = Bitmap.FromFile(file.FullName);

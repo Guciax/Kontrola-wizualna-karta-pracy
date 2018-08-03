@@ -12,19 +12,28 @@ namespace Kontrola_wizualna_karta_pracy
 {
     class Efficiency
     {
-        public static void SaveToTetFile(string textLine)
+        public static void SaveToTextFile(string textLine)
         {
-            List<string> file = System.IO.File.ReadAllLines("recentOrders.txt").ToList();
-            int startline = file.Count - 10;
-            if (startline < 0) startline = 0;
-            List<string> outputFile = new List<string>();
-            for (int i = startline; i < file.Count; i++) 
+            //SaveToTextFile(DateTime.Now.ToString("HH:mm dd-MMM") + ";" + currentLotInfo.Model + ";" + textBoxLotNumber.Text + ";" + textBoxGoodQty.Text + ";" + recordToSaceCalculation.GetAllNg());
+            List<string> fileLines = new List<string>();
+            List<string> outputLines = new List<string>();
+            if (System.IO.File.Exists("recentOrders.txt"))
             {
-                outputFile.Add(file[startline]);
+                List<string> file = System.IO.File.ReadAllLines("recentOrders.txt").ToList();
+                foreach (var line in file)
+                {
+                    var splittedLine = line.Split(';');
+                    DateTime inspectionDate = DateTime.ParseExact(splittedLine[0], "HH:mm dd-MMM", CultureInfo.CurrentCulture);
+                    if ((DateTime.Now-inspectionDate).TotalHours<=24)
+                    {
+                        outputLines.Add(line);
+                    }
+                }
             }
-            outputFile.Add(textLine);
+            outputLines.Add(textLine);
 
-            System.IO.File.AppendAllText("recentOrders.txt", textLine + Environment.NewLine);
+            System.IO.File.WriteAllLines("recentOrders.txt", outputLines);
+           
         }
 
         public static void AddRecentOrdersToGrid(DataGridView grid, ref Dictionary<string, string> lotModelDict)
@@ -36,53 +45,69 @@ namespace Kontrola_wizualna_karta_pracy
             source.Columns.Add("Ilosc");
             source.Columns.Add("NG");
 
-            string[] fileLines = System.IO.File.ReadAllLines("recentOrders.txt");
-
-            foreach (var line in fileLines)
+            if (System.IO.File.Exists("recentOrders.txt"))
             {
-                string[] lineSplitted = line.Split(';');
-                if (lineSplitted.Length < 4) continue;
+                string[] fileLines = System.IO.File.ReadAllLines("recentOrders.txt");
 
-                string date = lineSplitted[0];
-                string model = lineSplitted[1];
-                string zlecenie = lineSplitted[2];
-
-                if (model.Trim().Length == 0 || model == "Model") continue;
-                if(!lotModelDict.ContainsKey(zlecenie))
+                foreach (var line in fileLines)
                 {
-                    lotModelDict.Add(zlecenie, model);
+                    string[] lineSplitted = line.Split(';');
+                    if (lineSplitted.Length < 4) continue;
+
+                    string date = lineSplitted[0];
+                    string model = lineSplitted[1];
+                    string zlecenie = lineSplitted[2];
+
+                    if (model.Trim().Length == 0 || model == "Model") continue;
+                    if (!lotModelDict.ContainsKey(zlecenie))
+                    {
+                        lotModelDict.Add(zlecenie, model);
+                    }
+
+                    string ilosc = lineSplitted[3];
+                    string ng = lineSplitted[4];
+                    DataRow newRow = source.NewRow();
+                    newRow[0] = date;
+                    newRow[1] = model;
+                    newRow[2] = zlecenie;
+                    newRow[3] = ilosc;
+                    newRow[4] = ng;
+
+                    source.Rows.InsertAt(newRow, 0);
                 }
-                
-                string ilosc = lineSplitted[3];
-                string ng = lineSplitted[4];
-                DataRow newRow = source.NewRow();
-                newRow[0] = date;
-                newRow[1] = model;
-                newRow[2] = zlecenie;
-                newRow[3] = ilosc;
-                newRow[4] = ng;
 
-                source.Rows.InsertAt(newRow, 0);
+                grid.DataSource = source;
+
+                DgvTools.ColumnsAutoSize(grid, DataGridViewAutoSizeColumnMode.AllCellsExceptHeader);
             }
-
-            grid.DataSource = source;
-
-            DgvTools.ColumnsAutoSize(grid, DataGridViewAutoSizeColumnMode.AllCellsExceptHeader);
+            
         }
 
-        public static double CalculateWasteThisShift(DataGridView grid)
+        public static double CalculateWasteLast24h(DataGridView grid,int lastHours)
         {
             double ng = 0;
             double total = 0;
             foreach (DataGridViewRow row in grid.Rows)
             {
                 DateTime inspectionTime = DateTime.ParseExact(row.Cells["Data"].Value.ToString(),"HH:mm dd-MMM", CultureInfo.CurrentCulture);
-                if (TimeTools.whatDayShiftIsit(inspectionTime).fixedDate != TimeTools.whatDayShiftIsit(DateTime.Now).fixedDate || TimeTools.whatDayShiftIsit(inspectionTime).shift != TimeTools.whatDayShiftIsit(DateTime.Now).shift) continue;
+                if ((DateTime.Now-inspectionTime).TotalHours> lastHours) continue;
                 ng += double.Parse(row.Cells["NG"].Value.ToString());
                 total += double.Parse(row.Cells["Ilosc"].Value.ToString());
             }
 
-            return total>0?  Math.Round(ng / total * 100, 2): 0;
+            return total > 0 ? Math.Round(ng / total * 100, 2) : 0;
+        }
+
+        public static int CalculateQuantityThisShift(DataGridView grid)
+        {
+            int qty = 0;
+            foreach (DataGridViewRow row in grid.Rows)
+            {
+                DateTime inspectionTime = DateTime.ParseExact(row.Cells["Data"].Value.ToString(), "HH:mm dd-MMM", CultureInfo.CurrentCulture);
+                if (TimeTools.whatDayShiftIsit(inspectionTime).shiftStartDate != TimeTools.whatDayShiftIsit(DateTime.Now).shiftStartDate || TimeTools.whatDayShiftIsit(inspectionTime).shiftNumber != TimeTools.whatDayShiftIsit(DateTime.Now).shiftNumber) continue;
+                qty += int.Parse(row.Cells["Ilosc"].Value.ToString());
+            }
+            return qty;
         }
 
         public static double CalculateEfficiencyThisShift(DataGridView grid, bool polish)

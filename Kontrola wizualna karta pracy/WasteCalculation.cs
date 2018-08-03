@@ -31,7 +31,7 @@ namespace Kontrola_wizualna_karta_pracy
                 id = int.Parse(row["Id"].ToString());
                 realDateTime = TimeTools.ParseExact(row["Data_czas"].ToString());
 
-                shiftNumber = TimeTools.whatDayShiftIsit(realDateTime).shift;
+                shiftNumber = TimeTools.whatDayShiftIsit(realDateTime).shiftNumber;
                 oper = row["Operator"].ToString();
                 goodQty = int.Parse(row["iloscDobrych"].ToString());
                 allQty = goodQty;

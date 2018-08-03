@@ -16,7 +16,23 @@ namespace Kontrola_wizualna_karta_pracy
 
         public RecordToSave RecordToSave { get; }
 
-        public  int GetAllNg()
+        public int GetAllNg()
+        {
+            int result = 0;
+
+            PropertyInfo[] properties = typeof(RecordToSave).GetProperties();
+            foreach (PropertyInfo property in properties)
+            {
+                if (property.Name.ToLower().Contains("ng") || property.Name.ToLower().Contains("scrap"))
+                {
+                    result += (int)property.GetValue(RecordToSave);
+                }
+            }
+
+            return result;
+        }
+
+        public static int GetAllNg2(RecordToSave RecordToSave)
         {
             int result = 0;
 

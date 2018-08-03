@@ -85,9 +85,9 @@ namespace Kontrola_wizualna_karta_pracy
             return tempHash.OrderBy(op=>op).ToList();
         }
 
-        public static Dictionary<string,string> GetLotToModelDictionary()
+        public static Dictionary<string, List<string>> HowManyModulesTested(string lotId)
         {
-            Dictionary<string, string> result = new Dictionary<string, string>();
+
 
             DataTable sqlTable = new DataTable();
             SqlConnection conn = new SqlConnection();
@@ -96,7 +96,42 @@ namespace Kontrola_wizualna_karta_pracy
             SqlCommand command = new SqlCommand();
             command.Connection = conn;
             command.CommandText =
-                @"SELECT Nr_Zlecenia_Produkcyjnego,NC12_wyrobu FROM tb_Zlecenia_produkcyjne;";
+                @"SELECT serial_no,result,wip_entity_name FROM tb_tester_measurements WHERE wip_entity_name=@lotId AND result<>'NGV' ORDER BY inspection_time DESC;";
+            command.Parameters.AddWithValue("@lotId", lotId);
+
+            SqlDataAdapter adapter = new SqlDataAdapter(command);
+            adapter.Fill(sqlTable);
+
+            Dictionary<string, List<string>> result = new Dictionary<string, List<string>>();
+            result.Add("OK", new List<string>());
+            result.Add("NG", new List<string>());
+
+            
+            foreach (DataRow row in sqlTable.Rows)
+            {
+                string serial = row["serial_no"].ToString();
+                string testResult = row["result"].ToString();
+
+                if (testResult != "OK" & testResult != "NG") continue;
+                if (result["OK"].Contains(serial) || result["NG"].Contains(serial)) continue;
+                result[testResult].Add(serial);
+            }
+
+            return result;
+        }
+
+        public static Dictionary<string,CurrentLotInfo> GetLotToModelDictionary()
+        {
+            Dictionary<string, CurrentLotInfo> result = new Dictionary<string, CurrentLotInfo>();
+
+            DataTable sqlTable = new DataTable();
+            SqlConnection conn = new SqlConnection();
+            conn.ConnectionString = @"Data Source=MSTMS010;Initial Catalog=MES;User Id=mes;Password=mes;";
+
+            SqlCommand command = new SqlCommand();
+            command.Connection = conn;
+            command.CommandText =
+                @"SELECT Nr_Zlecenia_Produkcyjnego,NC12_wyrobu,Ilosc_wyrobu_zlecona FROM tb_Zlecenia_produkcyjne;";
 
             SqlDataAdapter adapter = new SqlDataAdapter(command);
             adapter.Fill(sqlTable);
@@ -104,7 +139,12 @@ namespace Kontrola_wizualna_karta_pracy
             foreach (DataRow row in sqlTable.Rows)
             {
                 if (result.ContainsKey(row["Nr_Zlecenia_Produkcyjnego"].ToString())) continue;
-                result.Add(row["Nr_Zlecenia_Produkcyjnego"].ToString(), row["NC12_wyrobu"].ToString());
+                string lotId = row["Nr_Zlecenia_Produkcyjnego"].ToString();
+                string model = row["NC12_wyrobu"].ToString().Replace("LLFML", "");
+                int orderedQty = int.Parse( row["Ilosc_wyrobu_zlecona"].ToString());
+
+                CurrentLotInfo nfo = new CurrentLotInfo(lotId, model, orderedQty);
+                result.Add(lotId, nfo);
             }
 
             return result;
@@ -121,7 +161,7 @@ namespace Kontrola_wizualna_karta_pracy
             SqlCommand command = new SqlCommand();
             command.Connection = conn;
             command.CommandText =
-                @"SELECT DataCzasKoniec,LiniaSMT,NrZlecenia,IloscWykonana FROM tb_SMT_Karta_Pracy;";
+                @"SELECT DataCzasKoniec,LiniaSMT,NrZlecenia,IloscWykonana,Model FROM tb_SMT_Karta_Pracy;";
 
             SqlDataAdapter adapter = new SqlDataAdapter(command);
             adapter.Fill(sqlTable);
@@ -131,13 +171,14 @@ namespace Kontrola_wizualna_karta_pracy
                 if (result.ContainsKey(row["NrZlecenia"].ToString())) continue;
                 string completitionDate = row["DataCzasKoniec"].ToString();
                 string smtLine = row["LiniaSMT"].ToString();
+                string model = row["Model"].ToString();
                 int qty = 0;
                 if (!int.TryParse(row["IloscWykonana"].ToString(), out qty))
                 {
                     qty = 0;
                 }
 
-                SmtInfo newItem = new SmtInfo(smtLine, completitionDate, qty);
+                SmtInfo newItem = new SmtInfo(smtLine, completitionDate, qty, model);
                 result.Add(row["NrZlecenia"].ToString(), newItem );
             }
             return result;

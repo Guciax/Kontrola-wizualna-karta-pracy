@@ -205,10 +205,9 @@ namespace Kontrola_wizualna_karta_pracy
                             labelDecodedQr.Text = decoded;
                             btnTakePic.Visible = true;
                             panelQr.BackColor = Color.Lime;
-
                         }
-                        
                     }
+
                     catch (Exception ex)
                     {
                         Debug.WriteLine(ex.Message + " - " + ex.HResult);

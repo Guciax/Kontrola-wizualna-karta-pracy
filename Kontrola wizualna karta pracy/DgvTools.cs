@@ -1,14 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static Kontrola_wizualna_karta_pracy.DateOperations;
 
 namespace Kontrola_wizualna_karta_pracy
 {
     class DgvTools
     {
+
+
+        public static void ColorShifts(DataGridView grid, string dateColumnName)
+        {
+            Dictionary<int, Color> shiftColorDict = new Dictionary<int, Color>();
+            shiftColorDict.Add(1, Color.Yellow);
+            shiftColorDict.Add(2, Color.SeaGreen);
+            shiftColorDict.Add(3, Color.MediumVioletRed);
+
+            foreach (DataGridViewRow row in grid.Rows)
+            {
+                DateTime inspectionTime = DateTime.ParseExact(row.Cells[dateColumnName].Value.ToString(), "HH:mm dd-MMM", CultureInfo.CurrentCulture);
+                dateShiftNo shiftInfo = DateOperations.whatDayShiftIsit(inspectionTime);
+                foreach (DataGridViewCell cell in row.Cells)
+                {
+                    cell.Style.BackColor = shiftColorDict[shiftInfo.shift];
+                }
+            }
+            
+        }
+
         public static void ColumnsAutoSize(DataGridView grid, DataGridViewAutoSizeColumnMode mode)
         {
             foreach (DataGridViewColumn col in grid.Columns)

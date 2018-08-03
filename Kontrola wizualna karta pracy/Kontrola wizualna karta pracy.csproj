@@ -41,6 +41,9 @@
     <Reference Include="AForge.Video.DirectShow, Version=2.2.5.0, Culture=neutral, PublicKeyToken=61ea4348d43881b7, processorArchitecture=MSIL">
       <HintPath>..\packages\AForge.Video.DirectShow.2.2.5\lib\AForge.Video.DirectShow.dll</HintPath>
     </Reference>
+    <Reference Include="EPPlus, Version=4.5.2.1, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.4.5.2.1\lib\net40\EPPlus.dll</HintPath>
+    </Reference>
     <Reference Include="Nevron.Nov.Barcode, Version=17.5.29.12, Culture=neutral, PublicKeyToken=b33b1a04bb5ca8ad" />
     <Reference Include="Nevron.Nov.Chart, Version=17.5.29.12, Culture=neutral, PublicKeyToken=b33b1a04bb5ca8ad" />
     <Reference Include="Nevron.Nov.Diagram, Version=17.5.29.12, Culture=neutral, PublicKeyToken=b33b1a04bb5ca8ad" />
@@ -50,9 +53,11 @@
     <Reference Include="Nevron.Nov.Schedule, Version=17.5.29.12, Culture=neutral, PublicKeyToken=b33b1a04bb5ca8ad" />
     <Reference Include="Nevron.Nov.Text, Version=17.5.29.12, Culture=neutral, PublicKeyToken=b33b1a04bb5ca8ad" />
     <Reference Include="Nevron.Nov.WinFormControls, Version=17.5.29.12, Culture=neutral, PublicKeyToken=b33b1a04bb5ca8ad" />
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -74,6 +79,7 @@
     <Compile Include="App.cs" />
     <Compile Include="Charting.cs" />
     <Compile Include="controlToDbTranslation.cs" />
+    <Compile Include="DataStructures\CurrentLotInfo.cs" />
     <Compile Include="DataStructures\SmtInfo.cs" />
     <Compile Include="DateOperations.cs" />
     <Compile Include="DgvTools.cs" />
@@ -86,6 +92,13 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="ImagesTools.cs" />
+    <Compile Include="mstOrdersFromExcel.cs" />
+    <Compile Include="TestResults.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TestResults.Designer.cs">
+      <DependentUpon>TestResults.cs</DependentUpon>
+    </Compile>
     <Compile Include="WasteCalculation.cs" />
     <Compile Include="LanguangeTranslation.cs" />
     <Compile Include="NewFailureForm.cs">
@@ -140,6 +153,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SummaryView.resx">
       <DependentUpon>SummaryView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TestResults.resx">
+      <DependentUpon>TestResults.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="virtualKeyboard.resx">
       <DependentUpon>virtualKeyboard.cs</DependentUpon>

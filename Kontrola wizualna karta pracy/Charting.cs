@@ -23,6 +23,7 @@ namespace Kontrola_wizualna_karta_pracy
             {
                 foreach (var wasteEntry in inspectionRecord.WastePerReason)
                 {
+                    if (wasteEntry.Value == 0) continue;
                     if(!wastePerReasonDict.ContainsKey(wasteEntry.Key))
                     {
                         wastePerReasonDict.Add(wasteEntry.Key, 0);
@@ -31,10 +32,10 @@ namespace Kontrola_wizualna_karta_pracy
                 }
             }
 
-            var myList = wastePerReasonDict.ToList();
+            var wasteList = wastePerReasonDict.ToList();
 
-            myList.Sort((pair1, pair2) =>  -1*pair1.Value.CompareTo(pair2.Value));
-            myList = myList.Select(i => i).Take(5).ToList();
+            wasteList.Sort((pair1, pair2) =>  -1*pair1.Value.CompareTo(pair2.Value));
+            wasteList = wasteList.Select(i => i).Take(5).ToList();
 
             Series sr = new Series();
             sr.ChartType = SeriesChartType.Bar;
@@ -49,6 +50,7 @@ namespace Kontrola_wizualna_karta_pracy
             ar.AxisX.IsMarginVisible = false;
             ar.AxisY.IsMarginVisible = false;
             ar.AxisX.LabelStyle.Enabled = false;
+            ar.AxisY.LabelStyle.Enabled = false;
             ar.AxisX.IsReversed = true;
             ar.AxisX.MajorGrid.Enabled = false;
             ar.AxisY.MajorGrid.Enabled = false;
@@ -57,12 +59,10 @@ namespace Kontrola_wizualna_karta_pracy
             ar.Position.Height = 100;
             ar.Position.Width = 100;
             
-            
-
-            foreach (var waste in myList)
+            foreach (var waste in wasteList)
             {
                 DataPoint point = new DataPoint();
-                point.SetValueXY(waste.Key, waste.Value);
+                point.SetValueXY( waste.Key, waste.Value);
                 //point.Label = waste.Key;
 
                 RectangleAnnotation ta = new RectangleAnnotation();
@@ -73,7 +73,7 @@ namespace Kontrola_wizualna_karta_pracy
                 ta.Font = new Font("Arial Narrow", 9, FontStyle.Bold);
                 ta.AnchorOffsetY = 0;     // *
                 ta.AnchorAlignment = ContentAlignment.MiddleLeft;
-                ta.Text = waste.Value + " - " + waste.Key;
+                ta.Text = waste.Value + " - ["+waste.Key.Substring(0,2).ToString().ToUpper()+"] "+  controlToDbTranslation.GetLabelCaptionFromDbColumn( waste.Key);
                 ta.BackColor = Color.Transparent;
                 ta.LineWidth = 0;
                 chart.Annotations.Add(ta);
@@ -83,6 +83,8 @@ namespace Kontrola_wizualna_karta_pracy
 
             chart.ChartAreas.Add(ar);
             chart.Series.Add(sr);
+            //int interval = (int)Math.Round(chart.ChartAreas[0].AxisY.Maximum / 5, MidpointRounding.AwayFromZero);
+            //chart.ChartAreas[0].AxisY.LabelStyle.Interval = interval;
         }
     }
 }
