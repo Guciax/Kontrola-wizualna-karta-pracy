@@ -42,7 +42,7 @@ namespace Kontrola_wizualna_karta_pracy
                         int nc12ColIndex = 0;
                         int qtyColIndex = 0;
                         int firstRowData = 0;
-                        int endOrderIndex = 0;
+                        int dateIndex = 0;
 
                         for (int row = 1; row < 11; row++)
                         {
@@ -63,9 +63,9 @@ namespace Kontrola_wizualna_karta_pracy
                                         qtyColIndex = col;
                                     }
 
-                                    if (worksheet.Cells[row, col].Value.ToString().Trim().ToUpper().Replace(" ", "") == "DATAPRZESUNIĘCIA")
+                                    if (worksheet.Cells[row, col].Value.ToString().Trim().ToUpper().Replace(" ", "") == "DATAWEJŚCIA")
                                     {
-                                        endOrderIndex = col;
+                                        dateIndex = col;
                                     }
 
                                 }
@@ -82,7 +82,7 @@ namespace Kontrola_wizualna_karta_pracy
                         {
                             if (worksheet.Cells[row, nc12ColIndex].Value != null)
                             {
-                                if (worksheet.Cells[row, endOrderIndex].Value == null) continue;
+                                if (worksheet.Cells[row, dateIndex].Value == null) continue;
                                 string nc12 = worksheet.Cells[row, nc12ColIndex].Value.ToString().Replace(" ", "").Trim();
                                 string orderNo = worksheet.Cells[row, orderColIndex].Value.ToString().Replace(" ", "").Trim();
                                 string qty = worksheet.Cells[row, qtyColIndex].Value.ToString().Replace(" ", "").Trim();
@@ -92,10 +92,10 @@ namespace Kontrola_wizualna_karta_pracy
                                 newItem.nc12 = nc12;
                                 newItem.quantity = qty;
 
-                                if (endOrderIndex > 0)
+                                if (dateIndex > 0)
                                 {
                                     DateTime endDate = new DateTime(0001, 01, 01);
-                                    DateTime.TryParse(fixDateStringFormat(worksheet.Cells[row, endOrderIndex].Value.ToString().Replace(" ", "").Trim().Replace(".", "-")), out endDate);
+                                    DateTime.TryParse(fixDateStringFormat(worksheet.Cells[row, dateIndex].Value.ToString().Replace(" ", "").Trim().Replace(".", "-")), out endDate);
                                     newItem.endDate = endDate;
                                     //Debug.WriteLine(endDate.ToShortDateString());
                                 }
@@ -112,7 +112,7 @@ namespace Kontrola_wizualna_karta_pracy
                 if (smtInfo.ContainsKey(item.order)) continue;
                 int qty = 0;
                 int.TryParse(item.quantity, out qty);
-                smtInfo.Add(item.order, new SmtInfo("", item.endDate.ToString("dd.MM.yyyy"), qty, item.nc12));
+                smtInfo.Add(item.order, new SmtInfo("", item.endDate.ToString("dd.MM.yyyy"), qty, item.nc12, true));
             }
 
             //return result;

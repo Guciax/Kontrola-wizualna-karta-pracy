@@ -21,12 +21,13 @@ namespace Kontrola_wizualna_karta_pracy
                 string failureName = col.Replace("ng", "").Replace("Ng", "").Replace("NG", "").Replace("scrap", "").Replace("Scrap", "").Replace("SCRAP", "");
                 if (uniqeColumns.Contains(failureName)) continue;
                 uniqeColumns.Add(failureName);
-                Padding pad = new Padding((ngPanel.Width - 40) / 2, 1, (ngPanel.Width - 40) / 2, 1);
+                Padding pad = new Padding((ngPanel.Width - 30) / 2, 1, (ngPanel.Width - 30) / 2, 1);
 
                 MyTextBox lblBox = new MyTextBox();
                 lblBox.Name = col.Replace("ng","").Replace("scrap","");
                 Debug.WriteLine(lblBox.Name);
                 lblBox.Text = controlToDbTranslation.GetLabelCaptionFromDbColumn(col);
+                lblBox.TextAlign = HorizontalAlignment.Center;
                 lblBox.Width = labelPanel.Width;
                 lblBox.ReadOnly = true;
                 lblBox.Cursor = Cursors.Arrow;
@@ -63,7 +64,7 @@ namespace Kontrola_wizualna_karta_pracy
                 ngBox.TextAlign = HorizontalAlignment.Center;
                 ngBox.ReadOnly = true;
                 ngBox.SelectionHighlightEnabled = false;
-                ngBox.Width = 40;
+                ngBox.Width = 30;
                 ngBox.Margin = pad;
                 ngBox.DataBindings.Add("Text", recordToSave, ngBox.Name, false, DataSourceUpdateMode.OnPropertyChanged);
                 ngBox.Tag = lblBox.Text;
@@ -77,7 +78,7 @@ namespace Kontrola_wizualna_karta_pracy
                     scrapBox.TextAlign = HorizontalAlignment.Center;
                     scrapBox.ReadOnly = true;
                     scrapBox.SelectionHighlightEnabled = false;
-                    scrapBox.Width = 40;
+                    scrapBox.Width = 30;
                     scrapBox.Margin = pad;
                     scrapBox.DataBindings.Add("Text", recordToSave, scrapBox.Name, false, DataSourceUpdateMode.OnPropertyChanged);
                     scrapBox.Tag = lblBox.Text;

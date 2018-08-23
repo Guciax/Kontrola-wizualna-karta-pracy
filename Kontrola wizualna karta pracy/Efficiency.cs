@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,14 +14,15 @@ namespace Kontrola_wizualna_karta_pracy
 {
     class Efficiency
     {
-        public static void SaveToTextFile(string textLine)
+        public static void SaveToTextFile(string textLine, string appPath)
         {
             //SaveToTextFile(DateTime.Now.ToString("HH:mm dd-MMM") + ";" + currentLotInfo.Model + ";" + textBoxLotNumber.Text + ";" + textBoxGoodQty.Text + ";" + recordToSaceCalculation.GetAllNg());
             List<string> fileLines = new List<string>();
             List<string> outputLines = new List<string>();
-            if (System.IO.File.Exists("recentOrders.txt"))
+            string recentOrdersPath = Path.Combine(appPath, "recentOrders.txt");
+            if (System.IO.File.Exists(recentOrdersPath))
             {
-                List<string> file = System.IO.File.ReadAllLines("recentOrders.txt").ToList();
+                List<string> file = System.IO.File.ReadAllLines(recentOrdersPath).ToList();
                 foreach (var line in file)
                 {
                     var splittedLine = line.Split(';');
@@ -32,11 +35,11 @@ namespace Kontrola_wizualna_karta_pracy
             }
             outputLines.Add(textLine);
 
-            System.IO.File.WriteAllLines("recentOrders.txt", outputLines);
+            System.IO.File.WriteAllLines(recentOrdersPath, outputLines);
            
         }
 
-        public static void AddRecentOrdersToGrid(DataGridView grid, ref Dictionary<string, string> lotModelDict)
+        public static void AddRecentOrdersToGrid(DataGridView grid, ref Dictionary<string, string> lotModelDict, string appPath)
         {
             DataTable source = new DataTable();
             source.Columns.Add("Data");
@@ -44,10 +47,11 @@ namespace Kontrola_wizualna_karta_pracy
             source.Columns.Add("Zlecenie");
             source.Columns.Add("Ilosc");
             source.Columns.Add("NG");
+            string recentOrdersPath = Path.Combine(appPath, "recentOrders.txt");
 
-            if (System.IO.File.Exists("recentOrders.txt"))
+            if (System.IO.File.Exists(recentOrdersPath))
             {
-                string[] fileLines = System.IO.File.ReadAllLines("recentOrders.txt");
+                string[] fileLines = System.IO.File.ReadAllLines(recentOrdersPath);
 
                 foreach (var line in fileLines)
                 {
@@ -77,24 +81,23 @@ namespace Kontrola_wizualna_karta_pracy
                 }
 
                 grid.DataSource = source;
-
                 DgvTools.ColumnsAutoSize(grid, DataGridViewAutoSizeColumnMode.AllCellsExceptHeader);
             }
             
         }
 
-        public static double CalculateWasteLast24h(DataGridView grid,int lastHours)
+        public static double CalculateWasteLastXXh(DataGridView grid,int givenTime)
         {
             double ng = 0;
             double total = 0;
             foreach (DataGridViewRow row in grid.Rows)
             {
                 DateTime inspectionTime = DateTime.ParseExact(row.Cells["Data"].Value.ToString(),"HH:mm dd-MMM", CultureInfo.CurrentCulture);
-                if ((DateTime.Now-inspectionTime).TotalHours> lastHours) continue;
+                if ((DateTime.Now-inspectionTime).TotalHours> givenTime) continue;
+                Debug.WriteLine("LOT:" + row.Cells["Zlecenie"].Value.ToString() +" "+ row.Cells["Ilosc"].Value.ToString() + " NG:" + row.Cells["NG"].Value.ToString());
                 ng += double.Parse(row.Cells["NG"].Value.ToString());
                 total += double.Parse(row.Cells["Ilosc"].Value.ToString());
             }
-
             return total > 0 ? Math.Round(ng / total * 100, 2) : 0;
         }
 
@@ -110,11 +113,7 @@ namespace Kontrola_wizualna_karta_pracy
             return qty;
         }
 
-        public static double CalculateEfficiencyThisShift(DataGridView grid, bool polish)
-        {
-            int qty = Efficiency.HowManyInspectedThisShift(grid);
-            return Math.Round((double)qty / (double)LanguangeTranslation.NormPerShift(polish) * 100, 2);
-        }
+
 
         public static int HowManyInspectedThisShift(DataGridView grid)
         {

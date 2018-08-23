@@ -24,15 +24,27 @@ namespace Kontrola_wizualna_karta_pracy
         public string buttonClicked { get; set; }
         public string LotNumber { get; }
         public string FixedDate { get; }
+        public string[] PcbsInCurrentLot { get; }
+        public bool LangPolish { get; }
+        public string DeviceMonikerString { get; }
+
         List<Image> imageList = new List<Image>();
 
-        public NewFailureForm(string[] ngButtons, string[] scrapButtons, string lotNumber, string fixedDate)
+        public NewFailureForm(string[] ngButtons, string[] scrapButtons, string lotNumber, string fixedDate, string[] pcbsInCurrentLot,bool langPolish, string deviceMonikerString)
         {
             InitializeComponent();
-            CreateWasteReasonButtons(ngButtons, scrapButtons);
+            
 
             LotNumber = lotNumber;
             FixedDate = fixedDate;
+            PcbsInCurrentLot = pcbsInCurrentLot;
+            if (PcbsInCurrentLot==null)
+            {
+                PcbsInCurrentLot = new string[0];
+            }
+            LangPolish = langPolish;
+            DeviceMonikerString = deviceMonikerString;
+            CreateWasteReasonButtons(ngButtons, scrapButtons);
         }
 
         Button prevBtn = null;
@@ -58,11 +70,15 @@ namespace Kontrola_wizualna_karta_pracy
         {
             CaptureDevice = new FilterInfoCollection(FilterCategory.VideoInputDevice);
             FinalFrame = new VideoCaptureDevice();
-            FinalFrame = new VideoCaptureDevice(CaptureDevice[0].MonikerString);
+            FinalFrame = new VideoCaptureDevice(DeviceMonikerString);
             FinalFrame.NewFrame += new NewFrameEventHandler(FinalFrame_NewFrame);
             FinalFrame.NewFrame -= Handle_New_Frame;
             Thread.Sleep(1000);
             FinalFrame.Start();
+
+            labelDecodedQr.Text = LanguangeTranslation.Translate("Zeskanuj kod Qr", LangPolish);
+            button1.Text = LanguangeTranslation.Translate("Zapisz", LangPolish);
+            btnTakePic.Text = LanguangeTranslation.Translate("+zdjęcie", LangPolish);
         }
 
         private void Handle_New_Frame(object sender, NewFrameEventArgs eventArgs)
@@ -84,7 +100,7 @@ namespace Kontrola_wizualna_karta_pracy
 
         private void btnTakePic_Click(object sender, EventArgs e)
         {
-            if (flowLayoutPanel1.Controls.Count < 6)
+            if (flowLayoutPanel1.Controls.Count < 11)
             {
                 Image img = pictureBox1.Image;
 
@@ -106,7 +122,7 @@ namespace Kontrola_wizualna_karta_pracy
             }
             else
             {
-                MessageBox.Show("Max 5 zdjęć. Skasuj zdjęcia aby dodać nowe.");
+                MessageBox.Show(LanguangeTranslation.Translate("Max 10 zdjęć. Skasuj zdjęcia aby dodać nowe.", LangPolish));
             }
         }
 
@@ -151,19 +167,19 @@ namespace Kontrola_wizualna_karta_pracy
 
         private bool IsFormReadyTosave()
         {
-            if (labelDecodedQr.Text == "Zeskanuj kod Qr")
+            if (labelDecodedQr.Text.Contains(" "))
             {
-                MessageBox.Show("Zeskanuj kod Qr");
+                MessageBox.Show(LanguangeTranslation.Translate("Zeskanuj kod Qr", LangPolish));
                 return false;
             }
             if (buttonClicked == "")
             {
-                MessageBox.Show("Wbierz przyczynę błędu");
+                MessageBox.Show(LanguangeTranslation.Translate("Wbierz przyczynę wady", LangPolish));
                 return false;
             }
             if (flowLayoutPanel1.Controls.Count<2)
             {
-                MessageBox.Show("Dodaj zdjęcia wad");
+                MessageBox.Show(LanguangeTranslation.Translate("Dodaj zdjęcia wad", LangPolish));
                 return false;
             }
             
@@ -199,12 +215,23 @@ namespace Kontrola_wizualna_karta_pracy
                         string decoded = result.ToString().Trim();
                         if (decoded != "")
                         {
-                            timer1.Stop();
-                            stoper.Stop();
-                            stoper.Reset();
-                            labelDecodedQr.Text = decoded;
-                            btnTakePic.Visible = true;
-                            panelQr.BackColor = Color.Lime;
+                            if (!PcbsInCurrentLot.Contains(decoded) & PcbsInCurrentLot.Length>0)
+                            {
+                                labelDecodedQr.Text = LanguangeTranslation.Translate("Ten numer PCB należy do innego zlecenia!", LangPolish);
+                                panelQr.BackColor = Color.Red;
+                                panelQr.ForeColor = Color.White;
+                            }
+                            else
+                            {
+                                timer1.Stop();
+                                stoper.Stop();
+                                stoper.Reset();
+                                labelDecodedQr.Text = decoded;
+                                btnTakePic.Visible = true;
+                                panelQr.BackColor = Color.Lime;
+                                panelQr.ForeColor = Color.Black;
+                                System.Windows.Forms.Clipboard.SetText(decoded);
+                            }
                         }
                     }
 
@@ -220,7 +247,7 @@ namespace Kontrola_wizualna_karta_pracy
                         timer1.Stop();
                         stoper.Stop();
                         stoper.Reset();
-                        labelDecodedQr.Text = "Nie można odczytać kodu, wpisz ręcznie:";
+                        labelDecodedQr.Text = LanguangeTranslation.Translate("Nie można odczytać kodu, wpisz ręcznie:", LangPolish);
                         btnTakePic.Visible = true;
                         textBox1.Visible = true;
                     }
@@ -234,7 +261,7 @@ namespace Kontrola_wizualna_karta_pracy
             {
                 Button btn = new Button();
                 btn.Name = ngButton;
-                btn.Text = controlToDbTranslation.GetLabelCaptionFromDbColumn(ngButton);
+                btn.Text = LanguangeTranslation.Translate(ngButton.Replace("ng", ""), LangPolish);//controlToDbTranslation.GetLabelCaptionFromDbColumn(ngButton);
                 btn.Width = flpNgButtons.Width - 6;
                 btn.Margin = new Padding(3);
                 btn.Height = 50;
@@ -248,21 +275,21 @@ namespace Kontrola_wizualna_karta_pracy
             {
                 Button btn = new Button();
                 btn.Name = scrapButton;
-                btn.Text = controlToDbTranslation.GetLabelCaptionFromDbColumn(scrapButton);
+                btn.Text = LanguangeTranslation.Translate(scrapButton.Replace("scrap", ""), LangPolish);
                 btn.Width = flpScrapButtons.Width - 6;
                 btn.Margin = new Padding(3);
                 btn.Height = 50;
                 btn.ForeColor = Color.White;
                 btn.FlatStyle = FlatStyle.Flat;
                 btn.MouseClick += btn_MouseClick;
-
                 flpScrapButtons.Controls.Add(btn);
             }
         }
 
         private void SaveImagesToFiles(List<Image> imgList)
         {
-            var imgFolderPath = ConfigurationManager.AppSettings["ImgPath"] + "\\" + FixedDate + "\\" + LotNumber+"\\";
+            //var imgFolderPath = ConfigurationManager.AppSettings["ImgPath"] + "\\" + FixedDate + "\\" + LotNumber+"\\";
+            var imgFolderPath = AppSettings.GetSettings("ImgPath") + "\\" + FixedDate + "\\" + LotNumber+"\\";
             System.IO.Directory.CreateDirectory(imgFolderPath);
             string pcbId = labelDecodedQr.Text;
             if (textBox1.Text != "") 
@@ -274,6 +301,15 @@ namespace Kontrola_wizualna_karta_pracy
                 Image img = imgList[i];
                 var saveBmp = new Bitmap(img);
                 saveBmp.Save(imgFolderPath + pcbId + "_" + i + ".jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
+            }
+        }
+
+        private void textBox1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Return)
+            {
+                labelDecodedQr.Text = textBox1.Text;
+                textBox1.Visible = false;
             }
         }
     }

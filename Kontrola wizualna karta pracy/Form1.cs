@@ -31,26 +31,35 @@ namespace Kontrola_wizualna_karta_pracy
         {
             InitializeComponent();
 
-            byte[] fontData = Properties.Resources.Open_24_Display_St;
+            byte[] fontData = Properties.Resources.digital_7;
             IntPtr fontPtr = System.Runtime.InteropServices.Marshal.AllocCoTaskMem(fontData.Length);
             System.Runtime.InteropServices.Marshal.Copy(fontData, 0, fontPtr, fontData.Length);
             uint dummy = 0;
-            fonts.AddMemoryFont(fontPtr, Properties.Resources.Open_24_Display_St.Length);
-            AddFontMemResourceEx(fontPtr, (uint)Properties.Resources.Open_24_Display_St.Length, IntPtr.Zero, ref dummy);
+            fonts.AddMemoryFont(fontPtr, Properties.Resources.digital_7.Length);
+            AddFontMemResourceEx(fontPtr, (uint)Properties.Resources.digital_7.Length, IntPtr.Zero, ref dummy);
             System.Runtime.InteropServices.Marshal.FreeCoTaskMem(fontPtr);
-
+            
             myFont = new Font(fonts.Families[0], 56.0F);
 
             recordToSaceCalculation = new RecordToSaveCalculations(recordToSave);
-            summaryView = new SummaryView(recordToSave);
+            summaryView = new SummaryView(recordToSave, radioButtonPolish.Checked);
+
+            panelClock.Width = panel5.Width+2;
+            panelNumerics.Width = panel5.Width+2;
+            panelClock.Location = new System.Drawing.Point(0, this.Height - panelClock.Height-15);
+            labelClock.Font = myFont;
         }
 
         List<Image> imagesList = new List<Image>();
         RecordToSave recordToSave = new RecordToSave("", 0, "", DateTime.Now);
+        string appPath = AppSettings.GetSettings("AppPath");
         Dictionary<string, CurrentLotInfo> currentLotDictionary = new Dictionary<string, CurrentLotInfo>();
         Dictionary<string, SmtInfo> smtInfo = new Dictionary<string, SmtInfo>();
+
         FilterInfoCollection CaptureDevice;
         VideoCaptureDevice FinalFrame;
+        string deviceMonikerString = "";
+
         Bitmap bitmap;
         List<WasteDataStructure> inspectionData = new List<WasteDataStructure>();
         Dictionary<string, string> lotModelDict = new Dictionary<string, string>();
@@ -63,43 +72,54 @@ namespace Kontrola_wizualna_karta_pracy
         private PrivateFontCollection fonts = new PrivateFontCollection();
         private SummaryView summaryView;
         bool cameraEnabled = false;
+        string[] pcbsInCurrentLot = null;
+        
 
         private void Form1_Load(object sender, EventArgs e)
         {
             //label1.Font = myFont;
             ClearRecordToSave();
-            imagesList = ImagesTools.CreateListOfImages(@"Zdjecia\PL");
+            imagesList = ImagesTools.CreateListOfImages(Path.Combine(AppSettings.GetSettings("AppPath"), @"Zdjecia\PL"));
+
             CaptureDevice = new FilterInfoCollection(FilterCategory.VideoInputDevice);
 
-            textBoxLotNumber.DataBindings.Add("Text", recordToSave, "NumerZlecenia", false, DataSourceUpdateMode.OnPropertyChanged);
-            comboBoxOperator.DataBindings.Add("Text", recordToSave, "Operator", false, DataSourceUpdateMode.OnPropertyChanged);
-            textBoxGoodQty.DataBindings.Add("Text", recordToSave, "IloscDobrych", false, DataSourceUpdateMode.OnPropertyChanged);
+            
 
             comboBoxOperator.Items.AddRange(SqlOperations.RecentOperatorsList(45).ToArray());
             smtInfo = SqlOperations.GetSmtInfo();
             mstOrdersFromExcel.loadExcel(ref smtInfo);
 
             CalculateWasteAndEff();
-            string cameraConfig = ConfigurationManager.AppSettings["Camera_ON_OFF"];
+            //string cameraConfig = ConfigurationManager.AppSettings["Camera_ON_OFF"];
+            string cameraConfig = AppSettings.GetSettings("Camera_ON_OFF");
             if (cameraConfig == "ON")
             {
                 cameraEnabled = true;
             }
 
             FinalFrame = new VideoCaptureDevice();
+
             if (cameraEnabled)
             {
-                FinalFrame = new VideoCaptureDevice(CaptureDevice[0].MonikerString);
-                FinalFrame.NewFrame += new NewFrameEventHandler(FinalFrame_NewFrame);
-                FinalFrame.NewFrame -= Handle_New_Frame;
-                buttonCamStartStop.Visible = true;
-                panelNumerics.Visible = false;
+                deviceMonikerString = CheckDeviceMonikerString();
+                if (deviceMonikerString != "")
+                {
+                    FinalFrame = new VideoCaptureDevice(deviceMonikerString);
+                    FinalFrame.NewFrame += new NewFrameEventHandler(FinalFrame_NewFrame);
+                    FinalFrame.NewFrame -= Handle_New_Frame;
+                    buttonCamStartStop.Visible = true;
+                    panelNumerics.Visible = false;
+                }
             }
 
             panelVirtualKeyboard.Parent = this;
             panelVirtualKeyboard.BringToFront();
 
-            DynamicControls.CreateControls(flpNgBox, flpScrapBox, flowLayoutPanel1, SqlOperations.GetWasteColumnNames(), recordToSave, FinalFrame, imagesList, pictureBox1);
+            DynamicControls.CreateControls(flpNgBox, flpScrapBox, labelPanel, SqlOperations.GetWasteColumnNames(), recordToSave, FinalFrame, imagesList, pictureBox1);
+
+            textBoxLotNumber.DataBindings.Add("Text", recordToSave, "NumerZlecenia", false, DataSourceUpdateMode.OnPropertyChanged);
+            comboBoxOperator.DataBindings.Add("Text", recordToSave, "Operator", false, DataSourceUpdateMode.OnPropertyChanged);
+            textBoxGoodQty.DataBindings.Add("Text", recordToSave, "IloscDobrych", false, DataSourceUpdateMode.OnPropertyChanged);
 
             Ng0BrakLutowia.DataBindings.Add("Value", recordToSave, "NgBrakLutowia", false, DataSourceUpdateMode.OnPropertyChanged);
             Ng0BrakDiodyLed.DataBindings.Add("Value", recordToSave, "NgBrakDiodyLed", false, DataSourceUpdateMode.OnPropertyChanged);
@@ -128,14 +148,26 @@ namespace Kontrola_wizualna_karta_pracy
             Scrap0SpalonyConn.DataBindings.Add("Value", recordToSave, "ScrapSpalonyConn", false, DataSourceUpdateMode.OnPropertyChanged);
             Scrap0Inne.DataBindings.Add("Value", recordToSave, "ScrapInne", false, DataSourceUpdateMode.OnPropertyChanged);
             Ng0TestElektryczny.DataBindings.Add("Value", recordToSave, "NgTestElektryczny", false, DataSourceUpdateMode.OnPropertyChanged);
+
+            
+
+
             bool release = true;
-#if debug
+#if DEBUG
             release=false;
 #endif
             if (release)
             {
-                panelNumerics.Location = new System.Drawing.Point(0, 400);
+                var locationOnForm = flpNgBox.FindForm().PointToClient(flpNgBox.Parent.PointToScreen(flpNgBox.Location));
+                panelNumerics.Location = new System.Drawing.Point(locationOnForm.X-3, locationOnForm.Y-3);
             }
+
+            this.Size = new Size(SystemInformation.VirtualScreen.Width, SystemInformation.VirtualScreen.Height);
+            this.Location = new System.Drawing.Point(0, 0);
+
+            System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
+            labelAppVersion.Text = fvi.FileVersion;
         }
 
         private void Handle_New_Frame(object sender, NewFrameEventArgs eventArgs)
@@ -242,13 +274,19 @@ namespace Kontrola_wizualna_karta_pracy
             if (textBoxLotNumber.Text.Length < 5) 
             {
                 result = false;
-                MessageBox.Show("Nieprawidłowy numer zlecenia");
+                MessageBox.Show(LanguangeTranslation.Translate("Nieprawidłowy numer zlecenia", radioButtonPolish.Checked));
             }
 
             if (comboBoxOperator.Text.Length<4)
             {
                 result = false;
-                MessageBox.Show("Nieprawidłowa nazwa operatora");
+                MessageBox.Show(LanguangeTranslation.Translate( "Nieprawidłowa nazwa operatora", radioButtonPolish.Checked));
+            }
+
+            if (textBoxGoodQty.Text=="0")
+            {
+                result = false;
+                MessageBox.Show(LanguangeTranslation.Translate("Nieprawidłowa ilość", radioButtonPolish.Checked));
             }
             return result;
         }
@@ -257,32 +295,34 @@ namespace Kontrola_wizualna_karta_pracy
         {
             if (AllDataFilledCorrectly())
             {
-                using (SummaryView summaryForm = new SummaryView(recordToSave))
+                using (SummaryView summaryForm = new SummaryView(recordToSave, radioButtonPolish.Checked))
                 {
                     summaryForm.ShowDialog();
                     if (summaryForm.DialogResult == DialogResult.OK)
                     {
                         recordToSave.Data_Czas = DateTime.Now;
                         SqlOperations.SaveRecordToDb(recordToSave);
-                        string model = "Nieznany";
-                        if (smtCurrentLotInfo.Model!=null)
+                        string model = LanguangeTranslation.Translate("Nieznany", radioButtonPolish.Checked);
+
+                        if (smtCurrentLotInfo != null)
                         {
-                            model = smtCurrentLotInfo.Model;
+                            if (smtCurrentLotInfo.Model != null)
+                            {
+                                model = smtCurrentLotInfo.Model;
+                            }
                         }
 
+                        var allNg = recordToSaceCalculation.GetAllNg();
+                        Efficiency.SaveToTextFile(DateTime.Now.ToString("HH:mm dd-MMM") + ";" + smtCurrentLotInfo.Model + ";" + textBoxLotNumber.Text + ";" + (int.Parse(textBoxGoodQty.Text) + allNg).ToString() + ";" + allNg, appPath);
 
-                        Efficiency.SaveToTextFile(DateTime.Now.ToString("HH:mm dd-MMM") + ";" + smtCurrentLotInfo.Model + ";" + textBoxLotNumber.Text + ";" + textBoxGoodQty.Text + ";" + recordToSaceCalculation.GetAllNg());
-
-                        textBoxLotNumber.Text = "";
-                        comboBoxOperator.Items.Clear();
-                        comboBoxOperator.Items.AddRange(SqlOperations.RecentOperatorsList(45).ToArray());
-                        textBoxGoodQty.Text = "0";
-                        labelLotInfo.Text = "Dane zlecenia:";
+                        labelLotInfo.Text = LanguangeTranslation.Translate("Dane zlecenia", radioButtonPolish.Checked);
 
                         CalculateWasteAndEff();
 
                         ClearRecordToSave();
                         currentLotInfo = null;
+
+                        comboBoxOperator.Items.AddRange(SqlOperations.RecentOperatorsList(45).ToArray());
                     }
                 }
             }
@@ -290,6 +330,7 @@ namespace Kontrola_wizualna_karta_pracy
 
         private void ClearRecordToSave()
         {
+            //recordToSave = new RecordToSave("", 0, "", DateTime.Now, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
             foreach (object control in flpNgBox.Controls)
             {
                 if (control is TextBox)
@@ -307,6 +348,10 @@ namespace Kontrola_wizualna_karta_pracy
                     txtB.Text = "0";
                 }
             }
+
+            textBoxLotNumber.Text = "";
+            comboBoxOperator.Items.Clear();
+            textBoxGoodQty.Text = "0";
         }
 
         private NumericUpDown DbFieldToNumeric(string dbField)
@@ -381,10 +426,10 @@ namespace Kontrola_wizualna_karta_pracy
             }).Start();
         }
 
-        private string GetNumberOfConnectors(string model)
+        public static string GetNumberOfConnectors(string model)
         {
             string result = "";
-            if (model.Contains("LLFML"))
+            if (model.Contains("-"))
             {
                 //exceptions....
                 if (model.Replace("LLFML", "") == "G2-08L404B")
@@ -401,47 +446,51 @@ namespace Kontrola_wizualna_karta_pracy
                     result = "2";
                 }
             }
+            else
+            {
+                result = "?";
+            }
             return result;
         }
 
-        SmtInfo smtCurrentLotInfo = null;
+        SmtInfo smtCurrentLotInfo = new SmtInfo("", "", 0, "Nieznany", true);
         private void textBoxLotNumber_TextChanged(object sender, EventArgs e)
         {
-            if (textBoxLotNumber.Text.Length > 5)
+            smtCurrentLotInfo = new SmtInfo("", "", 0, "Nieznany", radioButtonPolish.Checked);
+            string lot = textBoxLotNumber.Text;
+
+            if (textBoxLotNumber.Text.Length > 6)
             {
-                string lot = textBoxLotNumber.Text;
-
-                
-                string smtLine = "";
-                string smtDate = "";
-                string connInfo = "";
-
-                //currentLotDictionary.TryGetValue(lot, out currentLotInfo);
-
-
                 if (smtInfo.TryGetValue(lot, out smtCurrentLotInfo))
                 {
-                    connInfo = GetNumberOfConnectors(smtCurrentLotInfo.Model);
-
-                        smtDate = smtCurrentLotInfo.CompletitionDate;
-                        smtLine = smtCurrentLotInfo.SmtLine;
-                    string model = smtCurrentLotInfo.Model;
-                        textBoxGoodQty.Text = smtCurrentLotInfo.OrderedQty.ToString();
-
-                    labelLotInfo.Text = "Model: " + Environment.NewLine + model + Environment.NewLine + Environment.NewLine
-                        + "Produkcja: " + Environment.NewLine + smtDate + " " + smtLine + Environment.NewLine;
-
-                    if (connInfo != "")
-                    {
-                        labelLotInfo.Text += Environment.NewLine + "Ilość złączek: " + connInfo;
-                    }
-                    textBoxLotNumber.Text = lot;
+                    BackgroundWorker worker = new BackgroundWorker();
+                    worker.DoWork += worker_DoWork;
+                    worker.RunWorkerAsync();
                 }
                 else
                 {
-                    labelLotInfo.Text = "Model: Nieznany";
+                    CurrentLotInfo tryMesToGetLotInfo = SqlOperations.LotNoToModelIdFromMes(textBoxLotNumber.Text);
+                    if (tryMesToGetLotInfo.Model != "")
+                    {
+                        smtCurrentLotInfo = new SmtInfo("", "Brak danych SMT", tryMesToGetLotInfo.OrderedQty, tryMesToGetLotInfo.Model, radioButtonPolish.Checked);
+                    }
+                    else
+                    {
+                        smtCurrentLotInfo = new SmtInfo("", "", 0, "Nieznany", radioButtonPolish.Checked);
+                    }
                 }
             }
+
+            labelLotInfo.Text = smtCurrentLotInfo.infoToDisplay;
+            //recordToSave.IloscDobrych = smtCurrentLotInfo.OrderedQty;
+            textBoxGoodQty.Text = smtCurrentLotInfo.OrderedQty.ToString();
+            textBoxLotNumber.Text = lot;
+        }
+
+        private void worker_DoWork(object sender, DoWorkEventArgs e) //to know what pcbSerials are in this lot
+        {
+            Dictionary<string, List<string>> testResult = SqlOperations.HowManyModulesTested(textBoxLotNumber.Text);
+            pcbsInCurrentLot = testResult.SelectMany(s => s.Value).ToArray();
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -451,24 +500,15 @@ namespace Kontrola_wizualna_karta_pracy
 
         private void buttonCamStartStop_Click(object sender, EventArgs e)
         {
-
             if (FinalFrame.IsRunning)
             {
                 FinalFrame.Stop();
                 pictureBox1.Image = null;
-                //pictureBoxCaptured.Image = null;
                 pictureBox1.Invalidate();
-                //pictureBoxCaptured.Invalidate();
-
-                buttonCamStartStop.Text = "Cam Start";
-
             }
             else
             {
-
                 FinalFrame.Start();
-
-                buttonCamStartStop.Text = "Cam Stop";
 
             }
         }
@@ -477,7 +517,7 @@ namespace Kontrola_wizualna_karta_pracy
         {
             if (textBoxLotNumber.Text.Trim() == "")
             {
-                MessageBox.Show("Najpierw wpisz numer zlecenia");
+                MessageBox.Show(LanguangeTranslation.Translate("Najpierw wpisz numer zlecenia", radioButtonPolish.Checked));
             }
             else
             {
@@ -493,7 +533,7 @@ namespace Kontrola_wizualna_karta_pracy
                 }
 
                 FinalFrame.Stop();
-                NewFailureForm failForm = new NewFailureForm(ngButtons.ToArray(), scrapButtons.ToArray(), textBoxLotNumber.Text, DateTime.Now.ToString("dd-MM-yyyy"));
+                NewFailureForm failForm = new NewFailureForm(ngButtons.ToArray(), scrapButtons.ToArray(), textBoxLotNumber.Text, DateTime.Now.ToString("dd-MM-yyyy"), pcbsInCurrentLot, radioButtonPolish.Checked, deviceMonikerString);
                 failForm.ShowDialog();
                 string buttonClicked = failForm.buttonClicked;
 
@@ -524,15 +564,6 @@ namespace Kontrola_wizualna_karta_pracy
                         }
                     }
 
-                    //int goodqty = 0;
-
-                    //if (int.TryParse(textBoxGoodQty.Text,out goodqty))
-                    //{
-                    //    if (goodqty > 0)
-                    //    {
-                    //        textBoxGoodQty.Text = (goodqty - 1).ToString();
-                    //    }
-                    //}
                 }
             }
         }
@@ -596,19 +627,19 @@ namespace Kontrola_wizualna_karta_pracy
 
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
         {
-            if(!FinalFrame.IsRunning)
-            {
-                buttonCamStartStop.Text = "Cam Start";
-            }
-            else
-            {
-                buttonCamStartStop.Text = "Cam Stop";
-            }
+            //if(!FinalFrame.IsRunning)
+            //{
+            //    buttonCamStartStop.Text = "Cam Start";
+            //}
+            //else
+            //{
+            //    buttonCamStartStop.Text = "Cam Stop";
+            //}
         }
 
         private void button14_Click(object sender, EventArgs e)
         {
-            App.RunOrBringToFront("MATCH-inger");
+
         }
 
         private void textBoxLotNumber_Enter(object sender, EventArgs e)
@@ -630,15 +661,16 @@ namespace Kontrola_wizualna_karta_pracy
         }
 
         private void CalculateWasteAndEff()
-
         {
-                Efficiency.AddRecentOrdersToGrid(dataGridViewHistory, ref lotModelDict);
+                Efficiency.AddRecentOrdersToGrid(dataGridViewHistory, ref lotModelDict, appPath);
                 List<string> inspectedLots = new List<string>();
 
-                foreach (DataGridViewRow row in dataGridViewHistory.Rows)
-                {
-                    inspectedLots.Add(row.Cells["Zlecenie"].Value.ToString());
-                }
+            foreach (DataGridViewRow row in dataGridViewHistory.Rows)
+            {
+                DateTime inspectionTime = DateTime.ParseExact(row.Cells["Data"].Value.ToString(), "HH:mm dd-MMM", CultureInfo.CurrentCulture);
+                if ((DateTime.Now - inspectionTime).TotalHours > 8) continue;
+                inspectedLots.Add(row.Cells["Zlecenie"].Value.ToString());
+            }
 
                 if (inspectedLots.Count > 0)
                 {
@@ -646,7 +678,7 @@ namespace Kontrola_wizualna_karta_pracy
                     DataTable inspectionTable = SqlOperations.DownloadVisInspFromSQL(inspectedLots.ToArray());
                     inspectionData = WasteCalculation.LoadData(inspectionTable, lotModelDict);
                     Charting.DrawChartWasteReasons(inspectionData, chart1);
-                    double waste = Efficiency.CalculateWasteLast24h(dataGridViewHistory, 8);
+                    double waste = Efficiency.CalculateWasteLastXXh(dataGridViewHistory, 8);
                     labelWasteLevel.Text = waste.ToString().Replace(",", ".") + "%";
 
                     //int currentShift = DateOperations.whatDayShiftIsit(DateTime.Now).shift;
@@ -661,12 +693,12 @@ namespace Kontrola_wizualna_karta_pracy
                     }
 
                     int qtyThisShift = Efficiency.CalculateQuantityThisShift(dataGridViewHistory);
-                    labelQtySinceShiftBegining.Text = qtyThisShift.ToString() + "szt";
+                    labelQtySinceShiftBegining.Text = qtyThisShift.ToString() + LanguangeTranslation.Translate("szt",radioButtonPolish.Checked);
 
                     DateTime shiftStart = TimeTools.whatDayShiftIsit(DateTime.Now).shiftStartDate;
                     double qtyPerHour = (double)qtyThisShift / (DateTime.Now - shiftStart).TotalHours;
 
-                    labelQtyPerHour.Text = Math.Round(qtyPerHour, 1).ToString() + "szt/godz";
+                    labelQtyPerHour.Text = Math.Round(qtyPerHour, 1).ToString() + LanguangeTranslation.Translate("szt/godz",radioButtonPolish.Checked);
                 }
                 else
                 {
@@ -700,6 +732,7 @@ namespace Kontrola_wizualna_karta_pracy
 
         private void numUpDown_valueChange_shared(object sender, EventArgs e)
         {
+            
             NumericUpDown ctrl = (NumericUpDown)sender;
             if (ctrl.Value > 0)
             {
@@ -711,11 +744,13 @@ namespace Kontrola_wizualna_karta_pracy
                 ctrl.BackColor = Color.White;
                 ctrl.ForeColor = Color.Black;
             }
+
+            //textBoxGoodQty.Text = recordToSave.IloscDobrych.ToString();
         }
 
         private void numUpDown_Validated_shared(object sender, EventArgs e)
         {
-
+            
         }
 
         private void textBox1_KeyDown(object sender, KeyEventArgs e)
@@ -730,9 +765,9 @@ namespace Kontrola_wizualna_karta_pracy
                 }
                 else
                 {
-                    MessageBox.Show("Brak danych o testach");
+                    MessageBox.Show(LanguangeTranslation.Translate("Brak danych o testach", radioButtonPolish.Checked));
                 }
-                textBox1.Text= "Wyniki testu";
+                textBox1.Text= LanguangeTranslation.Translate("Wyniki testu", radioButtonPolish.Checked);
                 textBox1.ForeColor = Color.Silver;
                 this.ActiveControl = radioButton2;
             }
@@ -752,7 +787,7 @@ namespace Kontrola_wizualna_karta_pracy
         {
             if (textBox1.Text=="")
             {
-                textBox1.Text = "Wyniki testu";
+                textBox1.Text = LanguangeTranslation.Translate("Wyniki testu", radioButtonPolish.Checked);
                 textBox1.ForeColor = Color.Silver;
             }
         }
@@ -760,6 +795,108 @@ namespace Kontrola_wizualna_karta_pracy
         private void timerEfficiencyAndWaste_Tick(object sender, EventArgs e)
         {
             CalculateWasteAndEff();
+        }
+
+        private void UpdateLanguage()
+        {
+            labelLotNo.Text = LanguangeTranslation.Translate("Numer zlecenia", radioButtonPolish.Checked);
+            labelOperator.Text = LanguangeTranslation.Translate("Operator", radioButtonPolish.Checked);
+            labelGoodQty.Text = LanguangeTranslation.Translate("Ilość dobrych", radioButtonPolish.Checked);
+            buttonSave.Text = LanguangeTranslation.Translate("Zapisz", radioButtonPolish.Checked);
+            buttonAddFailure.Text = LanguangeTranslation.Translate("Dodaj wadę", radioButtonPolish.Checked);
+            labelOdpadTitle.Text = LanguangeTranslation.Translate("ODPAD", radioButtonPolish.Checked);
+            labelLast8h.Text= LanguangeTranslation.Translate("ostatnie 8h:", radioButtonPolish.Checked);
+            labelWasteTop5.Text= LanguangeTranslation.Translate("Odpad TOP 5 przyczyn odpadu:", radioButtonPolish.Checked);
+            labelEffTitle.Text= LanguangeTranslation.Translate("WYDAJNOŚĆ", radioButtonPolish.Checked);
+            labelQtySinceShiftStart.Text= LanguangeTranslation.Translate("Ilość od początku zmiany:", radioButtonPolish.Checked);
+            labelEffNorm.Text= LanguangeTranslation.Translate("Norma: 2500 szt./ zm.", radioButtonPolish.Checked);
+            labelEffNormHour.Text= LanguangeTranslation.Translate("312 szt/godz", radioButtonPolish.Checked);
+            label23.Text= LanguangeTranslation.Translate("Aktualnie średnio", radioButtonPolish.Checked);
+            labelLotInfo.Text = labelLotInfo.Text
+                .Replace("Dane zlecenia", LanguangeTranslation.Translate("Dane zlecenia", radioButtonPolish.Checked))
+                .Replace("Model", LanguangeTranslation.Translate("Model", radioButtonPolish.Checked))
+                .Replace("Ilość złączek", LanguangeTranslation.Translate("Ilość złączek", radioButtonPolish.Checked))
+                .Replace("Nieznany", LanguangeTranslation.Translate("Nieznany", radioButtonPolish.Checked))
+                .Replace("Produkcja", LanguangeTranslation.Translate("Produkcja", radioButtonPolish.Checked));
+
+            foreach (var control in panel2.Controls)
+            {
+                if (control is Label)
+                {
+                    Label lbl = (Label)control;
+                    lbl.Text = LanguangeTranslation.Translate(lbl.Name, radioButtonPolish.Checked);
+                }
+            }
+
+            foreach (var control in labelPanel.Controls)
+            {
+                if (control is TextBox)
+                {
+                    TextBox txtB = (TextBox)control;
+                    txtB.Text = LanguangeTranslation.Translate(txtB.Name, radioButtonPolish.Checked);
+                }
+            }
+        }
+
+        private void radioButtonPolish_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateLanguage();
+        }
+
+        private string CheckDeviceMonikerString()
+        {
+            string result = "";
+            CaptureDevice = new FilterInfoCollection(FilterCategory.VideoInputDevice);
+            List<string> devices = new List<string>();
+            foreach (FilterInfo dev in CaptureDevice)
+            {
+                devices.Add(dev.MonikerString);
+            }
+            string deviceFromSettings = AppSettings.GetSettings("deviceMonikerString");
+
+            if (devices.Contains(deviceFromSettings))
+            {
+                return deviceFromSettings;
+            }
+            else
+            {
+                using (SettingsForm setF = new SettingsForm(CaptureDevice))
+                {
+                    if (setF.ShowDialog() == DialogResult.OK)
+                    {
+                        return setF.deviceMonikerString;
+                    }
+                    else
+                    {
+                        return "";
+                    }
+                }
+            }
+        }
+
+        private void button14_Click_1(object sender, EventArgs e)
+        {
+            using (SettingsForm setF = new SettingsForm(CaptureDevice))
+            {
+                if (setF.ShowDialog()== DialogResult.OK)
+                {
+                    MessageBox.Show(LanguangeTranslation.Translate("Uruchom ponownie aplikację aby użyć nowej kamery", radioButtonPolish.Checked));
+                }
+            }
+        }
+
+        private void button15_Click(object sender, EventArgs e)
+        {
+            DialogResult dialogResult = MessageBox.Show(LanguangeTranslation.Translate("Zamknąć program?", radioButtonPolish.Checked), LanguangeTranslation.Translate("Zakończenie pracy", radioButtonPolish.Checked), MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                this.Close();
+            }
+        }
+
+        private void timerClock_Tick(object sender, EventArgs e)
+        {
+            labelClock.Text = System.DateTime.Now.ToString("HH:mm:ss");
         }
     }
 }

@@ -14,17 +14,23 @@ namespace Kontrola_wizualna_karta_pracy
     public partial class SummaryView : Form
     {
         private readonly RecordToSave recordToSave;
-
+        private readonly bool languagePolish;
+        int allNg = 0;
         public bool OK { get; set; }
 
-        public SummaryView(RecordToSave recordToSave)
+        public SummaryView(RecordToSave recordToSave, bool languagePolish)
         {
             InitializeComponent();
             this.recordToSave = recordToSave;
+            this.languagePolish = languagePolish;
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
+            if (allNg > 5) 
+            {
+                MessageBox.Show("Odpad powyżej 5NG" + Environment.NewLine + "Powiadom Lidera Zmiany!");
+            }
             this.OK = true;
             this.DialogResult = DialogResult.OK;
             this.Close();
@@ -39,10 +45,17 @@ namespace Kontrola_wizualna_karta_pracy
 
         private void SummaryView_Load(object sender, EventArgs e)
         {
-            int allNg = RecordToSaveCalculations.GetAllNg2(recordToSave);
+            labelSummary.Text = LanguangeTranslation.Translate("SPRAWDŹ POPRAWNOŚĆ DANYCH:", languagePolish);
+
+            allNg = RecordToSaveCalculations.GetAllNg2(recordToSave);
+            
             double ngPercentage = Math.Round((double)allNg / (double)(recordToSave.IloscDobrych + allNg)*100,2);
 
-            labelNgPercentage.Text = "ODPAD" +Environment.NewLine+ngPercentage + "%";
+            string wasteString = LanguangeTranslation.Translate("ODPAD", languagePolish);
+            labelNgPercentage.Text = wasteString + Environment.NewLine+ngPercentage + "%";
+
+            buttonYes.Text = LanguangeTranslation.Translate("TAK", languagePolish);
+            buttonNo.Text = LanguangeTranslation.Translate("NIE", languagePolish);
 
             if (ngPercentage>0.7)
             {
@@ -55,10 +68,18 @@ namespace Kontrola_wizualna_karta_pracy
                 panelNgPercentage.ForeColor = Color.Black;
             }
 
-            labelSummary.Text   += Environment.NewLine + "Ilość dobrych: " + recordToSave.IloscDobrych
-                                + Environment.NewLine + "Numer zlecenia: " + recordToSave.NumerZlecenia
-                                + Environment.NewLine + "Operator: " + recordToSave.Operator;
+            string gooQtyString = LanguangeTranslation.Translate("Ilość dobrych", languagePolish);
+            string lotNoString = LanguangeTranslation.Translate("Numer zlecenia", languagePolish);
+            string operatorString = LanguangeTranslation.Translate("Operator", languagePolish);
 
+            labelSummary.Text   += Environment.NewLine + gooQtyString + ": " + recordToSave.IloscDobrych
+                                + Environment.NewLine + lotNoString + ": " + recordToSave.NumerZlecenia
+                                + Environment.NewLine + operatorString+": " + recordToSave.Operator;
+
+            string ngSummary = "";
+            string scrapSummary = "";
+            int totalNg = 0;
+            int totalScrap = 0;
             PropertyInfo[] properties = typeof(RecordToSave).GetProperties();
             foreach (PropertyInfo property in properties)
             {
@@ -66,17 +87,22 @@ namespace Kontrola_wizualna_karta_pracy
                 {
                     if ((int)property.GetValue(recordToSave) > 0)
                     {
-                        labelNg.Text += Environment.NewLine + controlToDbTranslation.GetLabelCaptionFromDbColumn(property.Name) + ": " + property.GetValue(recordToSave);
+                        ngSummary +=Environment.NewLine+ controlToDbTranslation.GetLabelCaptionFromDbColumn(property.Name) + ": " + property.GetValue(recordToSave);
+                        totalNg += (int)property.GetValue(recordToSave);
                     }
                 }
                 else if (property.Name.ToLower().StartsWith("scrap"))
                 {
                     if ((int)property.GetValue(recordToSave) > 0)
                     {
-                        labelScrap.Text += Environment.NewLine + controlToDbTranslation.GetLabelCaptionFromDbColumn( property.Name) + ": " + property.GetValue(recordToSave);
+                        scrapSummary+= Environment.NewLine + controlToDbTranslation.GetLabelCaptionFromDbColumn( property.Name) + ": " + property.GetValue(recordToSave);
+                        totalScrap += (int)property.GetValue(recordToSave);
                     }
                 }
             }
+
+            labelNg.Text = "NG - " + totalNg + ngSummary;
+            labelScrap.Text = "SCRAP - " + totalScrap + scrapSummary;
         }
     }
 }

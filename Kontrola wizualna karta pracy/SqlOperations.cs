@@ -87,8 +87,6 @@ namespace Kontrola_wizualna_karta_pracy
 
         public static Dictionary<string, List<string>> HowManyModulesTested(string lotId)
         {
-
-
             DataTable sqlTable = new DataTable();
             SqlConnection conn = new SqlConnection();
             conn.ConnectionString = @"Data Source=MSTMS010;Initial Catalog=MES;User Id=mes;Password=mes;";
@@ -120,7 +118,7 @@ namespace Kontrola_wizualna_karta_pracy
             return result;
         }
 
-        public static Dictionary<string,CurrentLotInfo> GetLotToModelDictionary()
+        public static Dictionary<string,CurrentLotInfo> LotToModelDictionaryFromMesZlecProd()
         {
             Dictionary<string, CurrentLotInfo> result = new Dictionary<string, CurrentLotInfo>();
 
@@ -148,6 +146,32 @@ namespace Kontrola_wizualna_karta_pracy
             }
 
             return result;
+        }
+
+        public static CurrentLotInfo LotNoToModelIdFromMes(string lotNo)
+        {
+
+            DataTable sqlTable = new DataTable();
+            SqlConnection conn = new SqlConnection();
+            conn.ConnectionString = @"Data Source=MSTMS010;Initial Catalog=MES;User Id=mes;Password=mes;";
+
+            SqlCommand command = new SqlCommand();
+            command.Connection = conn;
+            command.CommandText =
+                @"SELECT Nr_Zlecenia_Produkcyjnego,NC12_wyrobu,Ilosc_wyrobu_zlecona FROM tb_Zlecenia_produkcyjne WHERE Nr_Zlecenia_Produkcyjnego=@lot;";
+            command.Parameters.AddWithValue("@lot", lotNo);
+            SqlDataAdapter adapter = new SqlDataAdapter(command);
+            adapter.Fill(sqlTable);
+
+            string model = "";
+            int qty = 0;
+            if (sqlTable.Rows.Count>0)
+            {
+                model = sqlTable.Rows[0]["NC12_wyrobu"].ToString();
+                qty = int.Parse(sqlTable.Rows[0]["Ilosc_wyrobu_zlecona"].ToString());
+            }
+
+            return new CurrentLotInfo(lotNo, model, qty);
         }
 
         public static Dictionary<string, SmtInfo> GetSmtInfo()
@@ -178,7 +202,7 @@ namespace Kontrola_wizualna_karta_pracy
                     qty = 0;
                 }
 
-                SmtInfo newItem = new SmtInfo(smtLine, completitionDate, qty, model);
+                SmtInfo newItem = new SmtInfo(smtLine, completitionDate, qty, model, true);
                 result.Add(row["NrZlecenia"].ToString(), newItem );
             }
             return result;
@@ -217,5 +241,7 @@ namespace Kontrola_wizualna_karta_pracy
 
             return new string[] { "ngBrakLutowia", "ngBrakDiodyLed", "ngBrakResConn", "ngPrzesuniecieLed", "ngPrzesuniecieResConn", "ngZabrudzenieLed", "ngUszkodzenieMechaniczneLed", "ngUszkodzenieConn", "ngWadaFabrycznaDiody", "ngUszkodzonePcb", "ngWadaNaklejki", "ngSpalonyConn", "ngInne", "scrapBrakLutowia", "scrapBrakDiodyLed", "scrapBrakResConn", "scrapPrzesuniecieLed", "scrapPrzesuniecieResConn", "scrapZabrudzenieLed", "scrapUszkodzenieMechaniczneLed", "scrapUszkodzenieConn", "scrapWadaFabrycznaDiody", "scrapUszkodzonePcb", "scrapWadaNaklejki", "scrapSpalonyConn", "scrapInne", "ngTestElektryczny" };
         }
+
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AForge.Video.DirectShow;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,14 +13,28 @@ namespace Kontrola_wizualna_karta_pracy
 {
     public partial class SettingsForm : Form
     {
-        public SettingsForm(string[] camList)
+        private readonly FilterInfoCollection captureDevice;
+        public string deviceMonikerString = "";
+
+        public SettingsForm(FilterInfoCollection CaptureDevice)
         {
             InitializeComponent();
+            captureDevice = CaptureDevice;
+
         }
 
         private void SettingsForm_Load(object sender, EventArgs e)
         {
+            foreach (FilterInfo device in captureDevice)
+            {
+                comboBox1.Items.Add(device.Name);
+            }
+        }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            deviceMonikerString = captureDevice[comboBox1.SelectedIndex].MonikerString;
+            AppSettings.AddOrUpdateAppSettings("deviceMonikerString", deviceMonikerString);
         }
     }
 }

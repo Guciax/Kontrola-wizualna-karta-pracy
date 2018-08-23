@@ -47,32 +47,359 @@ namespace Kontrola_wizualna_karta_pracy
         public string Operator { get; set; }
         public int IloscDobrych { get; set; }
         public string NumerZlecenia { get; set; }
-        public int NgBrakLutowia { get; set; }
-        public int NgBrakDiodyLed { get; set; }
-        public int NgBrakResConn { get; set; }
-        public int NgPrzesuniecieLed { get; set; }
-        public int NgPrzesuniecieResConn { get; set; }
-        public int NgZabrudzenieLed { get; set; }
-        public int NgUszkodzenieMechaniczneLed { get; set; }
-        public int NgUszkodzenieConn { get; set; }
-        public int NgWadaFabrycznaDiody { get; set; }
-        public int NgUszkodzonePcb { get; set; }
-        public int NgWadaNaklejki { get; set; }
-        public int NgSpalonyConn { get; set; }
-        public int NgInne { get; set; }
-        public int ScrapBrakLutowia { get; set; }
-        public int ScrapBrakDiodyLed { get; set; }
-        public int ScrapBrakResConn { get; set; }
-        public int ScrapPrzesuniecieLed { get; set; }
-        public int ScrapPrzesuniecieResConn { get; set; }
-        public int ScrapZabrudzenieLed { get; set; }
-        public int ScrapUszkodzenieMechaniczneLed { get; set; }
-        public int ScrapUszkodzenieConn { get; set; }
-        public int ScrapWadaFabrycznaDiody { get; set; }
-        public int ScrapUszkodzonePcb { get; set; }
-        public int ScrapWadaNaklejki { get; set; }
-        public int ScrapSpalonyConn { get; set; }
-        public int ScrapInne { get; set; }
-        public int NgTestElektryczny { get; set; }
+        public int NgBrakLutowia
+        {
+            get { return _ngBrakLutowia; }
+            set
+            {
+                if (IloscDobrych > 0)
+                {
+                    IloscDobrych += _ngBrakLutowia - value;
+                }
+                _ngBrakLutowia = value;
+            }
+        }
+
+        public int NgBrakDiodyLed
+        {
+            get { return _ngBrakDiodyLed; }
+            set
+            {
+                if (IloscDobrych > 0)
+                {
+                    IloscDobrych += _ngBrakDiodyLed - value;
+                }
+                _ngBrakDiodyLed = value;
+            }
+        }
+        public int NgBrakResConn
+        {
+            get { return _ngBrakResConn; }
+            set
+            {
+                if (IloscDobrych > 0)
+                {
+                    IloscDobrych += _ngBrakResConn - value;
+                }
+                _ngBrakResConn = value;
+            }
+        }
+        public int NgPrzesuniecieLed
+        {
+            get { return _ngPrzesuniecieLed; }
+            set
+            {
+                if (IloscDobrych > 0)
+                {
+                    IloscDobrych += _ngPrzesuniecieLed - value;
+                }
+                _ngPrzesuniecieLed = value;
+            }
+        }
+        public int NgPrzesuniecieResConn
+        {
+            get { return _ngPrzesuniecieResConn; }
+            set
+            {
+                if (IloscDobrych > 0)
+                {
+                    IloscDobrych += _ngPrzesuniecieResConn - value;
+                }
+                _ngPrzesuniecieResConn = value;
+            }
+        }
+        public int NgZabrudzenieLed
+        {
+            get { return _ngZabrudzenieLed; }
+            set
+            {
+                if (IloscDobrych > 0)
+                {
+                    IloscDobrych += _ngZabrudzenieLed - value;
+                }
+                _ngZabrudzenieLed = value;
+            }
+        }
+        public int NgUszkodzenieMechaniczneLed
+        {
+            get { return _ngUszkodzenieMechaniczneLed; }
+            set
+            {
+                if (IloscDobrych > 0)
+                {
+                    IloscDobrych += _ngUszkodzenieMechaniczneLed - value;
+                }
+                _ngUszkodzenieMechaniczneLed = value;
+            }
+        }
+        public int NgUszkodzenieConn
+        {
+            get { return _ngUszkodzenieConn; }
+            set
+            {
+                if (IloscDobrych > 0)
+                {
+                    IloscDobrych += _ngUszkodzenieConn - value;
+                }
+                _ngUszkodzenieConn = value;
+            }
+        }
+        public int NgWadaFabrycznaDiody
+        {
+            get { return _ngWadaFabrycznaDiody; }
+            set
+            {
+                if (IloscDobrych > 0)
+                {
+                    IloscDobrych += _ngWadaFabrycznaDiody - value;
+                }
+                _ngWadaFabrycznaDiody = value;
+            }
+        }
+        public int NgUszkodzonePcb
+        {
+            get { return _ngUszkodzonePcb; }
+            set
+            {
+                if (IloscDobrych > 0)
+                {
+                    IloscDobrych += _ngUszkodzonePcb - value;
+                }
+                _ngUszkodzonePcb = value;
+            }
+        }
+        public int NgWadaNaklejki
+        {
+            get { return _ngWadaNaklejki; }
+            set
+            {
+                if (IloscDobrych > 0)
+                {
+                    IloscDobrych += _ngWadaNaklejki - value;
+                }
+                _ngWadaNaklejki = value;
+            }
+        }
+        public int NgSpalonyConn
+        {
+            get { return _ngSpalonyConn; }
+            set
+            {
+                if (IloscDobrych > 0)
+                {
+                    IloscDobrych += _ngSpalonyConn - value;
+                }
+                _ngSpalonyConn = value;
+            }
+        }
+        public int NgInne
+        {
+            get { return _ngInne; }
+            set
+            {
+                if (IloscDobrych > 0)
+                {
+                    IloscDobrych += _ngInne - value;
+                }
+                _ngInne = value;
+            }
+        }
+        public int ScrapBrakLutowia
+        {
+            get { return _scrapBrakLutowia; }
+            set
+            {
+                if (IloscDobrych > 0)
+                {
+                    IloscDobrych += _scrapBrakLutowia - value;
+                }
+                _scrapBrakLutowia = value;
+            }
+        }
+        public int ScrapBrakDiodyLed
+        {
+            get { return _scrapBrakDiodyLed; }
+            set
+            {
+                if (IloscDobrych > 0)
+                {
+                    IloscDobrych += _scrapBrakDiodyLed - value;
+                }
+                _scrapBrakDiodyLed = value;
+            }
+        }
+        public int ScrapBrakResConn
+        {
+            get { return _scrapBrakResConn; }
+            set
+            {
+                if (IloscDobrych > 0)
+                {
+                    IloscDobrych += _scrapBrakResConn - value;
+                }
+                _scrapBrakResConn = value;
+            }
+        }
+        public int ScrapPrzesuniecieLed
+        {
+            get { return _scrapPrzesuniecieLed; }
+            set
+            {
+                if (IloscDobrych > 0)
+                {
+                    IloscDobrych += _scrapPrzesuniecieLed - value;
+                }
+                _scrapPrzesuniecieLed = value;
+            }
+        }
+        public int ScrapPrzesuniecieResConn
+        {
+            get { return _scrapPrzesuniecieResConn; }
+            set
+            {
+                if (IloscDobrych > 0)
+                {
+                    IloscDobrych += _scrapPrzesuniecieResConn - value;
+                }
+                _scrapPrzesuniecieResConn = value;
+            }
+        }
+        public int ScrapZabrudzenieLed
+        {
+            get { return _scrapZabrudzenieLed; }
+            set
+            {
+                if (IloscDobrych > 0)
+                {
+                    IloscDobrych += _scrapZabrudzenieLed - value;
+                }
+                _scrapZabrudzenieLed = value;
+            }
+        }
+        public int ScrapUszkodzenieMechaniczneLed
+        {
+            get { return _scrapUszkodzenieMechaniczneLed; }
+            set
+            {
+                if (IloscDobrych > 0)
+                {
+                    IloscDobrych += _scrapUszkodzenieMechaniczneLed - value;
+                }
+                _scrapUszkodzenieMechaniczneLed = value;
+            }
+        }
+        public int ScrapUszkodzenieConn
+        {
+            get { return _scrapUszkodzenieConn; }
+            set
+            {
+                if (IloscDobrych > 0)
+                {
+                    IloscDobrych += _scrapUszkodzenieConn - value;
+                }
+                _scrapUszkodzenieConn = value;
+            }
+        }
+        public int ScrapWadaFabrycznaDiody
+        {
+            get { return _scrapWadaFabrycznaDiody; }
+            set
+            {
+                if (IloscDobrych > 0)
+                {
+                    IloscDobrych += _scrapWadaFabrycznaDiody - value;
+                }
+                _scrapWadaFabrycznaDiody = value;
+            }
+        }
+        public int ScrapUszkodzonePcb
+        {
+            get { return _scrapUszkodzonePcb; }
+            set
+            {
+                if (IloscDobrych > 0)
+                {
+                    IloscDobrych += _scrapUszkodzonePcb - value;
+                }
+                _scrapUszkodzonePcb = value;
+            }
+        }
+        public int ScrapWadaNaklejki
+        {
+            get { return _scrapWadaNaklejki; }
+            set
+            {
+                if (IloscDobrych > 0)
+                {
+                    IloscDobrych += _scrapWadaNaklejki - value;
+                }
+                _scrapWadaNaklejki = value;
+            }
+        }
+        public int ScrapSpalonyConn
+        {
+            get { return _scrapSpalonyConn; }
+            set
+            {
+                if (IloscDobrych > 0)
+                {
+                    IloscDobrych += _scrapSpalonyConn - value;
+                }
+                _scrapSpalonyConn = value;
+            }
+        }
+        public int ScrapInne
+        {
+            get { return _scrapInne; }
+            set
+            {
+                if (IloscDobrych > 0)
+                {
+                    IloscDobrych += _scrapInne - value;
+                }
+                _scrapInne = value;
+            }
+        }
+        public int NgTestElektryczny
+        {
+            get { return _ngTestElektryczny; }
+            set
+            {
+                if (IloscDobrych > 0)
+                {
+                    IloscDobrych += _ngTestElektryczny - value;
+                }
+                _ngTestElektryczny = value;
+            }
+        }
+
+
+        private int _ngBrakLutowia=0;
+        private int _ngBrakDiodyLed = 0;
+        private int _ngBrakResConn = 0;
+        private int _ngPrzesuniecieLed = 0;
+        private int _ngPrzesuniecieResConn = 0;
+        private int _ngZabrudzenieLed = 0;
+        private int _ngUszkodzenieMechaniczneLed = 0;
+        private int _ngUszkodzenieConn = 0;
+        private int _ngWadaFabrycznaDiody = 0;
+        private int _ngUszkodzonePcb = 0;
+        private int _ngWadaNaklejki = 0;
+        private int _ngSpalonyConn = 0;
+        private int _ngInne = 0;
+        private int _scrapBrakLutowia ;
+        private int _scrapBrakDiodyLed ;
+        private int _scrapBrakResConn;
+        private int _scrapPrzesuniecieLed;
+        private int _scrapPrzesuniecieResConn;
+        private int _scrapZabrudzenieLed;
+        private int _scrapUszkodzenieMechaniczneLed;
+        private int _scrapUszkodzenieConn;
+        private int _scrapWadaFabrycznaDiody;
+        private int _scrapUszkodzonePcb;
+        private int _scrapWadaNaklejki;
+        private int _scrapSpalonyConn;
+        private int _scrapInne;
+        private int _ngTestElektryczny;
     }
 }
