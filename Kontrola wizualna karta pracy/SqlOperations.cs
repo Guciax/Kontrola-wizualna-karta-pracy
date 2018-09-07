@@ -242,6 +242,24 @@ namespace Kontrola_wizualna_karta_pracy
             return new string[] { "ngBrakLutowia", "ngBrakDiodyLed", "ngBrakResConn", "ngPrzesuniecieLed", "ngPrzesuniecieResConn", "ngZabrudzenieLed", "ngUszkodzenieMechaniczneLed", "ngUszkodzenieConn", "ngWadaFabrycznaDiody", "ngUszkodzonePcb", "ngWadaNaklejki", "ngSpalonyConn", "ngInne", "scrapBrakLutowia", "scrapBrakDiodyLed", "scrapBrakResConn", "scrapPrzesuniecieLed", "scrapPrzesuniecieResConn", "scrapZabrudzenieLed", "scrapUszkodzenieMechaniczneLed", "scrapUszkodzenieConn", "scrapWadaFabrycznaDiody", "scrapUszkodzonePcb", "scrapWadaNaklejki", "scrapSpalonyConn", "scrapInne", "ngTestElektryczny" };
         }
 
+        public static bool CheckIfLotIsAlreadyAdded(string lot)
+        {
+            DataTable tabletoFill = new DataTable();
+
+            SqlConnection conn = new SqlConnection();
+            conn.ConnectionString = @"Data Source=MSTMS010;Initial Catalog=MES;User Id=mes;Password=mes;";
+
+            SqlCommand command = new SqlCommand();
+            command.Connection = conn;
+            command.CommandText = @"SELECT numerZlecenia FROM tb_Kontrola_Wizualna_Karta_Pracy WHERE numerZlecenia=@lot;";
+            command.Parameters.AddWithValue("@lot", lot);
+
+            SqlDataAdapter adapter = new SqlDataAdapter(command);
+
+            adapter.Fill(tabletoFill);
+
+            return tabletoFill.Rows.Count > 0 ? true : false;
+        }
 
     }
 }

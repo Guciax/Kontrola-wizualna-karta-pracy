@@ -93,7 +93,15 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="ImagesTools.cs" />
+    <Compile Include="ImageSynchronizer.cs" />
     <Compile Include="mstOrdersFromExcel.cs" />
+    <Compile Include="DataStructures\ngBoxTag.cs" />
+    <Compile Include="ShowDefectsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ShowDefectsForm.Designer.cs">
+      <DependentUpon>ShowDefectsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="TestResults.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -152,6 +160,9 @@
     <EmbeddedResource Include="SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ShowDefectsForm.resx">
+      <DependentUpon>ShowDefectsForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SummaryView.resx">
       <DependentUpon>SummaryView.cs</DependentUpon>
     </EmbeddedResource>
@@ -162,6 +173,7 @@
       <DependentUpon>virtualKeyboard.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
+    <None Include="Properties\DataSources\RecordToSave.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -196,6 +208,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\off 55x55.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\microscope_OFF.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\microscope_ON.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

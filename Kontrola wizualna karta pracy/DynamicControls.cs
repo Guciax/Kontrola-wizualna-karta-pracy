@@ -13,7 +13,7 @@ namespace Kontrola_wizualna_karta_pracy
 {
     public class DynamicControls
     {
-        public static void CreateControls(FlowLayoutPanel ngPanel, FlowLayoutPanel scrapPanel, FlowLayoutPanel labelPanel, string[] dbColumns, RecordToSave recordToSave, VideoCaptureDevice FinalFrame, List<Image> imagesList, PictureBox mainPicBox)
+        public static void CreateControls(FlowLayoutPanel ngPanel, FlowLayoutPanel scrapPanel, FlowLayoutPanel labelPanel, string[] dbColumns, RecordToSave recordToSave, VideoCaptureDevice FinalFrame, List<Image> imagesList, PictureBox mainPicBox, Button camStartStopButton)
         {
             List<string> uniqeColumns = new List<string>();
             foreach (var col in dbColumns)
@@ -43,8 +43,12 @@ namespace Kontrola_wizualna_karta_pracy
                     
                     if (FinalFrame != null)
                     {
-                        FinalFrame.Stop();
-                        mainPicBox.Image = null;
+                        if (FinalFrame.IsRunning)
+                        {
+                            FinalFrame.Stop();
+                            mainPicBox.Image = null;
+                            camStartStopButton.BackgroundImage = Kontrola_wizualna_karta_pracy.Properties.Resources.microscope_OFF;
+                        }
                     }
 
                     foreach (var img in imagesList)
@@ -69,6 +73,8 @@ namespace Kontrola_wizualna_karta_pracy
                 ngBox.DataBindings.Add("Text", recordToSave, ngBox.Name, false, DataSourceUpdateMode.OnPropertyChanged);
                 ngBox.Tag = lblBox.Text;
                 ngBox.Cursor = Cursors.Arrow;
+                ngBox.Tag = new List<ngBoxTag>();
+                ngBox.MouseClick += NgBox_MouseClick;
 
                 if (!col.ToLower().Contains("elektrycz"))
                 {
@@ -83,10 +89,27 @@ namespace Kontrola_wizualna_karta_pracy
                     scrapBox.DataBindings.Add("Text", recordToSave, scrapBox.Name, false, DataSourceUpdateMode.OnPropertyChanged);
                     scrapBox.Tag = lblBox.Text;
                     scrapBox.Cursor = Cursors.Arrow;
+                    scrapBox.Tag = new List<ngBoxTag>();
+                    scrapBox.MouseClick+= NgBox_MouseClick;
                     scrapPanel.Controls.Add(scrapBox);
                 }
                 ngPanel.Controls.Add(ngBox);
                 labelPanel.Controls.Add(lblBox);
+            }
+        }
+
+        private static void NgBox_MouseClick(object sender, MouseEventArgs e)
+        {
+            MyTextBox ngbox = (MyTextBox)sender;
+            List<ngBoxTag> defectList = (List<ngBoxTag>)ngbox.Tag;
+            if (defectList.Count > 0) 
+            {
+                ShowDefectsForm defectsForm = new ShowDefectsForm(defectList, true, ngbox.Name);
+                if (defectsForm.ShowDialog()== DialogResult.OK)
+                {
+                    ngbox.Tag = defectsForm.newListOfDefects;
+                    ngbox.Text = defectsForm.newListOfDefects.Count.ToString();
+                }
             }
         }
 

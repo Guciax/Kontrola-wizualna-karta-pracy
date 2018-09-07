@@ -38,5 +38,62 @@ namespace Kontrola_wizualna_karta_pracy
             return configFile.AppSettings.Settings[key].Value;
             //return ConfigurationManager.open.AppSettings[key];
         }
+
+        public static void CheckAppSettingsKeys()
+        {
+            try
+            {
+                AppSettings.GetSettings("SprawdzajSerial");
+            }
+            catch
+            {
+                AppSettings.AddOrUpdateAppSettings("SprawdzajSerial", "OFF");
+            }
+
+            try
+            {
+                AppSettings.GetSettings("Camera_ON_OFF");
+            }
+            catch
+            {
+                AppSettings.AddOrUpdateAppSettings("Camera_ON_OFF", "OFF");
+            }
+
+            try
+            {
+                AppSettings.GetSettings("camera180Rotate");
+            }
+            catch
+            {
+                AppSettings.AddOrUpdateAppSettings("camera180Rotate", "OFF");
+            }
+
+            try
+            {
+                AppSettings.GetSettings("AppPath");
+            }
+            catch
+            {
+                AppSettings.AddOrUpdateAppSettings("AppPath", @"C:\Kontrola Wzrokowa Karta Pracy 2.0\");
+            }
+
+            try
+            {
+                AppSettings.GetSettings("ImgPath");
+            }
+            catch
+            {
+                AppSettings.AddOrUpdateAppSettings("ImgPath", @"P:\Kontrola_Wzrokowa");
+            }
+
+            try
+            {
+                AppSettings.GetSettings("camera180Rotate");
+            }
+            catch
+            {
+                AppSettings.AddOrUpdateAppSettings("deviceMonikerString", "");
+            }
+        }
     }
 }

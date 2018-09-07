@@ -22,6 +22,7 @@ using System.Drawing.Text;
 using System.Globalization;
 using static Kontrola_wizualna_karta_pracy.DateOperations;
 using System.Configuration;
+using System.Drawing.Drawing2D;
 
 namespace Kontrola_wizualna_karta_pracy
 {
@@ -60,7 +61,7 @@ namespace Kontrola_wizualna_karta_pracy
         VideoCaptureDevice FinalFrame;
         string deviceMonikerString = "";
 
-        Bitmap bitmap;
+        Bitmap bmp;
         List<WasteDataStructure> inspectionData = new List<WasteDataStructure>();
         Dictionary<string, string> lotModelDict = new Dictionary<string, string>();
         CurrentLotInfo currentLotInfo;
@@ -73,17 +74,24 @@ namespace Kontrola_wizualna_karta_pracy
         private SummaryView summaryView;
         bool cameraEnabled = false;
         string[] pcbsInCurrentLot = null;
-        
+        bool rotate180 = false;
+
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            AppSettings.CheckAppSettingsKeys();
+
+            string rotateSettings = AppSettings.GetSettings("camera180Rotate");
+            if (rotateSettings=="ON")
+            {
+                rotate180 = true;
+            }
+            
             //label1.Font = myFont;
             ClearRecordToSave();
             imagesList = ImagesTools.CreateListOfImages(Path.Combine(AppSettings.GetSettings("AppPath"), @"Zdjecia\PL"));
 
             CaptureDevice = new FilterInfoCollection(FilterCategory.VideoInputDevice);
-
-            
 
             comboBoxOperator.Items.AddRange(SqlOperations.RecentOperatorsList(45).ToArray());
             smtInfo = SqlOperations.GetSmtInfo();
@@ -95,15 +103,18 @@ namespace Kontrola_wizualna_karta_pracy
             if (cameraConfig == "ON")
             {
                 cameraEnabled = true;
+
             }
 
             FinalFrame = new VideoCaptureDevice();
+            
 
             if (cameraEnabled)
             {
                 deviceMonikerString = CheckDeviceMonikerString();
                 if (deviceMonikerString != "")
                 {
+                    //buttonCamSettings.Visible = true;
                     FinalFrame = new VideoCaptureDevice(deviceMonikerString);
                     FinalFrame.NewFrame += new NewFrameEventHandler(FinalFrame_NewFrame);
                     FinalFrame.NewFrame -= Handle_New_Frame;
@@ -115,7 +126,7 @@ namespace Kontrola_wizualna_karta_pracy
             panelVirtualKeyboard.Parent = this;
             panelVirtualKeyboard.BringToFront();
 
-            DynamicControls.CreateControls(flpNgBox, flpScrapBox, labelPanel, SqlOperations.GetWasteColumnNames(), recordToSave, FinalFrame, imagesList, pictureBox1);
+            DynamicControls.CreateControls(flpNgBox, flpScrapBox, labelPanel, SqlOperations.GetWasteColumnNames(), recordToSave, FinalFrame, imagesList, pictureBox1, buttonCamStartStop);
 
             textBoxLotNumber.DataBindings.Add("Text", recordToSave, "NumerZlecenia", false, DataSourceUpdateMode.OnPropertyChanged);
             comboBoxOperator.DataBindings.Add("Text", recordToSave, "Operator", false, DataSourceUpdateMode.OnPropertyChanged);
@@ -155,6 +166,7 @@ namespace Kontrola_wizualna_karta_pracy
             bool release = true;
 #if DEBUG
             release=false;
+            button1.Visible = true;
 #endif
             if (release)
             {
@@ -172,19 +184,87 @@ namespace Kontrola_wizualna_karta_pracy
 
         private void Handle_New_Frame(object sender, NewFrameEventArgs eventArgs)
         {
-            if (bitmap != null)
-                bitmap.Dispose();
-            bitmap = new Bitmap(eventArgs.Frame);
+            if (bmp != null)
+                bmp.Dispose();
+            bmp = new Bitmap(eventArgs.Frame);
 
             if (pictureBox1.Image != null)
                 this.Invoke(new MethodInvoker(delegate () { pictureBox1.Image.Dispose(); }));
-            pictureBox1.Image = bitmap;
+
+            
+
+            pictureBox1.Image = bmp;
+
         }
 
         private void FinalFrame_NewFrame(object sender, NewFrameEventArgs eventArgs)
         {
-            bitmap = (Bitmap)eventArgs.Frame.Clone();
-            pictureBox1.Image = bitmap;
+            bmp = (Bitmap)eventArgs.Frame.Clone();
+            Pen redPen = new Pen(Color.Black, 1);
+
+            int linesPerWidth = bmp.Width / 5;
+            int linesPerHeigth = bmp.Height / 5;
+
+
+            using (var graphics = Graphics.FromImage(bmp))
+            {
+                graphics.DrawLine(redPen, 0, 0, bmp.Width, 0);
+                for (int x = 1; x < linesPerWidth; x++)
+                {
+                    int length = 10;
+                    if (x % 5 == 0)
+                    {
+                        length = 15;
+                    }
+                    graphics.DrawLine(redPen, x*5, 0, x*5, length);
+                }
+                graphics.DrawLine(redPen, 0, 0, 0, bmp.Height);
+                for (int x = 1; x < linesPerHeigth; x++)
+                {
+                    int length = 10;
+                    if (x % 5 == 0)
+                    {
+                        length = 15;
+                    }
+                    graphics.DrawLine(redPen, 0, x*5, length, x*5);
+                }
+            }
+            if(rotate180)
+            {
+                bmp.RotateFlip(RotateFlipType.Rotate180FlipNone);
+            }
+            //pictureBox1.Image = bmp;
+            pictureBox1.Image = RotateImage(bmp, (float)numericUpDown1.Value);
+        }
+
+        public static Image RotateImage(Image img, float rotationAngle)
+        {
+            //create an empty Bitmap image
+            Bitmap bmp = new Bitmap(img.Width, img.Height);
+
+            //turn the Bitmap into a Graphics object
+            Graphics gfx = Graphics.FromImage(bmp);
+
+            //now we set the rotation point to the center of our image
+            gfx.TranslateTransform((float)bmp.Width / 2, (float)bmp.Height / 2);
+
+            //now rotate the image
+            gfx.RotateTransform(rotationAngle);
+
+            gfx.TranslateTransform(-(float)bmp.Width / 2, -(float)bmp.Height / 2);
+
+            //set the InterpolationMode to HighQualityBicubic so to ensure a high
+            //quality image once it is transformed to the specified size
+            gfx.InterpolationMode = InterpolationMode.HighQualityBicubic;
+
+            //now draw our new image onto the graphics object
+            gfx.DrawImage(img, new System.Drawing.Point(0, 0));
+
+            //dispose of our Graphics object
+            gfx.Dispose();
+
+            //return the image
+            return bmp;
         }
 
         NumericUpDown previousUpDown = null;
@@ -291,6 +371,138 @@ namespace Kontrola_wizualna_karta_pracy
             return result;
         }
 
+        private  List<Image> GetAllImagesToSaveAndClear(bool deleteImages)
+        {
+            List<Image> result = new List<Image>();
+            foreach (var control in flpNgBox.Controls)
+            {
+                if (control is MyTextBox)
+                {
+                    MyTextBox box = (MyTextBox)control;
+                    if (box.Text != "0")
+                    {
+                        List<ngBoxTag> defectlist = (List<ngBoxTag>)box.Tag;
+                        foreach (var defect in defectlist)
+                        {
+                            foreach (var img in defect.Images)
+                            {
+                                result.Add(img);
+                            }
+                            
+                        }
+                        if (deleteImages)
+                        {
+                            box.Tag = new List<ngBoxTag>();
+                            box.Text = "0";
+                        }
+                    }
+                }
+            }
+            foreach (var control in flpScrapBox.Controls)
+            {
+                if (control is MyTextBox)
+                {
+                    MyTextBox box = (MyTextBox)control;
+                    if (box.Text != "0")
+                    {
+                        List<ngBoxTag> defectlist = (List<ngBoxTag>)box.Tag;
+                        foreach (var defect in defectlist)
+                        {
+                            foreach (var img in defect.Images)
+                            {
+                                result.Add(img);
+                            }
+
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        private static void ConnectPDrive()
+        {
+            Process myProcess = new Process();
+            myProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            myProcess.StartInfo.CreateNoWindow = true;
+            myProcess.StartInfo.UseShellExecute = false;
+            myProcess.StartInfo.FileName = "cmd.exe";
+            myProcess.StartInfo.Arguments = @"/c net use P: \\mstms005\shared /user:eprod plfm!234 /PERSISTENT:NO";
+            myProcess.EnableRaisingEvents = true;
+            myProcess.Start();
+            myProcess.WaitForExit();
+        }
+
+        private void SaveImagesToFiles(List<Image> imgList, string LotNumber)
+        {
+            var imgFolderPath = Path.Combine(@"C:\TempImages\", DateTime.Now.ToString("dd-MM-yyyy"), LotNumber);
+            //if (Path.GetPathRoot(imgFolderPath).StartsWith("P"))
+            //{
+            //    if (!Directory.Exists("P:\\"))
+            //    {
+            //        ConnectPDrive();
+            //    }
+            //}
+            if (!Directory.Exists(imgFolderPath))
+            {
+                System.IO.Directory.CreateDirectory(imgFolderPath);
+            }
+
+            for (int i = 0; i < imgList.Count; i++)
+            {
+                Image img = imgList[i];
+                string pcbId = img.Tag.ToString();
+                var saveBmp = new Bitmap(img);
+                saveBmp.Save(imgFolderPath + "\\" + pcbId + "_" +  ".jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
+            }
+        }
+
+        private List<string> GetListOfNgPcbSerials()
+        {
+            List<string> result = new List<string>();
+            foreach (var control in flpNgBox.Controls)
+            {
+                if (control is MyTextBox)
+                {
+                    MyTextBox box = (MyTextBox)control;
+                    if (box.Text != "0")
+                    {
+                        List<ngBoxTag> defectlist = (List<ngBoxTag>)box.Tag;
+                        foreach (var defect in defectlist)
+                        {
+                            foreach (var img in defect.Images)
+                            {
+                                result.Add(img.Tag.ToString());
+                            }
+
+                        }
+                    }
+                }
+            }
+            foreach (var control in flpScrapBox.Controls)
+            {
+                if (control is MyTextBox)
+                {
+                    MyTextBox box = (MyTextBox)control;
+                    if (box.Text != "0")
+                    {
+                        List<ngBoxTag> defectlist = (List<ngBoxTag>)box.Tag;
+                        foreach (var defect in defectlist)
+                        {
+                            foreach (var img in defect.Images)
+                            {
+                                result.Add(img.Tag.ToString());
+                            }
+
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
         private void buttonSave_Click(object sender, EventArgs e)
         {
             if (AllDataFilledCorrectly())
@@ -310,6 +522,12 @@ namespace Kontrola_wizualna_karta_pracy
                             {
                                 model = smtCurrentLotInfo.Model;
                             }
+                        }
+
+                        List<Image> imagesToSave = GetAllImagesToSaveAndClear(true);
+                        if (imagesToSave.Count > 0)
+                        {
+                            SaveImagesToFiles(imagesToSave, recordToSave.NumerZlecenia);
                         }
 
                         var allNg = recordToSaceCalculation.GetAllNg();
@@ -391,7 +609,7 @@ namespace Kontrola_wizualna_karta_pracy
 
         private void button1_Click(object sender, EventArgs e)
         {
-
+            ImageSynchronizer.DoSynchronization();
         }
 
         private void textBoxGoodQty_KeyPress(object sender, KeyPressEventArgs e)
@@ -461,11 +679,31 @@ namespace Kontrola_wizualna_karta_pracy
 
             if (textBoxLotNumber.Text.Length > 6)
             {
+                if (SqlOperations.CheckIfLotIsAlreadyAdded(textBoxLotNumber.Text))
+                {
+                    MessageBox.Show(LanguangeTranslation.Translate("To zlecenie jest już w bazie danych", radioButtonPolish.Checked));
+                }
+
+                var images = GetAllImagesToSaveAndClear(true);
+                //if (images.Count>0)
+                {
+                    //DialogResult dialogResult = MessageBox.Show("Uwaga!",LanguangeTranslation.Translate( "Niezapisane PCB zostaną usunięte!", radioButtonPolish.Checked) + LanguangeTranslation.Translate( Environment.NewLine+"Zmienić LOT i usunąć?",radioButtonPolish.Checked), MessageBoxButtons.YesNo);
+                    //if (dialogResult == DialogResult.Yes)
+                    //{
+                    //    //do something
+                    //}
+                    //else if (dialogResult == DialogResult.No)
+                    //{
+                    //    //do something else
+                    //}
+
+                }
+
                 if (smtInfo.TryGetValue(lot, out smtCurrentLotInfo))
                 {
-                    BackgroundWorker worker = new BackgroundWorker();
-                    worker.DoWork += worker_DoWork;
-                    worker.RunWorkerAsync();
+                        BackgroundWorker worker = new BackgroundWorker();
+                        worker.DoWork += worker_DoWork;
+                        worker.RunWorkerAsync();
                 }
                 else
                 {
@@ -482,9 +720,9 @@ namespace Kontrola_wizualna_karta_pracy
             }
 
             labelLotInfo.Text = smtCurrentLotInfo.infoToDisplay;
-            //recordToSave.IloscDobrych = smtCurrentLotInfo.OrderedQty;
-            textBoxGoodQty.Text = smtCurrentLotInfo.OrderedQty.ToString();
-            textBoxLotNumber.Text = lot;
+            recordToSave.IloscDobrych = smtCurrentLotInfo.OrderedQty;
+            //textBoxGoodQty.Text = smtCurrentLotInfo.OrderedQty.ToString();
+            //textBoxLotNumber.Text = lot;
         }
 
         private void worker_DoWork(object sender, DoWorkEventArgs e) //to know what pcbSerials are in this lot
@@ -500,17 +738,7 @@ namespace Kontrola_wizualna_karta_pracy
 
         private void buttonCamStartStop_Click(object sender, EventArgs e)
         {
-            if (FinalFrame.IsRunning)
-            {
-                FinalFrame.Stop();
-                pictureBox1.Image = null;
-                pictureBox1.Invalidate();
-            }
-            else
-            {
-                FinalFrame.Start();
-
-            }
+            ToggleCamOnOff();
         }
 
         private void buttonAddFailure_Click(object sender, EventArgs e)
@@ -521,8 +749,11 @@ namespace Kontrola_wizualna_karta_pracy
             }
             else
             {
+                List<string> serialOfNgPcb = GetListOfNgPcbSerials();
                 List<string> ngButtons = new List<string>();
                 List<string> scrapButtons = new List<string>();
+
+
                 foreach (Control ctrl in flpNgBox.Controls)
                 {
                     ngButtons.Add(ctrl.Name);
@@ -533,37 +764,48 @@ namespace Kontrola_wizualna_karta_pracy
                 }
 
                 FinalFrame.Stop();
-                NewFailureForm failForm = new NewFailureForm(ngButtons.ToArray(), scrapButtons.ToArray(), textBoxLotNumber.Text, DateTime.Now.ToString("dd-MM-yyyy"), pcbsInCurrentLot, radioButtonPolish.Checked, deviceMonikerString);
-                failForm.ShowDialog();
-                string buttonClicked = failForm.buttonClicked;
-
-                if (buttonClicked != null)
+                NewFailureForm failForm = new NewFailureForm(ngButtons.ToArray(), scrapButtons.ToArray(), textBoxLotNumber.Text, DateTime.Now.ToString("dd-MM-yyyy"), pcbsInCurrentLot, radioButtonPolish.Checked, deviceMonikerString, rotate180, serialOfNgPcb);
+                if (failForm.ShowDialog() == DialogResult.OK)
                 {
-                    if (buttonClicked.StartsWith("ng"))
-                    {
-                        foreach (Control tb in flpNgBox.Controls)
-                        {
-                            if (tb.Name == buttonClicked)
-                            {
-                                int val = int.Parse(tb.Text);
-                                val++;
-                                tb.Text = val.ToString();
-                            }
-                        }
-                    }
-                    else if (buttonClicked.StartsWith("scrap"))
-                    {
-                        foreach (Control tb in flpScrapBox.Controls)
-                        {
-                            if (tb.Name == buttonClicked)
-                            {
-                                int val = int.Parse(tb.Text);
-                                val++;
-                                tb.Text = val.ToString();
-                            }
-                        }
-                    }
+                    string buttonClicked = failForm.buttonClicked;
+                    string serialNo = failForm.serialNo;
+                    List<Image> listOfImages = failForm.imageList;
+                    ngBoxTag newTag = new ngBoxTag(serialNo, DateTime.Now.ToString("HH:mm:ss dd-MMM"), listOfImages);
 
+                    if (buttonClicked != null)
+                    {
+                        if (buttonClicked.StartsWith("ng"))
+                        {
+                            foreach (Control tb in flpNgBox.Controls)
+                            {
+                                if (tb.Name == buttonClicked)
+                                {
+                                    int val = int.Parse(tb.Text);
+                                    val++;
+                                    tb.Text = val.ToString();
+                                    List<ngBoxTag> currentList = (List<ngBoxTag>)tb.Tag;
+                                    currentList.Add(newTag);
+                                    tb.Tag = currentList;
+                                }
+                            }
+                        }
+                        else if (buttonClicked.StartsWith("scrap"))
+                        {
+                            foreach (Control tb in flpScrapBox.Controls)
+                            {
+                                if (tb.Name == buttonClicked)
+                                {
+                                    int val = int.Parse(tb.Text);
+                                    val++;
+                                    tb.Text = val.ToString();
+                                    List<ngBoxTag> currentList = (List<ngBoxTag>)tb.Tag;
+                                    currentList.Add(newTag);
+                                    tb.Tag = currentList;
+                                }
+                            }
+                        }
+
+                    }
                 }
             }
         }
@@ -880,7 +1122,14 @@ namespace Kontrola_wizualna_karta_pracy
             {
                 if (setF.ShowDialog()== DialogResult.OK)
                 {
-                    MessageBox.Show(LanguangeTranslation.Translate("Uruchom ponownie aplikację aby użyć nowej kamery", radioButtonPolish.Checked));
+                    //MessageBox.Show(LanguangeTranslation.Translate("Uruchom ponownie aplikację aby użyć nowej kamery", radioButtonPolish.Checked));
+                    string rotateSettings = AppSettings.GetSettings("camera180Rotate");
+                    if (rotateSettings == "ON")
+                    {
+                        rotate180 = true;
+                    }
+                    deviceMonikerString = CheckDeviceMonikerString();
+                    
                 }
             }
         }
@@ -897,6 +1146,27 @@ namespace Kontrola_wizualna_karta_pracy
         private void timerClock_Tick(object sender, EventArgs e)
         {
             labelClock.Text = System.DateTime.Now.ToString("HH:mm:ss");
+        }
+
+        private void ToggleCamOnOff()
+        {
+            if (FinalFrame.IsRunning)
+            {
+                FinalFrame.Stop();
+                buttonCamStartStop.BackgroundImage = Kontrola_wizualna_karta_pracy.Properties.Resources.microscope_OFF;
+                pictureBox1.Image = null;
+                pictureBox1.Invalidate();
+            }
+            else
+            {
+                FinalFrame.Start();
+                buttonCamStartStop.BackgroundImage = Kontrola_wizualna_karta_pracy.Properties.Resources.microscope_ON;
+            }
+        }
+
+        private void timerImagesSynchro_Tick(object sender, EventArgs e)
+        {
+            ImageSynchronizer.DoSynchronization();
         }
     }
 }

@@ -91,8 +91,14 @@ namespace Kontrola_wizualna_karta_pracy
                     case "Zakończenie pracy": return "Конец работы";
                     case "TAK": return "ДА";
                     case "NIE": return "НЕТ";
+                    case "Usuń": return "Удалить";
+                    case "Ten numer PCB jest już dodany": return "Этот идентификатор уже добавлен";
+                    case "To zlecenie jest już w bazie danych": return "Этот заказ уже находится в базе данных";
+                    case "Niezapisane PCB zostaną usunięte!": return "Все несохраненные PCB будут удалены";
+                    case "Zmienić LOT i usunąć?": return "Изменить заказ и удалить?";
 
-                } 
+                }
+                
             }
             return result;
         }

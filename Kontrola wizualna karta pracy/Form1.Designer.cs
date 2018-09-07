@@ -29,9 +29,12 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.textBoxLotNumber = new System.Windows.Forms.TextBox();
             this.labelLotNo = new System.Windows.Forms.Label();
             this.labelGoodQty = new System.Windows.Forms.Label();
@@ -104,8 +107,9 @@
             this.SpalonyConn = new System.Windows.Forms.Label();
             this.UszkodzenieConn = new System.Windows.Forms.Label();
             this.panel5 = new System.Windows.Forms.Panel();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.button15 = new System.Windows.Forms.Button();
-            this.button14 = new System.Windows.Forms.Button();
+            this.buttonCamSettings = new System.Windows.Forms.Button();
             this.panelVirtualKeyboard = new System.Windows.Forms.Panel();
             this.button10 = new System.Windows.Forms.Button();
             this.button11 = new System.Windows.Forms.Button();
@@ -147,8 +151,10 @@
             this.panelClock = new System.Windows.Forms.Panel();
             this.labelClock = new System.Windows.Forms.Label();
             this.timerClock = new System.Windows.Forms.Timer(this.components);
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.labelAppVersion = new System.Windows.Forms.Label();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.timerImagesSynchro = new System.Windows.Forms.Timer(this.components);
+            this.recordToSaveBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.Ng0BrakLutowia)).BeginInit();
             this.panelNg.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Ng0UszkodzenieConn)).BeginInit();
@@ -184,6 +190,7 @@
             this.panelEfficiency.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewHistory)).BeginInit();
             this.panel5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.panelVirtualKeyboard.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
@@ -193,6 +200,7 @@
             this.panelNumerics.SuspendLayout();
             this.panelClock.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.recordToSaveBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // textBoxLotNumber
@@ -957,7 +965,7 @@
             this.buttonAddFailure.BackColor = System.Drawing.Color.Maroon;
             this.buttonAddFailure.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.buttonAddFailure.ForeColor = System.Drawing.Color.White;
-            this.buttonAddFailure.Location = new System.Drawing.Point(0, 463);
+            this.buttonAddFailure.Location = new System.Drawing.Point(0, 400);
             this.buttonAddFailure.Name = "buttonAddFailure";
             this.buttonAddFailure.Size = new System.Drawing.Size(268, 60);
             this.buttonAddFailure.TabIndex = 51;
@@ -1130,10 +1138,34 @@
             this.dataGridViewHistory.AllowUserToDeleteRows = false;
             this.dataGridViewHistory.AllowUserToResizeColumns = false;
             this.dataGridViewHistory.AllowUserToResizeRows = false;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewHistory.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridViewHistory.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewHistory.DefaultCellStyle = dataGridViewCellStyle2;
             this.dataGridViewHistory.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewHistory.Location = new System.Drawing.Point(3, 643);
             this.dataGridViewHistory.Name = "dataGridViewHistory";
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewHistory.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.dataGridViewHistory.RowHeadersVisible = false;
             this.dataGridViewHistory.Size = new System.Drawing.Size(223, 424);
             this.dataGridViewHistory.TabIndex = 46;
@@ -1173,8 +1205,9 @@
             // 
             this.panel5.BackColor = System.Drawing.SystemColors.InactiveCaption;
             this.panel5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel5.Controls.Add(this.numericUpDown1);
             this.panel5.Controls.Add(this.button15);
-            this.panel5.Controls.Add(this.button14);
+            this.panel5.Controls.Add(this.buttonCamSettings);
             this.panel5.Controls.Add(this.textBoxGoodQty);
             this.panel5.Controls.Add(this.panelVirtualKeyboard);
             this.panel5.Controls.Add(this.buttonCamStartStop);
@@ -1195,27 +1228,44 @@
             this.panel5.Size = new System.Drawing.Size(270, 474);
             this.panel5.TabIndex = 47;
             // 
+            // numericUpDown1
+            // 
+            this.numericUpDown1.Location = new System.Drawing.Point(241, 37);
+            this.numericUpDown1.Maximum = new decimal(new int[] {
+            360,
+            0,
+            0,
+            0});
+            this.numericUpDown1.Minimum = new decimal(new int[] {
+            360,
+            0,
+            0,
+            -2147483648});
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(31, 20);
+            this.numericUpDown1.TabIndex = 59;
+            // 
             // button15
             // 
             this.button15.BackgroundImage = global::Kontrola_wizualna_karta_pracy.Properties.Resources.off_55x55;
             this.button15.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.button15.Location = new System.Drawing.Point(103, 2);
+            this.button15.Location = new System.Drawing.Point(77, 2);
             this.button15.Name = "button15";
             this.button15.Size = new System.Drawing.Size(55, 55);
             this.button15.TabIndex = 58;
             this.button15.UseVisualStyleBackColor = true;
             this.button15.Click += new System.EventHandler(this.button15_Click);
             // 
-            // button14
+            // buttonCamSettings
             // 
-            this.button14.BackgroundImage = global::Kontrola_wizualna_karta_pracy.Properties.Resources.settings1;
-            this.button14.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.button14.Location = new System.Drawing.Point(158, 2);
-            this.button14.Name = "button14";
-            this.button14.Size = new System.Drawing.Size(55, 55);
-            this.button14.TabIndex = 56;
-            this.button14.UseVisualStyleBackColor = true;
-            this.button14.Click += new System.EventHandler(this.button14_Click_1);
+            this.buttonCamSettings.BackgroundImage = global::Kontrola_wizualna_karta_pracy.Properties.Resources.settings1;
+            this.buttonCamSettings.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.buttonCamSettings.Location = new System.Drawing.Point(132, 2);
+            this.buttonCamSettings.Name = "buttonCamSettings";
+            this.buttonCamSettings.Size = new System.Drawing.Size(55, 55);
+            this.buttonCamSettings.TabIndex = 56;
+            this.buttonCamSettings.UseVisualStyleBackColor = true;
+            this.buttonCamSettings.Click += new System.EventHandler(this.button14_Click_1);
             // 
             // panelVirtualKeyboard
             // 
@@ -1390,7 +1440,7 @@
             // 
             this.buttonCamStartStop.BackgroundImage = global::Kontrola_wizualna_karta_pracy.Properties.Resources.microscope_ICO;
             this.buttonCamStartStop.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.buttonCamStartStop.Location = new System.Drawing.Point(212, 2);
+            this.buttonCamStartStop.Location = new System.Drawing.Point(186, 2);
             this.buttonCamStartStop.Name = "buttonCamStartStop";
             this.buttonCamStartStop.Size = new System.Drawing.Size(55, 55);
             this.buttonCamStartStop.TabIndex = 54;
@@ -1541,17 +1591,17 @@
             // chart1
             // 
             this.chart1.BackColor = System.Drawing.Color.Transparent;
-            chartArea2.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea2);
+            chartArea1.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea1);
             this.chart1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            legend2.Name = "Legend1";
-            this.chart1.Legends.Add(legend2);
+            legend1.Name = "Legend1";
+            this.chart1.Legends.Add(legend1);
             this.chart1.Location = new System.Drawing.Point(0, 147);
             this.chart1.Name = "chart1";
-            series2.ChartArea = "ChartArea1";
-            series2.Legend = "Legend1";
-            series2.Name = "Series1";
-            this.chart1.Series.Add(series2);
+            series1.ChartArea = "ChartArea1";
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            this.chart1.Series.Add(series1);
             this.chart1.Size = new System.Drawing.Size(221, 245);
             this.chart1.TabIndex = 51;
             this.chart1.Text = "chart1";
@@ -1673,7 +1723,7 @@
             // panelClock
             // 
             this.panelClock.Controls.Add(this.labelClock);
-            this.panelClock.Location = new System.Drawing.Point(513, 99);
+            this.panelClock.Location = new System.Drawing.Point(396, 947);
             this.panelClock.Name = "panelClock";
             this.panelClock.Size = new System.Drawing.Size(322, 78);
             this.panelClock.TabIndex = 59;
@@ -1697,6 +1747,17 @@
             this.timerClock.Interval = 1000;
             this.timerClock.Tick += new System.EventHandler(this.timerClock_Tick);
             // 
+            // labelAppVersion
+            // 
+            this.labelAppVersion.AutoSize = true;
+            this.labelAppVersion.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.labelAppVersion.ForeColor = System.Drawing.SystemColors.AppWorkspace;
+            this.labelAppVersion.Location = new System.Drawing.Point(282, 6);
+            this.labelAppVersion.Name = "labelAppVersion";
+            this.labelAppVersion.Size = new System.Drawing.Size(25, 13);
+            this.labelAppVersion.TabIndex = 60;
+            this.labelAppVersion.Text = "ver.";
+            // 
             // pictureBox1
             // 
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -1708,16 +1769,15 @@
             this.pictureBox1.TabStop = false;
             this.pictureBox1.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox1_Paint);
             // 
-            // labelAppVersion
+            // timerImagesSynchro
             // 
-            this.labelAppVersion.AutoSize = true;
-            this.labelAppVersion.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelAppVersion.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            this.labelAppVersion.Location = new System.Drawing.Point(282, 6);
-            this.labelAppVersion.Name = "labelAppVersion";
-            this.labelAppVersion.Size = new System.Drawing.Size(25, 13);
-            this.labelAppVersion.TabIndex = 60;
-            this.labelAppVersion.Text = "ver.";
+            this.timerImagesSynchro.Enabled = true;
+            this.timerImagesSynchro.Interval = 60000;
+            this.timerImagesSynchro.Tick += new System.EventHandler(this.timerImagesSynchro_Tick);
+            // 
+            // recordToSaveBindingSource
+            // 
+            this.recordToSaveBindingSource.DataSource = typeof(Kontrola_wizualna_karta_pracy.RecordToSave);
             // 
             // Form1
             // 
@@ -1776,6 +1836,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewHistory)).EndInit();
             this.panel5.ResumeLayout(false);
             this.panel5.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.panelVirtualKeyboard.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel3.ResumeLayout(false);
@@ -1788,6 +1849,7 @@
             this.panelNumerics.ResumeLayout(false);
             this.panelClock.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.recordToSaveBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1906,13 +1968,16 @@
         private System.Windows.Forms.TextBox textBox1;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private System.Windows.Forms.Timer timerEfficiencyAndWaste;
-        private System.Windows.Forms.Button button14;
+        private System.Windows.Forms.Button buttonCamSettings;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button button15;
         private System.Windows.Forms.Panel panelClock;
         private System.Windows.Forms.Label labelClock;
         private System.Windows.Forms.Timer timerClock;
         private System.Windows.Forms.Label labelAppVersion;
+        private System.Windows.Forms.BindingSource recordToSaveBindingSource;
+        private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.Timer timerImagesSynchro;
     }
 }
 
