@@ -37,8 +37,8 @@
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.textBoxLotNumber = new System.Windows.Forms.TextBox();
             this.labelLotNo = new System.Windows.Forms.Label();
-            this.labelGoodQty = new System.Windows.Forms.Label();
-            this.textBoxGoodQty = new System.Windows.Forms.TextBox();
+            this.labelGood = new System.Windows.Forms.Label();
+            this.textBoxAllQty = new System.Windows.Forms.TextBox();
             this.BrakLutowia = new System.Windows.Forms.Label();
             this.BrakDiodyLed = new System.Windows.Forms.Label();
             this.BrakResConn = new System.Windows.Forms.Label();
@@ -107,6 +107,8 @@
             this.SpalonyConn = new System.Windows.Forms.Label();
             this.UszkodzenieConn = new System.Windows.Forms.Label();
             this.panel5 = new System.Windows.Forms.Panel();
+            this.labelGoodQty = new System.Windows.Forms.Label();
+            this.labelAll = new System.Windows.Forms.Label();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.button15 = new System.Windows.Forms.Button();
             this.buttonCamSettings = new System.Windows.Forms.Button();
@@ -219,32 +221,33 @@
             // 
             this.labelLotNo.AutoSize = true;
             this.labelLotNo.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelLotNo.Location = new System.Drawing.Point(3, 64);
+            this.labelLotNo.Location = new System.Drawing.Point(5, 64);
             this.labelLotNo.Name = "labelLotNo";
             this.labelLotNo.Size = new System.Drawing.Size(106, 17);
             this.labelLotNo.TabIndex = 1;
             this.labelLotNo.Text = "Numer zlecenia";
             // 
-            // labelGoodQty
+            // labelGood
             // 
-            this.labelGoodQty.AutoSize = true;
-            this.labelGoodQty.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelGoodQty.Location = new System.Drawing.Point(3, 145);
-            this.labelGoodQty.Name = "labelGoodQty";
-            this.labelGoodQty.Size = new System.Drawing.Size(91, 17);
-            this.labelGoodQty.TabIndex = 3;
-            this.labelGoodQty.Text = "Ilość dobrych";
+            this.labelGood.AutoSize = true;
+            this.labelGood.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.labelGood.Location = new System.Drawing.Point(115, 164);
+            this.labelGood.Name = "labelGood";
+            this.labelGood.Size = new System.Drawing.Size(65, 17);
+            this.labelGood.TabIndex = 3;
+            this.labelGood.Text = "Dobrych:";
             // 
-            // textBoxGoodQty
+            // textBoxAllQty
             // 
-            this.textBoxGoodQty.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.textBoxGoodQty.Location = new System.Drawing.Point(6, 161);
-            this.textBoxGoodQty.Name = "textBoxGoodQty";
-            this.textBoxGoodQty.Size = new System.Drawing.Size(200, 23);
-            this.textBoxGoodQty.TabIndex = 2;
-            this.textBoxGoodQty.MouseClick += new System.Windows.Forms.MouseEventHandler(this.textBoxGoodQty_MouseClick);
-            this.textBoxGoodQty.Enter += new System.EventHandler(this.textBoxGoodQty_Enter);
-            this.textBoxGoodQty.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxGoodQty_KeyPress);
+            this.textBoxAllQty.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.textBoxAllQty.Location = new System.Drawing.Point(6, 161);
+            this.textBoxAllQty.Name = "textBoxAllQty";
+            this.textBoxAllQty.Size = new System.Drawing.Size(103, 23);
+            this.textBoxAllQty.TabIndex = 2;
+            this.textBoxAllQty.MouseClick += new System.Windows.Forms.MouseEventHandler(this.textBoxGoodQty_MouseClick);
+            this.textBoxAllQty.TextChanged += new System.EventHandler(this.textBoxGoodQty_TextChanged);
+            this.textBoxAllQty.Enter += new System.EventHandler(this.textBoxGoodQty_Enter);
+            this.textBoxAllQty.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxGoodQty_KeyPress);
             // 
             // BrakLutowia
             // 
@@ -934,7 +937,7 @@
             // 
             this.labelOperator.AutoSize = true;
             this.labelOperator.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelOperator.Location = new System.Drawing.Point(3, 103);
+            this.labelOperator.Location = new System.Drawing.Point(5, 103);
             this.labelOperator.Name = "labelOperator";
             this.labelOperator.Size = new System.Drawing.Size(65, 17);
             this.labelOperator.TabIndex = 43;
@@ -1037,9 +1040,10 @@
             this.panelEfficiency.Controls.Add(this.label8);
             this.panelEfficiency.Controls.Add(this.label7);
             this.panelEfficiency.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelEfficiency.Location = new System.Drawing.Point(3, 403);
+            this.panelEfficiency.Location = new System.Drawing.Point(1, 401);
+            this.panelEfficiency.Margin = new System.Windows.Forms.Padding(1);
             this.panelEfficiency.Name = "panelEfficiency";
-            this.panelEfficiency.Size = new System.Drawing.Size(223, 234);
+            this.panelEfficiency.Size = new System.Drawing.Size(227, 238);
             this.panelEfficiency.TabIndex = 50;
             // 
             // labelEffNormHour
@@ -1156,7 +1160,8 @@
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dataGridViewHistory.DefaultCellStyle = dataGridViewCellStyle2;
             this.dataGridViewHistory.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridViewHistory.Location = new System.Drawing.Point(3, 643);
+            this.dataGridViewHistory.Location = new System.Drawing.Point(1, 641);
+            this.dataGridViewHistory.Margin = new System.Windows.Forms.Padding(1);
             this.dataGridViewHistory.Name = "dataGridViewHistory";
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
@@ -1167,7 +1172,7 @@
             dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.dataGridViewHistory.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.dataGridViewHistory.RowHeadersVisible = false;
-            this.dataGridViewHistory.Size = new System.Drawing.Size(223, 424);
+            this.dataGridViewHistory.Size = new System.Drawing.Size(227, 428);
             this.dataGridViewHistory.TabIndex = 46;
             this.dataGridViewHistory.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dataGridViewHistory_DataBindingComplete);
             // 
@@ -1205,10 +1210,12 @@
             // 
             this.panel5.BackColor = System.Drawing.SystemColors.InactiveCaption;
             this.panel5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel5.Controls.Add(this.labelGoodQty);
+            this.panel5.Controls.Add(this.labelAll);
             this.panel5.Controls.Add(this.numericUpDown1);
             this.panel5.Controls.Add(this.button15);
             this.panel5.Controls.Add(this.buttonCamSettings);
-            this.panel5.Controls.Add(this.textBoxGoodQty);
+            this.panel5.Controls.Add(this.textBoxAllQty);
             this.panel5.Controls.Add(this.panelVirtualKeyboard);
             this.panel5.Controls.Add(this.buttonCamStartStop);
             this.panel5.Controls.Add(this.labelLotInfo);
@@ -1220,13 +1227,33 @@
             this.panel5.Controls.Add(this.labelLotNo);
             this.panel5.Controls.Add(this.comboBoxOperator);
             this.panel5.Controls.Add(this.labelOperator);
-            this.panel5.Controls.Add(this.labelGoodQty);
+            this.panel5.Controls.Add(this.labelGood);
             this.panel5.Controls.Add(this.label1);
             this.panel5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel5.Location = new System.Drawing.Point(3, 3);
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(270, 474);
             this.panel5.TabIndex = 47;
+            // 
+            // labelGoodQty
+            // 
+            this.labelGoodQty.AutoSize = true;
+            this.labelGoodQty.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.labelGoodQty.Location = new System.Drawing.Point(178, 165);
+            this.labelGoodQty.Name = "labelGoodQty";
+            this.labelGoodQty.Size = new System.Drawing.Size(16, 17);
+            this.labelGoodQty.TabIndex = 61;
+            this.labelGoodQty.Text = "0";
+            // 
+            // labelAll
+            // 
+            this.labelAll.AutoSize = true;
+            this.labelAll.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.labelAll.Location = new System.Drawing.Point(5, 144);
+            this.labelAll.Name = "labelAll";
+            this.labelAll.Size = new System.Drawing.Size(78, 17);
+            this.labelAll.TabIndex = 60;
+            this.labelAll.Text = "Wszystkich";
             // 
             // numericUpDown1
             // 
@@ -1573,9 +1600,10 @@
             this.panelWasteLevel.Controls.Add(this.label5);
             this.panelWasteLevel.Controls.Add(this.label6);
             this.panelWasteLevel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelWasteLevel.Location = new System.Drawing.Point(3, 3);
+            this.panelWasteLevel.Location = new System.Drawing.Point(1, 1);
+            this.panelWasteLevel.Margin = new System.Windows.Forms.Padding(1);
             this.panelWasteLevel.Name = "panelWasteLevel";
-            this.panelWasteLevel.Size = new System.Drawing.Size(223, 394);
+            this.panelWasteLevel.Size = new System.Drawing.Size(227, 398);
             this.panelWasteLevel.TabIndex = 0;
             // 
             // labelWasteTop5
@@ -1596,13 +1624,13 @@
             this.chart1.Dock = System.Windows.Forms.DockStyle.Bottom;
             legend1.Name = "Legend1";
             this.chart1.Legends.Add(legend1);
-            this.chart1.Location = new System.Drawing.Point(0, 147);
+            this.chart1.Location = new System.Drawing.Point(0, 151);
             this.chart1.Name = "chart1";
             series1.ChartArea = "ChartArea1";
             series1.Legend = "Legend1";
             series1.Name = "Series1";
             this.chart1.Series.Add(series1);
-            this.chart1.Size = new System.Drawing.Size(221, 245);
+            this.chart1.Size = new System.Drawing.Size(225, 245);
             this.chart1.TabIndex = 51;
             this.chart1.Text = "chart1";
             // 
@@ -1661,9 +1689,10 @@
             this.textBox1.Dock = System.Windows.Forms.DockStyle.Top;
             this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.textBox1.ForeColor = System.Drawing.Color.Silver;
-            this.textBox1.Location = new System.Drawing.Point(3, 1073);
+            this.textBox1.Location = new System.Drawing.Point(1, 1071);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(1);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(223, 29);
+            this.textBox1.Size = new System.Drawing.Size(227, 29);
             this.textBox1.TabIndex = 51;
             this.textBox1.Text = "Wyniki testu";
             this.textBox1.Enter += new System.EventHandler(this.textBox1_Enter);
@@ -1859,8 +1888,8 @@
 
         private System.Windows.Forms.TextBox textBoxLotNumber;
         private System.Windows.Forms.Label labelLotNo;
-        private System.Windows.Forms.Label labelGoodQty;
-        private System.Windows.Forms.TextBox textBoxGoodQty;
+        private System.Windows.Forms.Label labelGood;
+        private System.Windows.Forms.TextBox textBoxAllQty;
         private System.Windows.Forms.Label BrakLutowia;
         private System.Windows.Forms.Label BrakDiodyLed;
         private System.Windows.Forms.Label BrakResConn;
@@ -1978,6 +2007,8 @@
         private System.Windows.Forms.BindingSource recordToSaveBindingSource;
         private System.Windows.Forms.NumericUpDown numericUpDown1;
         private System.Windows.Forms.Timer timerImagesSynchro;
+        private System.Windows.Forms.Label labelGoodQty;
+        private System.Windows.Forms.Label labelAll;
     }
 }
 

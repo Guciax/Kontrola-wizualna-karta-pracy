@@ -39,7 +39,7 @@ namespace Kontrola_wizualna_karta_pracy
            
         }
 
-        public static void AddRecentOrdersToGrid(DataGridView grid, ref Dictionary<string, string> lotModelDict, string appPath)
+        public static void LoadRecentOrdersToGrid(DataGridView grid, ref Dictionary<string, string> lotModelDict, string appPath)
         {
             DataTable source = new DataTable();
             source.Columns.Add("Data");
@@ -52,33 +52,88 @@ namespace Kontrola_wizualna_karta_pracy
             if (System.IO.File.Exists(recentOrdersPath))
             {
                 string[] fileLines = System.IO.File.ReadAllLines(recentOrdersPath);
+                Dictionary<string, string> listOfLotsToModel = new Dictionary<string, string>();
+                Dictionary<string, string> listOfLotsToDate = new Dictionary<string, string>();
 
                 foreach (var line in fileLines)
                 {
                     string[] lineSplitted = line.Split(';');
                     if (lineSplitted.Length < 4) continue;
-
-                    string date = lineSplitted[0];
+                    string lot = lineSplitted[2];
                     string model = lineSplitted[1];
-                    string zlecenie = lineSplitted[2];
+                    string date = lineSplitted[0];
+
+                    listOfLotsToModel.Add(lot, model);
+                    listOfLotsToDate.Add(lot, date);
+                }
+
+                var inspectionTable = SqlOperations.DownloadVisInspFromSQL(listOfLotsToModel.Select(key=>key.Key).ToArray());
+                //[id],[Data_czas],[Operator],[iloscDobrych],[numerZlecenia],[ngBrakLutowia],[ngBrakDiodyLed],[ngBrakResConn],[ngPrzesuniecieLed],[ngPrzesuniecieResConn]
+                //,[ngZabrudzenieLed],[ngUszkodzenieMechaniczneLed],[ngUszkodzenieConn],[ngWadaFabrycznaDiody],[ngUszkodzonePcb],[ngWadaNaklejki],[ngSpalonyConn]
+                //,[ngInne],[scrapBrakLutowia],[scrapBrakDiodyLed],[scrapBrakResConn],[scrapPrzesuniecieLed],[scrapPrzesuniecieResConn],[scrapZabrudzenieLed]
+                //,[scrapUszkodzenieMechaniczneLed],[scrapUszkodzenieConn],[scrapWadaFabrycznaDiody],[scrapUszkodzonePcb],[scrapWadaNaklejki],[scrapSpalonyConn]
+                //,[scrapInne],[ngTestElektryczny]
+
+                foreach (DataRow row in inspectionTable.Rows)
+                {
+                    string lot = row["numerZlecenia"].ToString();
+                    string model = listOfLotsToModel[lot];
+                    DateTime date = DateTime.ParseExact(row["Data_czas"].ToString(), "dd.MM.yyyy HH:mm:ss", CultureInfo.CurrentCulture);
 
                     if (model.Trim().Length == 0 || model == "Model") continue;
-                    if (!lotModelDict.ContainsKey(zlecenie))
+                    if (!lotModelDict.ContainsKey(lot))
                     {
-                        lotModelDict.Add(zlecenie, model);
+                        lotModelDict.Add(lot, model);
                     }
 
-                    string ilosc = lineSplitted[3];
-                    string ng = lineSplitted[4];
+                    int scrapNg = 0;
+                    for (int i=5; i<inspectionTable.Columns.Count ;i++)
+                    {
+                        if (row[i].ToString()!="0")
+                        {
+                            scrapNg += int.Parse(row[i].ToString());
+                        }
+                    }
+
+                    int goodQty = Int32.Parse(row["iloscDobrych"].ToString())+scrapNg;
+
                     DataRow newRow = source.NewRow();
-                    newRow[0] = date;
+                    newRow[0] = date.ToString("HH:mm dd-MMM");
                     newRow[1] = model;
-                    newRow[2] = zlecenie;
-                    newRow[3] = ilosc;
-                    newRow[4] = ng;
+                    newRow[2] = lot;
+                    newRow[3] = goodQty;
+                    newRow[4] = scrapNg;
 
                     source.Rows.InsertAt(newRow, 0);
+
                 }
+
+                //foreach (var line in fileLines)
+                //{
+                //    string[] lineSplitted = line.Split(';');
+                //    if (lineSplitted.Length < 4) continue;
+
+                //    string date = lineSplitted[0];
+                //    string model = lineSplitted[1];
+                //    string zlecenie = lineSplitted[2];
+
+                //    if (model.Trim().Length == 0 || model == "Model") continue;
+                //    if (!lotModelDict.ContainsKey(zlecenie))
+                //    {
+                //        lotModelDict.Add(zlecenie, model);
+                //    }
+
+                //    string ilosc = lineSplitted[3];
+                //    string ng = lineSplitted[4];
+                //    DataRow newRow = source.NewRow();
+                //    newRow[0] = date;
+                //    newRow[1] = model;
+                //    newRow[2] = zlecenie;
+                //    newRow[3] = ilosc;
+                //    newRow[4] = ng;
+
+                //    source.Rows.InsertAt(newRow, 0);
+                //}
 
                 grid.DataSource = source;
                 DgvTools.ColumnsAutoSize(grid, DataGridViewAutoSizeColumnMode.AllCellsExceptHeader);

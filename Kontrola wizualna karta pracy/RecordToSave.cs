@@ -8,7 +8,7 @@ namespace Kontrola_wizualna_karta_pracy
 {
     public class RecordToSave
     {
-        public RecordToSave(string Operator,int iloscDobrych,string numerZlecenia, DateTime Data_czas, int ngBrakLutowia=0, int ngBrakDiodyLed=0, int ngBrakResConn = 0, int ngPrzesuniecieLed = 0, int ngPrzesuniecieResConn = 0, int ngZabrudzenieLed = 0, int ngUszkodzenieMechaniczneLed = 0, int ngUszkodzenieConn = 0, int ngWadaFabrycznaDiody = 0, int ngUszkodzonePcb = 0, int ngWadaNaklejki = 0, int ngSpalonyConn = 0, int ngInne = 0, int scrapBrakLutowia = 0, int scrapBrakDiodyLed = 0, int scrapBrakResConn = 0, int scrapPrzesuniecieLed = 0, int scrapPrzesuniecieResConn = 0, int scrapZabrudzenieLed = 0, int scrapUszkodzenieMechaniczneLed = 0, int scrapUszkodzenieConn = 0, int scrapWadaFabrycznaDiody = 0, int scrapUszkodzonePcb = 0, int scrapWadaNaklejki = 0, int scrapSpalonyConn = 0, int scrapInne = 0, int ngTestElektryczny = 0)
+        public RecordToSave(string Operator,int iloscDobrych,string numerZlecenia, DateTime Data_czas, int ngBrakLutowia=0, int ngBrakDiodyLed=0, int ngBrakResConn = 0, int ngPrzesuniecieLed = 0, int ngPrzesuniecieResConn = 0, int ngZabrudzenieLed = 0, int ngUszkodzenieMechaniczneLed = 0, int ngUszkodzenieConn = 0, int ngWadaFabrycznaDiody = 0, int ngUszkodzonePcb = 0, int ngWadaNaklejki = 0, int ngSpalonyConn = 0, int ngInne = 0, int scrapBrakLutowia = 0, int scrapBrakDiodyLed = 0, int scrapBrakResConn = 0, int scrapPrzesuniecieLed = 0, int scrapPrzesuniecieResConn = 0, int scrapZabrudzenieLed = 0, int scrapUszkodzenieMechaniczneLed = 0, int scrapUszkodzenieConn = 0, int scrapWadaFabrycznaDiody = 0, int scrapUszkodzonePcb = 0, int scrapWadaNaklejki = 0, int scrapSpalonyConn = 0, int scrapInne = 0, int ngTestElektryczny = 0, int iloscWszystkich=0)
         {
             Data_Czas = Data_czas;
             this.Operator = Operator;
@@ -41,192 +41,94 @@ namespace Kontrola_wizualna_karta_pracy
             ScrapSpalonyConn = scrapSpalonyConn;
             ScrapInne = scrapInne;
             NgTestElektryczny = ngTestElektryczny;
+            IloscWszystkich = iloscWszystkich;
         }
 
         public DateTime Data_Czas { get; set; }
         public string Operator { get; set; }
-        public int IloscDobrych { get; set; }
         public string NumerZlecenia { get; set; }
+
+        public int IloscDobrych
+        {
+            get { return IloscWszystkich - GetAllScrap() - GetAllNg(); }
+            set {; }
+        }
+
         public int NgBrakLutowia
         {
-            get { return _ngBrakLutowia; }
-            set
-            {
-                if (IloscDobrych > 0)
-                {
-                    IloscDobrych += _ngBrakLutowia - value;
-                }
-                _ngBrakLutowia = value;
-            }
+            get;
+            set;
         }
 
         public int NgBrakDiodyLed
         {
-            get { return _ngBrakDiodyLed; }
-            set
-            {
-                if (IloscDobrych > 0)
-                {
-                    IloscDobrych += _ngBrakDiodyLed - value;
-                }
-                _ngBrakDiodyLed = value;
-            }
+            get;
+            set;
         }
         public int NgBrakResConn
         {
-            get { return _ngBrakResConn; }
-            set
-            {
-                if (IloscDobrych > 0)
-                {
-                    IloscDobrych += _ngBrakResConn - value;
-                }
-                _ngBrakResConn = value;
-            }
+            get;
+            set;
         }
         public int NgPrzesuniecieLed
         {
-            get { return _ngPrzesuniecieLed; }
-            set
-            {
-                if (IloscDobrych > 0)
-                {
-                    IloscDobrych += _ngPrzesuniecieLed - value;
-                }
-                _ngPrzesuniecieLed = value;
-            }
+            get;
+            set;
         }
         public int NgPrzesuniecieResConn
         {
-            get { return _ngPrzesuniecieResConn; }
-            set
-            {
-                if (IloscDobrych > 0)
-                {
-                    IloscDobrych += _ngPrzesuniecieResConn - value;
-                }
-                _ngPrzesuniecieResConn = value;
-            }
+            get;
+            set;
         }
         public int NgZabrudzenieLed
         {
-            get { return _ngZabrudzenieLed; }
-            set
-            {
-                if (IloscDobrych > 0)
-                {
-                    IloscDobrych += _ngZabrudzenieLed - value;
-                }
-                _ngZabrudzenieLed = value;
-            }
+            get;
+            set;
         }
         public int NgUszkodzenieMechaniczneLed
         {
-            get { return _ngUszkodzenieMechaniczneLed; }
-            set
-            {
-                if (IloscDobrych > 0)
-                {
-                    IloscDobrych += _ngUszkodzenieMechaniczneLed - value;
-                }
-                _ngUszkodzenieMechaniczneLed = value;
-            }
+            get;
+            set;
         }
         public int NgUszkodzenieConn
         {
-            get { return _ngUszkodzenieConn; }
-            set
-            {
-                if (IloscDobrych > 0)
-                {
-                    IloscDobrych += _ngUszkodzenieConn - value;
-                }
-                _ngUszkodzenieConn = value;
-            }
+            get;
+            set;
         }
         public int NgWadaFabrycznaDiody
         {
-            get { return _ngWadaFabrycznaDiody; }
-            set
-            {
-                if (IloscDobrych > 0)
-                {
-                    IloscDobrych += _ngWadaFabrycznaDiody - value;
-                }
-                _ngWadaFabrycznaDiody = value;
-            }
+            get;
+            set;
         }
         public int NgUszkodzonePcb
         {
-            get { return _ngUszkodzonePcb; }
-            set
-            {
-                if (IloscDobrych > 0)
-                {
-                    IloscDobrych += _ngUszkodzonePcb - value;
-                }
-                _ngUszkodzonePcb = value;
-            }
+            get;
+            set;
         }
         public int NgWadaNaklejki
         {
-            get { return _ngWadaNaklejki; }
-            set
-            {
-                if (IloscDobrych > 0)
-                {
-                    IloscDobrych += _ngWadaNaklejki - value;
-                }
-                _ngWadaNaklejki = value;
-            }
+            get;
+            set;
         }
         public int NgSpalonyConn
         {
-            get { return _ngSpalonyConn; }
-            set
-            {
-                if (IloscDobrych > 0)
-                {
-                    IloscDobrych += _ngSpalonyConn - value;
-                }
-                _ngSpalonyConn = value;
-            }
+            get;
+            set;
         }
         public int NgInne
         {
-            get { return _ngInne; }
-            set
-            {
-                if (IloscDobrych > 0)
-                {
-                    IloscDobrych += _ngInne - value;
-                }
-                _ngInne = value;
-            }
+            get;
+            set;
         }
         public int ScrapBrakLutowia
         {
-            get { return _scrapBrakLutowia; }
-            set
-            {
-                if (IloscDobrych > 0)
-                {
-                    IloscDobrych += _scrapBrakLutowia - value;
-                }
-                _scrapBrakLutowia = value;
-            }
+            get;
+            set;
         }
         public int ScrapBrakDiodyLed
         {
-            get { return _scrapBrakDiodyLed; }
-            set
-            {
-                if (IloscDobrych > 0)
-                {
-                    IloscDobrych += _scrapBrakDiodyLed - value;
-                }
-                _scrapBrakDiodyLed = value;
-            }
+            get;
+            set;
         }
         public int ScrapBrakResConn
         {
@@ -235,146 +137,76 @@ namespace Kontrola_wizualna_karta_pracy
             {
                 if (IloscDobrych > 0)
                 {
-                    IloscDobrych += _scrapBrakResConn - value;
+                    //IloscDobrych += _scrapBrakResConn - value;
                 }
                 _scrapBrakResConn = value;
+                //IloscDobrych = IloscWszystkich - GetAllNg() - GetAllScrap();
             }
         }
         public int ScrapPrzesuniecieLed
         {
-            get { return _scrapPrzesuniecieLed; }
-            set
-            {
-                if (IloscDobrych > 0)
-                {
-                    IloscDobrych += _scrapPrzesuniecieLed - value;
-                }
-                _scrapPrzesuniecieLed = value;
-            }
+            get;
+            set;
         }
         public int ScrapPrzesuniecieResConn
         {
-            get { return _scrapPrzesuniecieResConn; }
-            set
-            {
-                if (IloscDobrych > 0)
-                {
-                    IloscDobrych += _scrapPrzesuniecieResConn - value;
-                }
-                _scrapPrzesuniecieResConn = value;
-            }
+            get;
+            set;
         }
         public int ScrapZabrudzenieLed
         {
-            get { return _scrapZabrudzenieLed; }
-            set
-            {
-                if (IloscDobrych > 0)
-                {
-                    IloscDobrych += _scrapZabrudzenieLed - value;
-                }
-                _scrapZabrudzenieLed = value;
-            }
+            get;
+            set;
         }
         public int ScrapUszkodzenieMechaniczneLed
         {
-            get { return _scrapUszkodzenieMechaniczneLed; }
-            set
-            {
-                if (IloscDobrych > 0)
-                {
-                    IloscDobrych += _scrapUszkodzenieMechaniczneLed - value;
-                }
-                _scrapUszkodzenieMechaniczneLed = value;
-            }
+            get;
+            set;
         }
         public int ScrapUszkodzenieConn
         {
-            get { return _scrapUszkodzenieConn; }
-            set
-            {
-                if (IloscDobrych > 0)
-                {
-                    IloscDobrych += _scrapUszkodzenieConn - value;
-                }
-                _scrapUszkodzenieConn = value;
-            }
+            get;
+            set;
         }
         public int ScrapWadaFabrycznaDiody
         {
-            get { return _scrapWadaFabrycznaDiody; }
-            set
-            {
-                if (IloscDobrych > 0)
-                {
-                    IloscDobrych += _scrapWadaFabrycznaDiody - value;
-                }
-                _scrapWadaFabrycznaDiody = value;
-            }
+            get;
+            set;
         }
         public int ScrapUszkodzonePcb
         {
-            get { return _scrapUszkodzonePcb; }
-            set
-            {
-                if (IloscDobrych > 0)
-                {
-                    IloscDobrych += _scrapUszkodzonePcb - value;
-                }
-                _scrapUszkodzonePcb = value;
-            }
+            get;
+            set;
         }
         public int ScrapWadaNaklejki
         {
-            get { return _scrapWadaNaklejki; }
-            set
-            {
-                if (IloscDobrych > 0)
-                {
-                    IloscDobrych += _scrapWadaNaklejki - value;
-                }
-                _scrapWadaNaklejki = value;
-            }
+            get;
+            set;
         }
         public int ScrapSpalonyConn
         {
-            get { return _scrapSpalonyConn; }
-            set
-            {
-                if (IloscDobrych > 0)
-                {
-                    IloscDobrych += _scrapSpalonyConn - value;
-                }
-                _scrapSpalonyConn = value;
-            }
+            get;
+            set;
         }
         public int ScrapInne
         {
-            get { return _scrapInne; }
-            set
-            {
-                if (IloscDobrych > 0)
-                {
-                    IloscDobrych += _scrapInne - value;
-                }
-                _scrapInne = value;
-            }
+            get;
+            set;
         }
         public int NgTestElektryczny
         {
-            get { return _ngTestElektryczny; }
-            set
-            {
-                if (IloscDobrych > 0)
-                {
-                    IloscDobrych += _ngTestElektryczny - value;
-                }
-                _ngTestElektryczny = value;
-            }
+            get;
+            set;
         }
 
+        public int IloscWszystkich
+        {
+            get;
+            set;
+        }
 
-        private int _ngBrakLutowia=0;
+        private int _IloscWszystkich = 0;
+        private int _ngBrakLutowia = 0;
         private int _ngBrakDiodyLed = 0;
         private int _ngBrakResConn = 0;
         private int _ngPrzesuniecieLed = 0;
@@ -401,5 +233,15 @@ namespace Kontrola_wizualna_karta_pracy
         private int _scrapSpalonyConn;
         private int _scrapInne;
         private int _ngTestElektryczny;
+
+        private int GetAllNg()
+        {
+            return NgBrakLutowia+ NgBrakDiodyLed + NgBrakResConn + NgPrzesuniecieLed + NgPrzesuniecieResConn + NgZabrudzenieLed + NgUszkodzenieMechaniczneLed + NgUszkodzenieConn + NgWadaFabrycznaDiody + NgUszkodzonePcb +NgWadaNaklejki + NgSpalonyConn + NgInne + NgTestElektryczny;
+        }
+
+        private int GetAllScrap()
+        {
+            return  ScrapBrakLutowia + ScrapBrakDiodyLed + ScrapBrakResConn + ScrapPrzesuniecieLed + ScrapPrzesuniecieResConn + ScrapZabrudzenieLed + ScrapUszkodzenieMechaniczneLed + ScrapUszkodzenieConn + ScrapWadaFabrycznaDiody + ScrapUszkodzonePcb + ScrapWadaNaklejki + ScrapSpalonyConn+ ScrapInne;
+        }
     }
 }

@@ -75,6 +75,7 @@ namespace Kontrola_wizualna_karta_pracy
                 ngBox.Cursor = Cursors.Arrow;
                 ngBox.Tag = new List<ngBoxTag>();
                 ngBox.MouseClick += NgBox_MouseClick;
+                ngBox.TextChanged += NgBox_TextChanged;
 
                 if (!col.ToLower().Contains("elektrycz"))
                 {
@@ -96,6 +97,11 @@ namespace Kontrola_wizualna_karta_pracy
                 ngPanel.Controls.Add(ngBox);
                 labelPanel.Controls.Add(lblBox);
             }
+        }
+
+        private static void NgBox_TextChanged(object sender, EventArgs e)
+        {
+            
         }
 
         private static void NgBox_MouseClick(object sender, MouseEventArgs e)

@@ -96,6 +96,8 @@ namespace Kontrola_wizualna_karta_pracy
                     case "To zlecenie jest już w bazie danych": return "Этот заказ уже находится в базе данных";
                     case "Niezapisane PCB zostaną usunięte!": return "Все несохраненные PCB будут удалены";
                     case "Zmienić LOT i usunąć?": return "Изменить заказ и удалить?";
+                    case "dobrych:": return "хорошых";
+                    case "Wszystkich": return "Всех";
 
                 }
                 

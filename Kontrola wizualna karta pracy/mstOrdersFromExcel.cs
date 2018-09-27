@@ -122,26 +122,30 @@ namespace Kontrola_wizualna_karta_pracy
         public static string fixDateStringFormat(string inputDate)
         {
             string result = "";
-            string onlyDate = inputDate.Substring(0, 10);
-            Char splitChar;
-            if (onlyDate.Contains("."))
+            try
             {
-                splitChar = '.';
+                string onlyDate = inputDate.Substring(0, 10);
+                Char splitChar;
+                if (onlyDate.Contains("."))
+                {
+                    splitChar = '.';
+                }
+                else
+                {
+                    splitChar = '-';
+                }
+                string[] splittedDate = onlyDate.Split(splitChar);
+                if (splittedDate[0].Length == 4)
+                {
+                    result = splittedDate[2] + "-" + splittedDate[1] + "-" + splittedDate[0];
+                }
+                else
+                {
+                    result = splittedDate[0] + "-" + splittedDate[1] + "-" + splittedDate[2];
+                }
+                //Debug.WriteLine("fixed Date: " + result);
             }
-            else
-            {
-                splitChar = '-';
-            }
-            string[] splittedDate = onlyDate.Split(splitChar);
-            if (splittedDate[0].Length == 4)
-            {
-                result = splittedDate[2] + "-" + splittedDate[1] + "-" + splittedDate[0];
-            }
-            else
-            {
-                result = splittedDate[0] + "-" + splittedDate[1] + "-" + splittedDate[2];
-            }
-            //Debug.WriteLine("fixed Date: " + result);
+            catch { return inputDate; }
             return result;
         }
     }

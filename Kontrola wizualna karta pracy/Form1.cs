@@ -31,7 +31,6 @@ namespace Kontrola_wizualna_karta_pracy
         public Form1()
         {
             InitializeComponent();
-
             byte[] fontData = Properties.Resources.digital_7;
             IntPtr fontPtr = System.Runtime.InteropServices.Marshal.AllocCoTaskMem(fontData.Length);
             System.Runtime.InteropServices.Marshal.Copy(fontData, 0, fontPtr, fontData.Length);
@@ -42,7 +41,7 @@ namespace Kontrola_wizualna_karta_pracy
             
             myFont = new Font(fonts.Families[0], 56.0F);
 
-            recordToSaceCalculation = new RecordToSaveCalculations(recordToSave);
+            recordToSaveCalculation = new RecordToSaveCalculations(recordToSave);
             summaryView = new SummaryView(recordToSave, radioButtonPolish.Checked);
 
             panelClock.Width = panel5.Width+2;
@@ -69,7 +68,7 @@ namespace Kontrola_wizualna_karta_pracy
         private static extern IntPtr AddFontMemResourceEx(IntPtr pbFont, uint cbFont,
         IntPtr pdv, [System.Runtime.InteropServices.In] ref uint pcFonts);
         Font myFont;
-        private RecordToSaveCalculations recordToSaceCalculation;
+        private RecordToSaveCalculations recordToSaveCalculation;
         private PrivateFontCollection fonts = new PrivateFontCollection();
         private SummaryView summaryView;
         bool cameraEnabled = false;
@@ -130,7 +129,8 @@ namespace Kontrola_wizualna_karta_pracy
 
             textBoxLotNumber.DataBindings.Add("Text", recordToSave, "NumerZlecenia", false, DataSourceUpdateMode.OnPropertyChanged);
             comboBoxOperator.DataBindings.Add("Text", recordToSave, "Operator", false, DataSourceUpdateMode.OnPropertyChanged);
-            textBoxGoodQty.DataBindings.Add("Text", recordToSave, "IloscDobrych", false, DataSourceUpdateMode.OnPropertyChanged);
+            labelGoodQty.DataBindings.Add("Text", recordToSave, "IloscDobrych", false, DataSourceUpdateMode.OnPropertyChanged);
+            //textBoxAllQty.DataBindings.Add("Text", recordToSave, "IloscWszystkich", false, DataSourceUpdateMode.OnPropertyChanged);
 
             Ng0BrakLutowia.DataBindings.Add("Value", recordToSave, "NgBrakLutowia", false, DataSourceUpdateMode.OnPropertyChanged);
             Ng0BrakDiodyLed.DataBindings.Add("Value", recordToSave, "NgBrakDiodyLed", false, DataSourceUpdateMode.OnPropertyChanged);
@@ -159,9 +159,6 @@ namespace Kontrola_wizualna_karta_pracy
             Scrap0SpalonyConn.DataBindings.Add("Value", recordToSave, "ScrapSpalonyConn", false, DataSourceUpdateMode.OnPropertyChanged);
             Scrap0Inne.DataBindings.Add("Value", recordToSave, "ScrapInne", false, DataSourceUpdateMode.OnPropertyChanged);
             Ng0TestElektryczny.DataBindings.Add("Value", recordToSave, "NgTestElektryczny", false, DataSourceUpdateMode.OnPropertyChanged);
-
-            
-
 
             bool release = true;
 #if DEBUG
@@ -296,7 +293,7 @@ namespace Kontrola_wizualna_karta_pracy
         private string CreateSummaryText()
         {
             string result = labelOperator.Text + ": " + comboBoxOperator.Text + Environment.NewLine;
-            result += labelGoodQty.Text + ": " + textBoxGoodQty.Text + Environment.NewLine;
+            result += labelGood.Text + ": " + textBoxAllQty.Text + Environment.NewLine;
             result += Environment.NewLine + "____________________________________________________" + Environment.NewLine;
 
             string testSummary = "";
@@ -363,7 +360,7 @@ namespace Kontrola_wizualna_karta_pracy
                 MessageBox.Show(LanguangeTranslation.Translate( "Nieprawidłowa nazwa operatora", radioButtonPolish.Checked));
             }
 
-            if (textBoxGoodQty.Text=="0")
+            if (textBoxAllQty.Text=="0")
             {
                 result = false;
                 MessageBox.Show(LanguangeTranslation.Translate("Nieprawidłowa ilość", radioButtonPolish.Checked));
@@ -499,7 +496,6 @@ namespace Kontrola_wizualna_karta_pracy
                     }
                 }
             }
-
             return result;
         }
 
@@ -530,8 +526,10 @@ namespace Kontrola_wizualna_karta_pracy
                             SaveImagesToFiles(imagesToSave, recordToSave.NumerZlecenia);
                         }
 
-                        var allNg = recordToSaceCalculation.GetAllNg();
-                        Efficiency.SaveToTextFile(DateTime.Now.ToString("HH:mm dd-MMM") + ";" + smtCurrentLotInfo.Model + ";" + textBoxLotNumber.Text + ";" + (int.Parse(textBoxGoodQty.Text) + allNg).ToString() + ";" + allNg, appPath);
+                        var allNg = recordToSaveCalculation.GetAllNg();
+                        var allGood = int.Parse(textBoxAllQty.Text);
+
+                        Efficiency.SaveToTextFile(DateTime.Now.ToString("HH:mm dd-MMM") + ";" + smtCurrentLotInfo.Model + ";" + textBoxLotNumber.Text + ";" + (allGood + allNg).ToString() + ";" + allNg, appPath);
 
                         labelLotInfo.Text = LanguangeTranslation.Translate("Dane zlecenia", radioButtonPolish.Checked);
 
@@ -569,7 +567,7 @@ namespace Kontrola_wizualna_karta_pracy
 
             textBoxLotNumber.Text = "";
             comboBoxOperator.Items.Clear();
-            textBoxGoodQty.Text = "0";
+            textBoxAllQty.Text = "0";
         }
 
         private NumericUpDown DbFieldToNumeric(string dbField)
@@ -620,14 +618,14 @@ namespace Kontrola_wizualna_karta_pracy
 
         private void textBoxGoodQty_Enter(object sender, EventArgs e)
         {
-            textBoxGoodQty.SelectAll();
+            textBoxAllQty.SelectAll();
             panelVirtualKeyboard.Visible = true;
-            panelVirtualKeyboard.Location = new System.Drawing.Point(textBoxGoodQty.Location.X + 3, textBoxGoodQty.Location.Y + textBoxGoodQty.Height + 3);
+            panelVirtualKeyboard.Location = new System.Drawing.Point(textBoxAllQty.Location.X + 3, textBoxAllQty.Location.Y + textBoxAllQty.Height + 3);
         }
 
         private void textBoxGoodQty_MouseClick(object sender, MouseEventArgs e)
         {
-            textBoxGoodQty.SelectAll();
+            textBoxAllQty.SelectAll();
         }
 
         private void timerLotToModel_Tick(object sender, EventArgs e)
@@ -720,7 +718,7 @@ namespace Kontrola_wizualna_karta_pracy
             }
 
             labelLotInfo.Text = smtCurrentLotInfo.infoToDisplay;
-            recordToSave.IloscDobrych = smtCurrentLotInfo.OrderedQty;
+            textBoxAllQty.Text = smtCurrentLotInfo.OrderedQty.ToString();
             //textBoxGoodQty.Text = smtCurrentLotInfo.OrderedQty.ToString();
             //textBoxLotNumber.Text = lot;
         }
@@ -813,31 +811,31 @@ namespace Kontrola_wizualna_karta_pracy
         private void button13_Click(object sender, EventArgs e)
         {
             Button btn = (Button)sender;
-            if (textBoxGoodQty.Text == "0")
+            if (textBoxAllQty.Text == "0")
             {
-                textBoxGoodQty.Text = btn.Text;
+                textBoxAllQty.Text = btn.Text;
             }
             else
             {
-                textBoxGoodQty.Text += btn.Text;
+                textBoxAllQty.Text += btn.Text;
             }
         }
 
         private void button11_Click(object sender, EventArgs e)
         {
             Button btn = (Button)sender;
-            textBoxGoodQty.Text = "0";
+            textBoxAllQty.Text = "0";
         }
 
         private void button12_Click(object sender, EventArgs e)
         {
-            if (textBoxGoodQty.Text.Length > 1)
+            if (textBoxAllQty.Text.Length > 1)
             {
-                textBoxGoodQty.Text = textBoxGoodQty.Text.Substring(0, textBoxGoodQty.Text.Length - 1);
+                textBoxAllQty.Text = textBoxAllQty.Text.Substring(0, textBoxAllQty.Text.Length - 1);
             }
             else
             {
-                textBoxGoodQty.Text = "0";
+                textBoxAllQty.Text = "0";
             }
         }
 
@@ -851,7 +849,7 @@ namespace Kontrola_wizualna_karta_pracy
 
             if (panelVirtualKeyboard.Visible)
             {
-                if (!panelVirtualKeyboard.ClientRectangle.Contains(panelVirtualKeyboard.PointToClient(Cursor.Position)) & !textBoxGoodQty.ClientRectangle.Contains(textBoxGoodQty.PointToClient(Cursor.Position)))
+                if (!panelVirtualKeyboard.ClientRectangle.Contains(panelVirtualKeyboard.PointToClient(Cursor.Position)) & !textBoxAllQty.ClientRectangle.Contains(textBoxAllQty.PointToClient(Cursor.Position)))
                 {
                     panelVirtualKeyboard.Visible = false;
                     this.ActiveControl = pictureBox1;
@@ -904,8 +902,8 @@ namespace Kontrola_wizualna_karta_pracy
 
         private void CalculateWasteAndEff()
         {
-                Efficiency.AddRecentOrdersToGrid(dataGridViewHistory, ref lotModelDict, appPath);
-                List<string> inspectedLots = new List<string>();
+            Efficiency.LoadRecentOrdersToGrid(dataGridViewHistory, ref lotModelDict, appPath);
+            List<string> inspectedLots = new List<string>();
 
             foreach (DataGridViewRow row in dataGridViewHistory.Rows)
             {
@@ -914,38 +912,38 @@ namespace Kontrola_wizualna_karta_pracy
                 inspectedLots.Add(row.Cells["Zlecenie"].Value.ToString());
             }
 
-                if (inspectedLots.Count > 0)
+            if (inspectedLots.Count > 0)
+            {
+                chart1.Visible = true;
+                DataTable inspectionTable = SqlOperations.DownloadVisInspFromSQL(inspectedLots.ToArray());
+                inspectionData = WasteCalculation.LoadData(inspectionTable, lotModelDict);
+                Charting.DrawChartWasteReasons(inspectionData, chart1);
+                double waste = Efficiency.CalculateWasteLastXXh(dataGridViewHistory, 8);
+                labelWasteLevel.Text = String.Format("{0:0.00}", waste).Replace(",", ".") + "%";
+
+                //int currentShift = DateOperations.whatDayShiftIsit(DateTime.Now).shift;
+                //labelCurrentShift.Text = "Odpad od początku zmiany " + currentShift + ":";
+                if (waste > 0.7)
                 {
-                    chart1.Visible = true;
-                    DataTable inspectionTable = SqlOperations.DownloadVisInspFromSQL(inspectedLots.ToArray());
-                    inspectionData = WasteCalculation.LoadData(inspectionTable, lotModelDict);
-                    Charting.DrawChartWasteReasons(inspectionData, chart1);
-                    double waste = Efficiency.CalculateWasteLastXXh(dataGridViewHistory, 8);
-                    labelWasteLevel.Text = waste.ToString().Replace(",", ".") + "%";
-
-                    //int currentShift = DateOperations.whatDayShiftIsit(DateTime.Now).shift;
-                    //labelCurrentShift.Text = "Odpad od początku zmiany " + currentShift + ":";
-                    if (waste > 0.7)
-                    {
-                        panelWasteLevel.Tag = "Alarm";
-                    }
-                    else
-                    {
-                        panelWasteLevel.Tag = "";
-                    }
-
-                    int qtyThisShift = Efficiency.CalculateQuantityThisShift(dataGridViewHistory);
-                    labelQtySinceShiftBegining.Text = qtyThisShift.ToString() + LanguangeTranslation.Translate("szt",radioButtonPolish.Checked);
-
-                    DateTime shiftStart = TimeTools.whatDayShiftIsit(DateTime.Now).shiftStartDate;
-                    double qtyPerHour = (double)qtyThisShift / (DateTime.Now - shiftStart).TotalHours;
-
-                    labelQtyPerHour.Text = Math.Round(qtyPerHour, 1).ToString() + LanguangeTranslation.Translate("szt/godz",radioButtonPolish.Checked);
+                    panelWasteLevel.Tag = "Alarm";
                 }
                 else
                 {
-                    chart1.Visible = false;
+                    panelWasteLevel.Tag = "";
                 }
+
+                int qtyThisShift = Efficiency.CalculateQuantityThisShift(dataGridViewHistory);
+                labelQtySinceShiftBegining.Text = qtyThisShift.ToString() + LanguangeTranslation.Translate("szt", radioButtonPolish.Checked);
+
+                DateTime shiftStart = TimeTools.whatDayShiftIsit(DateTime.Now).shiftStartDate;
+                double qtyPerHour = (double)qtyThisShift / (DateTime.Now - shiftStart).TotalHours;
+
+                labelQtyPerHour.Text = Math.Round(qtyPerHour, 1).ToString() + LanguangeTranslation.Translate("szt/godz", radioButtonPolish.Checked);
+            }
+            else
+            {
+                chart1.Visible = false;
+            }
 
             
         }
@@ -972,23 +970,7 @@ namespace Kontrola_wizualna_karta_pracy
             }
         }
 
-        private void numUpDown_valueChange_shared(object sender, EventArgs e)
-        {
-            
-            NumericUpDown ctrl = (NumericUpDown)sender;
-            if (ctrl.Value > 0)
-            {
-                ctrl.BackColor = ctrl.Parent.BackColor;
-                ctrl.ForeColor = Color.White;
-            }
-            else
-            {
-                ctrl.BackColor = Color.White;
-                ctrl.ForeColor = Color.Black;
-            }
-
-            //textBoxGoodQty.Text = recordToSave.IloscDobrych.ToString();
-        }
+        
 
         private void numUpDown_Validated_shared(object sender, EventArgs e)
         {
@@ -1011,7 +993,7 @@ namespace Kontrola_wizualna_karta_pracy
                 }
                 textBox1.Text= LanguangeTranslation.Translate("Wyniki testu", radioButtonPolish.Checked);
                 textBox1.ForeColor = Color.Silver;
-                this.ActiveControl = radioButton2;
+                this.ActiveControl = buttonAddFailure;
             }
         }
 
@@ -1043,7 +1025,7 @@ namespace Kontrola_wizualna_karta_pracy
         {
             labelLotNo.Text = LanguangeTranslation.Translate("Numer zlecenia", radioButtonPolish.Checked);
             labelOperator.Text = LanguangeTranslation.Translate("Operator", radioButtonPolish.Checked);
-            labelGoodQty.Text = LanguangeTranslation.Translate("Ilość dobrych", radioButtonPolish.Checked);
+            labelGood.Text = LanguangeTranslation.Translate("Ilość dobrych", radioButtonPolish.Checked);
             buttonSave.Text = LanguangeTranslation.Translate("Zapisz", radioButtonPolish.Checked);
             buttonAddFailure.Text = LanguangeTranslation.Translate("Dodaj wadę", radioButtonPolish.Checked);
             labelOdpadTitle.Text = LanguangeTranslation.Translate("ODPAD", radioButtonPolish.Checked);
@@ -1061,6 +1043,8 @@ namespace Kontrola_wizualna_karta_pracy
                 .Replace("Nieznany", LanguangeTranslation.Translate("Nieznany", radioButtonPolish.Checked))
                 .Replace("Produkcja", LanguangeTranslation.Translate("Produkcja", radioButtonPolish.Checked));
 
+            labelGood.Text = LanguangeTranslation.Translate("dobrych:", radioButtonPolish.Checked);
+            labelAll.Text = LanguangeTranslation.Translate("Wszystkich", radioButtonPolish.Checked);
             foreach (var control in panel2.Controls)
             {
                 if (control is Label)
@@ -1164,9 +1148,42 @@ namespace Kontrola_wizualna_karta_pracy
             }
         }
 
+        private void numUpDown_valueChange_shared(object sender, EventArgs e)
+        {
+
+            NumericUpDown ctrl = (NumericUpDown)sender;
+            if (ctrl.Value > 0)
+            {
+                ctrl.BackColor = ctrl.Parent.BackColor;
+                ctrl.ForeColor = Color.White;
+            }
+            else
+            {
+                ctrl.BackColor = Color.White;
+                ctrl.ForeColor = Color.Black;
+            }
+
+            //textBoxGoodQty.Text = recordToSave.IloscDobrych.ToString();
+        }
+
         private void timerImagesSynchro_Tick(object sender, EventArgs e)
         {
             ImageSynchronizer.DoSynchronization();
+        }
+
+        public void UpdateNgQuantity()
+        {
+
+            //recordToSave.IloscDobrych = int.Parse(textBoxAllQty.Text) - RecordToSaveCalculations.GetAllNg2(recordToSave);
+            labelGoodQty.Text = recordToSave.IloscDobrych.ToString();
+        }
+
+        private void textBoxGoodQty_TextChanged(object sender, EventArgs e)
+        {
+            int qty = int.Parse(textBoxAllQty.Text);
+            recordToSave.IloscWszystkich = qty;
+            labelGoodQty.Text = recordToSave.IloscDobrych.ToString();
+           // UpdateNgQuantity();
         }
     }
 }
