@@ -75,11 +75,9 @@ namespace Kontrola_wizualna_karta_pracy
         string[] pcbsInCurrentLot = null;
         bool rotate180 = false;
 
-
         private void Form1_Load(object sender, EventArgs e)
         {
             AppSettings.CheckAppSettingsKeys();
-
             string rotateSettings = AppSettings.GetSettings("camera180Rotate");
             if (rotateSettings=="ON")
             {
@@ -89,7 +87,6 @@ namespace Kontrola_wizualna_karta_pracy
             //label1.Font = myFont;
             ClearRecordToSave();
             imagesList = ImagesTools.CreateListOfImages(Path.Combine(AppSettings.GetSettings("AppPath"), @"Zdjecia\PL"));
-
             CaptureDevice = new FilterInfoCollection(FilterCategory.VideoInputDevice);
 
             comboBoxOperator.Items.AddRange(SqlOperations.RecentOperatorsList(45).ToArray());
@@ -106,8 +103,6 @@ namespace Kontrola_wizualna_karta_pracy
             }
 
             FinalFrame = new VideoCaptureDevice();
-            
-
             if (cameraEnabled)
             {
                 deviceMonikerString = CheckDeviceMonikerString();
@@ -130,7 +125,7 @@ namespace Kontrola_wizualna_karta_pracy
             textBoxLotNumber.DataBindings.Add("Text", recordToSave, "NumerZlecenia", false, DataSourceUpdateMode.OnPropertyChanged);
             comboBoxOperator.DataBindings.Add("Text", recordToSave, "Operator", false, DataSourceUpdateMode.OnPropertyChanged);
             labelGoodQty.DataBindings.Add("Text", recordToSave, "IloscDobrych", false, DataSourceUpdateMode.OnPropertyChanged);
-            //textBoxAllQty.DataBindings.Add("Text", recordToSave, "IloscWszystkich", false, DataSourceUpdateMode.OnPropertyChanged);
+            textBoxAllQty.DataBindings.Add("Text", recordToSave, "IloscWszystkich", false, DataSourceUpdateMode.OnPropertyChanged);
 
             Ng0BrakLutowia.DataBindings.Add("Value", recordToSave, "NgBrakLutowia", false, DataSourceUpdateMode.OnPropertyChanged);
             Ng0BrakDiodyLed.DataBindings.Add("Value", recordToSave, "NgBrakDiodyLed", false, DataSourceUpdateMode.OnPropertyChanged);
@@ -164,6 +159,7 @@ namespace Kontrola_wizualna_karta_pracy
 #if DEBUG
             release=false;
             button1.Visible = true;
+            panelNumerics.Visible = true;
 #endif
             if (release)
             {
@@ -371,6 +367,7 @@ namespace Kontrola_wizualna_karta_pracy
         private  List<Image> GetAllImagesToSaveAndClear(bool deleteImages)
         {
             List<Image> result = new List<Image>();
+
             foreach (var control in flpNgBox.Controls)
             {
                 if (control is MyTextBox)
@@ -385,8 +382,8 @@ namespace Kontrola_wizualna_karta_pracy
                             {
                                 result.Add(img);
                             }
-                            
                         }
+
                         if (deleteImages)
                         {
                             box.Tag = new List<ngBoxTag>();
@@ -411,6 +408,11 @@ namespace Kontrola_wizualna_karta_pracy
                             }
 
                         }
+                        if (deleteImages)
+                        {
+                            box.Tag = new List<ngBoxTag>();
+                            box.Text = "0";
+                        }
                     }
                 }
             }
@@ -434,13 +436,7 @@ namespace Kontrola_wizualna_karta_pracy
         private void SaveImagesToFiles(List<Image> imgList, string LotNumber)
         {
             var imgFolderPath = Path.Combine(@"C:\TempImages\", DateTime.Now.ToString("dd-MM-yyyy"), LotNumber);
-            //if (Path.GetPathRoot(imgFolderPath).StartsWith("P"))
-            //{
-            //    if (!Directory.Exists("P:\\"))
-            //    {
-            //        ConnectPDrive();
-            //    }
-            //}
+
             if (!Directory.Exists(imgFolderPath))
             {
                 System.IO.Directory.CreateDirectory(imgFolderPath);
@@ -509,7 +505,7 @@ namespace Kontrola_wizualna_karta_pracy
                     if (summaryForm.DialogResult == DialogResult.OK)
                     {
                         recordToSave.Data_Czas = DateTime.Now;
-                        SqlOperations.SaveRecordToDb(recordToSave);
+                        SqlOperations.SaveRecordToVisualInspectionDb(recordToSave);
                         string model = LanguangeTranslation.Translate("Nieznany", radioButtonPolish.Checked);
 
                         if (smtCurrentLotInfo != null)
@@ -521,6 +517,8 @@ namespace Kontrola_wizualna_karta_pracy
                         }
 
                         List<Image> imagesToSave = GetAllImagesToSaveAndClear(true);
+
+
                         if (imagesToSave.Count > 0)
                         {
                             SaveImagesToFiles(imagesToSave, recordToSave.NumerZlecenia);
@@ -528,6 +526,7 @@ namespace Kontrola_wizualna_karta_pracy
 
                         var allNg = recordToSaveCalculation.GetAllNg();
                         var allGood = int.Parse(textBoxAllQty.Text);
+
 
                         Efficiency.SaveToTextFile(DateTime.Now.ToString("HH:mm dd-MMM") + ";" + smtCurrentLotInfo.Model + ";" + textBoxLotNumber.Text + ";" + (allGood + allNg).ToString() + ";" + allNg, appPath);
 
@@ -568,6 +567,7 @@ namespace Kontrola_wizualna_karta_pracy
             textBoxLotNumber.Text = "";
             comboBoxOperator.Items.Clear();
             textBoxAllQty.Text = "0";
+            recordToSave.IloscWszystkich = 0;
         }
 
         private NumericUpDown DbFieldToNumeric(string dbField)
@@ -674,6 +674,7 @@ namespace Kontrola_wizualna_karta_pracy
         {
             smtCurrentLotInfo = new SmtInfo("", "", 0, "Nieznany", radioButtonPolish.Checked);
             string lot = textBoxLotNumber.Text;
+            pcbsInCurrentLot = null;
 
             if (textBoxLotNumber.Text.Length > 6)
             {
@@ -718,9 +719,17 @@ namespace Kontrola_wizualna_karta_pracy
             }
 
             labelLotInfo.Text = smtCurrentLotInfo.infoToDisplay;
-            textBoxAllQty.Text = smtCurrentLotInfo.OrderedQty.ToString();
+            recordToSave.IloscWszystkich = smtCurrentLotInfo.OrderedQty;
+            //textBoxAllQty.Text = smtCurrentLotInfo.OrderedQty.ToString();
             //textBoxGoodQty.Text = smtCurrentLotInfo.OrderedQty.ToString();
             //textBoxLotNumber.Text = lot;
+        }
+
+        private void textBoxAllQty_TextChanged(object sender, EventArgs e)
+        {
+            Int32 qty = Int32.Parse(textBoxAllQty.Text);
+            recordToSave.IloscWszystkich = qty;
+            labelGoodQty.Text = recordToSave.IloscDobrych.ToString();
         }
 
         private void worker_DoWork(object sender, DoWorkEventArgs e) //to know what pcbSerials are in this lot
@@ -1171,19 +1180,12 @@ namespace Kontrola_wizualna_karta_pracy
             ImageSynchronizer.DoSynchronization();
         }
 
-        public void UpdateNgQuantity()
-        {
-
-            //recordToSave.IloscDobrych = int.Parse(textBoxAllQty.Text) - RecordToSaveCalculations.GetAllNg2(recordToSave);
-            labelGoodQty.Text = recordToSave.IloscDobrych.ToString();
-        }
-
         private void textBoxGoodQty_TextChanged(object sender, EventArgs e)
         {
-            int qty = int.Parse(textBoxAllQty.Text);
-            recordToSave.IloscWszystkich = qty;
-            labelGoodQty.Text = recordToSave.IloscDobrych.ToString();
-           // UpdateNgQuantity();
+            
+
         }
+
+        
     }
 }

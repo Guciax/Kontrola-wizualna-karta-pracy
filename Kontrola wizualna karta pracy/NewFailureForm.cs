@@ -185,11 +185,11 @@ namespace Kontrola_wizualna_karta_pracy
 
         private bool IsFormReadyTosave()
         {
-            if (labelDecodedQr.Text.Contains(" "))
-            {
-                MessageBox.Show(LanguangeTranslation.Translate("Zeskanuj kod Qr", LangPolish));
-                return false;
-            }
+            //if (labelDecodedQr.Text.Contains(" "))
+            //{
+            //    MessageBox.Show(LanguangeTranslation.Translate("Zeskanuj kod Qr", LangPolish));
+            //    return false;
+            //}
             if (buttonClicked == "")
             {
                 MessageBox.Show(LanguangeTranslation.Translate("Wbierz przyczynę wady", LangPolish));

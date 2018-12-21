@@ -11,7 +11,7 @@ namespace Kontrola_wizualna_karta_pracy
 {
     class SqlOperations
     {
-        public static void SaveRecordToDb(RecordToSave saveData)
+        public static void SaveRecordToVisualInspectionDb(RecordToSave saveData)
         {
             using (SqlConnection openCon = new SqlConnection(@"Data Source=MSTMS010;Initial Catalog=MES;User Id=mes;Password=mes;"))
             {
@@ -144,7 +144,6 @@ namespace Kontrola_wizualna_karta_pracy
                 CurrentLotInfo nfo = new CurrentLotInfo(lotId, model, orderedQty);
                 result.Add(lotId, nfo);
             }
-
             return result;
         }
 
@@ -261,5 +260,51 @@ namespace Kontrola_wizualna_karta_pracy
             return tabletoFill.Rows.Count > 0 ? true : false;
         }
 
+        public static void RegisterNgPcbToMes(string serial, string ngType)
+        {
+            string[] splitted = serial.Split('_');
+            string orderNo = "";
+            if (splitted.Length > 1)
+            {
+                orderNo = splitted[splitted.Length - 2];
+            }
+            using (SqlConnection openCon = new SqlConnection(@"Data Source=MSTMS010;Initial Catalog=MES;User Id=mes;Password=mes;"))
+            {
+                string save = "INSERT into tb_tester_measurements (serial_no,inspection_time,tester_id,wip_entity_id,wip_entity_name,program_id,result,ng_type) VALUES (@serial_no,@inspection_time,@tester_id,@wip_entity_id,@wip_entity_name,@program_id,@result,@ng_type)";
+                using (SqlCommand querySave = new SqlCommand(save))
+                {
+                    querySave.Connection = openCon;
+                    querySave.Parameters.Add("@serial_no", SqlDbType.NVarChar).Value = serial;
+                    querySave.Parameters.Add("@inspection_time", SqlDbType.NVarChar).Value = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                    querySave.Parameters.Add("@tester_id", SqlDbType.TinyInt).Value = 0;
+                    querySave.Parameters.Add("@wip_entity_id", SqlDbType.Int).Value = 0;
+                    querySave.Parameters.Add("@wip_entity_name", SqlDbType.NVarChar).Value = orderNo;
+                    querySave.Parameters.Add("@program_id", SqlDbType.Int).Value = 0;
+                    querySave.Parameters.Add("@result", SqlDbType.NVarChar).Value = "NG";
+                    querySave.Parameters.Add("@ng_type", SqlDbType.NVarChar).Value = ngType;
+                    openCon.Open();
+                    querySave.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public static void InsertPcbToBgTable(string serial, string result, string ngReason)
+        {
+            using (SqlConnection openCon = new SqlConnection(@"Data Source=MSTMS010;Initial Catalog=MES;User Id=mes;Password=mes;"))
+            {
+                string save = "INSERT into tb_NG_tracking (serial_no, result, ng_type, datetime) VALUES (@serial_no, @result, @ng_type, @datetime)";
+                using (SqlCommand querySave = new SqlCommand(save))
+                {
+                    querySave.Connection = openCon;
+                    querySave.Parameters.Add("@serial_no", SqlDbType.NVarChar).Value = serial;
+                    querySave.Parameters.Add("@result", SqlDbType.NVarChar).Value = result;
+                    querySave.Parameters.Add("@ng_type", SqlDbType.NVarChar).Value = ngReason;
+                    querySave.Parameters.Add("@datetime", SqlDbType.SmallDateTime).Value = DateTime.Now;
+                   
+                    openCon.Open();
+                    querySave.ExecuteNonQuery();
+                }
+            }
+        }
     }
 }

@@ -36,6 +36,7 @@ namespace Kontrola_wizualna_karta_pracy
                 lblBox.BackColor = System.Drawing.Color.Khaki;
                 lblBox.MouseLeave += lblBox_MouseLeave;
                 // lblBox.MouseEnter += lblBox_MouseEnter;
+
                 lblBox.MouseEnter += (sender, EventArgs) =>
                 {
                     MyTextBox box = (MyTextBox)sender;
@@ -92,6 +93,7 @@ namespace Kontrola_wizualna_karta_pracy
                     scrapBox.Cursor = Cursors.Arrow;
                     scrapBox.Tag = new List<ngBoxTag>();
                     scrapBox.MouseClick+= NgBox_MouseClick;
+                    scrapBox.TextChanged += ScrapBox_TextChanged;
                     scrapPanel.Controls.Add(scrapBox);
                 }
                 ngPanel.Controls.Add(ngBox);
@@ -99,9 +101,34 @@ namespace Kontrola_wizualna_karta_pracy
             }
         }
 
+        private static void ScrapBox_TextChanged(object sender, EventArgs e)
+        {
+            MyTextBox scrapBox = (MyTextBox)sender;
+            if (scrapBox.Text == "0")
+            {
+                scrapBox.BackColor = Color.White;
+                scrapBox.ForeColor = Color.Black;
+            }
+            else
+            {
+                scrapBox.BackColor = Color.Black;
+                scrapBox.ForeColor = Color.White;
+            }
+        }
+
         private static void NgBox_TextChanged(object sender, EventArgs e)
         {
-            
+            MyTextBox ngbox = (MyTextBox)sender;
+            if (ngbox.Text=="0")
+            {
+                ngbox.BackColor = Color.White;
+                ngbox.ForeColor = Color.Black;
+            }
+            else
+            {
+                ngbox.BackColor = Color.Red;
+                ngbox.ForeColor = Color.White;
+            }
         }
 
         private static void NgBox_MouseClick(object sender, MouseEventArgs e)

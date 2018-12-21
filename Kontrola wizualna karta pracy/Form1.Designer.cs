@@ -156,7 +156,6 @@
             this.labelAppVersion = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.timerImagesSynchro = new System.Windows.Forms.Timer(this.components);
-            this.recordToSaveBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.Ng0BrakLutowia)).BeginInit();
             this.panelNg.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Ng0UszkodzenieConn)).BeginInit();
@@ -202,7 +201,6 @@
             this.panelNumerics.SuspendLayout();
             this.panelClock.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.recordToSaveBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // textBoxLotNumber
@@ -245,7 +243,7 @@
             this.textBoxAllQty.Size = new System.Drawing.Size(103, 23);
             this.textBoxAllQty.TabIndex = 2;
             this.textBoxAllQty.MouseClick += new System.Windows.Forms.MouseEventHandler(this.textBoxGoodQty_MouseClick);
-            this.textBoxAllQty.TextChanged += new System.EventHandler(this.textBoxGoodQty_TextChanged);
+            this.textBoxAllQty.TextChanged += new System.EventHandler(this.textBoxAllQty_TextChanged);
             this.textBoxAllQty.Enter += new System.EventHandler(this.textBoxGoodQty_Enter);
             this.textBoxAllQty.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxGoodQty_KeyPress);
             // 
@@ -1043,7 +1041,7 @@
             this.panelEfficiency.Location = new System.Drawing.Point(1, 401);
             this.panelEfficiency.Margin = new System.Windows.Forms.Padding(1);
             this.panelEfficiency.Name = "panelEfficiency";
-            this.panelEfficiency.Size = new System.Drawing.Size(227, 238);
+            this.panelEfficiency.Size = new System.Drawing.Size(238, 238);
             this.panelEfficiency.TabIndex = 50;
             // 
             // labelEffNormHour
@@ -1172,7 +1170,7 @@
             dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.dataGridViewHistory.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.dataGridViewHistory.RowHeadersVisible = false;
-            this.dataGridViewHistory.Size = new System.Drawing.Size(227, 428);
+            this.dataGridViewHistory.Size = new System.Drawing.Size(238, 428);
             this.dataGridViewHistory.TabIndex = 46;
             this.dataGridViewHistory.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dataGridViewHistory_DataBindingComplete);
             // 
@@ -1578,14 +1576,14 @@
             this.tableLayoutPanel3.Controls.Add(this.panelEfficiency, 0, 1);
             this.tableLayoutPanel3.Controls.Add(this.textBox1, 0, 3);
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Right;
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(1214, 0);
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(1203, 0);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 4;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 400F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 240F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(229, 1100);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(240, 1100);
             this.tableLayoutPanel3.TabIndex = 55;
             // 
             // panelWasteLevel
@@ -1603,7 +1601,7 @@
             this.panelWasteLevel.Location = new System.Drawing.Point(1, 1);
             this.panelWasteLevel.Margin = new System.Windows.Forms.Padding(1);
             this.panelWasteLevel.Name = "panelWasteLevel";
-            this.panelWasteLevel.Size = new System.Drawing.Size(227, 398);
+            this.panelWasteLevel.Size = new System.Drawing.Size(238, 398);
             this.panelWasteLevel.TabIndex = 0;
             // 
             // labelWasteTop5
@@ -1630,7 +1628,7 @@
             series1.Legend = "Legend1";
             series1.Name = "Series1";
             this.chart1.Series.Add(series1);
-            this.chart1.Size = new System.Drawing.Size(225, 245);
+            this.chart1.Size = new System.Drawing.Size(236, 245);
             this.chart1.TabIndex = 51;
             this.chart1.Text = "chart1";
             // 
@@ -1692,7 +1690,7 @@
             this.textBox1.Location = new System.Drawing.Point(1, 1071);
             this.textBox1.Margin = new System.Windows.Forms.Padding(1);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(227, 29);
+            this.textBox1.Size = new System.Drawing.Size(238, 29);
             this.textBox1.TabIndex = 51;
             this.textBox1.Text = "Wyniki testu";
             this.textBox1.Enter += new System.EventHandler(this.textBox1_Enter);
@@ -1792,7 +1790,7 @@
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox1.Location = new System.Drawing.Point(276, 0);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(938, 1100);
+            this.pictureBox1.Size = new System.Drawing.Size(927, 1100);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 45;
             this.pictureBox1.TabStop = false;
@@ -1803,10 +1801,6 @@
             this.timerImagesSynchro.Enabled = true;
             this.timerImagesSynchro.Interval = 60000;
             this.timerImagesSynchro.Tick += new System.EventHandler(this.timerImagesSynchro_Tick);
-            // 
-            // recordToSaveBindingSource
-            // 
-            this.recordToSaveBindingSource.DataSource = typeof(Kontrola_wizualna_karta_pracy.RecordToSave);
             // 
             // Form1
             // 
@@ -1878,7 +1872,6 @@
             this.panelNumerics.ResumeLayout(false);
             this.panelClock.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.recordToSaveBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2004,7 +1997,6 @@
         private System.Windows.Forms.Label labelClock;
         private System.Windows.Forms.Timer timerClock;
         private System.Windows.Forms.Label labelAppVersion;
-        private System.Windows.Forms.BindingSource recordToSaveBindingSource;
         private System.Windows.Forms.NumericUpDown numericUpDown1;
         private System.Windows.Forms.Timer timerImagesSynchro;
         private System.Windows.Forms.Label labelGoodQty;

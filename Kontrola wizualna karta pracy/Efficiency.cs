@@ -63,51 +63,54 @@ namespace Kontrola_wizualna_karta_pracy
                     string model = lineSplitted[1];
                     string date = lineSplitted[0];
 
+                    if (listOfLotsToDate.ContainsKey(lot)) continue;
                     listOfLotsToModel.Add(lot, model);
                     listOfLotsToDate.Add(lot, date);
                 }
 
-                var inspectionTable = SqlOperations.DownloadVisInspFromSQL(listOfLotsToModel.Select(key=>key.Key).ToArray());
-                //[id],[Data_czas],[Operator],[iloscDobrych],[numerZlecenia],[ngBrakLutowia],[ngBrakDiodyLed],[ngBrakResConn],[ngPrzesuniecieLed],[ngPrzesuniecieResConn]
-                //,[ngZabrudzenieLed],[ngUszkodzenieMechaniczneLed],[ngUszkodzenieConn],[ngWadaFabrycznaDiody],[ngUszkodzonePcb],[ngWadaNaklejki],[ngSpalonyConn]
-                //,[ngInne],[scrapBrakLutowia],[scrapBrakDiodyLed],[scrapBrakResConn],[scrapPrzesuniecieLed],[scrapPrzesuniecieResConn],[scrapZabrudzenieLed]
-                //,[scrapUszkodzenieMechaniczneLed],[scrapUszkodzenieConn],[scrapWadaFabrycznaDiody],[scrapUszkodzonePcb],[scrapWadaNaklejki],[scrapSpalonyConn]
-                //,[scrapInne],[ngTestElektryczny]
-
-                foreach (DataRow row in inspectionTable.Rows)
+                if (listOfLotsToModel.Count > 0)
                 {
-                    string lot = row["numerZlecenia"].ToString();
-                    string model = listOfLotsToModel[lot];
-                    DateTime date = DateTime.ParseExact(row["Data_czas"].ToString(), "dd.MM.yyyy HH:mm:ss", CultureInfo.CurrentCulture);
+                    var inspectionTable = SqlOperations.DownloadVisInspFromSQL(listOfLotsToModel.Select(key => key.Key).ToArray());
+                    //[id],[Data_czas],[Operator],[iloscDobrych],[numerZlecenia],[ngBrakLutowia],[ngBrakDiodyLed],[ngBrakResConn],[ngPrzesuniecieLed],[ngPrzesuniecieResConn]
+                    //,[ngZabrudzenieLed],[ngUszkodzenieMechaniczneLed],[ngUszkodzenieConn],[ngWadaFabrycznaDiody],[ngUszkodzonePcb],[ngWadaNaklejki],[ngSpalonyConn]
+                    //,[ngInne],[scrapBrakLutowia],[scrapBrakDiodyLed],[scrapBrakResConn],[scrapPrzesuniecieLed],[scrapPrzesuniecieResConn],[scrapZabrudzenieLed]
+                    //,[scrapUszkodzenieMechaniczneLed],[scrapUszkodzenieConn],[scrapWadaFabrycznaDiody],[scrapUszkodzonePcb],[scrapWadaNaklejki],[scrapSpalonyConn]
+                    //,[scrapInne],[ngTestElektryczny]
 
-                    if (model.Trim().Length == 0 || model == "Model") continue;
-                    if (!lotModelDict.ContainsKey(lot))
+                    foreach (DataRow row in inspectionTable.Rows)
                     {
-                        lotModelDict.Add(lot, model);
-                    }
+                        string lot = row["numerZlecenia"].ToString();
+                        string model = listOfLotsToModel[lot];
+                        DateTime date = DateTime.ParseExact(row["Data_czas"].ToString(), "dd.MM.yyyy HH:mm:ss", CultureInfo.CurrentCulture);
 
-                    int scrapNg = 0;
-                    for (int i=5; i<inspectionTable.Columns.Count ;i++)
-                    {
-                        if (row[i].ToString()!="0")
+                        if (model.Trim().Length == 0 || model == "Model") continue;
+                        if (!lotModelDict.ContainsKey(lot))
                         {
-                            scrapNg += int.Parse(row[i].ToString());
+                            lotModelDict.Add(lot, model);
                         }
+
+                        int scrapNg = 0;
+                        for (int i = 5; i < inspectionTable.Columns.Count; i++)
+                        {
+                            if (row[i].ToString() != "0")
+                            {
+                                scrapNg += int.Parse(row[i].ToString());
+                            }
+                        }
+
+                        int goodQty = Int32.Parse(row["iloscDobrych"].ToString()) + scrapNg;
+
+                        DataRow newRow = source.NewRow();
+                        newRow[0] = date.ToString("HH:mm dd-MMM");
+                        newRow[1] = model;
+                        newRow[2] = lot;
+                        newRow[3] = goodQty;
+                        newRow[4] = scrapNg;
+
+                        source.Rows.InsertAt(newRow, 0);
+
                     }
-
-                    int goodQty = Int32.Parse(row["iloscDobrych"].ToString())+scrapNg;
-
-                    DataRow newRow = source.NewRow();
-                    newRow[0] = date.ToString("HH:mm dd-MMM");
-                    newRow[1] = model;
-                    newRow[2] = lot;
-                    newRow[3] = goodQty;
-                    newRow[4] = scrapNg;
-
-                    source.Rows.InsertAt(newRow, 0);
-
                 }
-
                 //foreach (var line in fileLines)
                 //{
                 //    string[] lineSplitted = line.Split(';');

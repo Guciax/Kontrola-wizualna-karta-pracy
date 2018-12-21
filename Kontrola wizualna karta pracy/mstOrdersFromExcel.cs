@@ -22,7 +22,7 @@ namespace Kontrola_wizualna_karta_pracy
         public static void loadExcel(ref Dictionary<string,SmtInfo > smtInfo)
         {
             List<mstOrders> result = new List<mstOrders>();
-            string FilePath = @"Y:\Manufacturing_Center\Manufacturing HID EM\weinne\woto\elektronika\ZLECENIA MST\2018\zlecenia MST.xlsx";
+            string FilePath = @"Y:\Manufacturing_Center\Manufacturing Elektronika EM\woto\elektronika\ZLECENIA MST\2018\zlecenia MST.xlsx";
 
             if (File.Exists(FilePath))
             {
