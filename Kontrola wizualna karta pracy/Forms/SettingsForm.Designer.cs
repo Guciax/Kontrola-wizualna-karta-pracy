@@ -99,6 +99,7 @@
             // checkBox2
             // 
             this.checkBox2.AutoSize = true;
+            this.checkBox2.Enabled = false;
             this.checkBox2.Location = new System.Drawing.Point(15, 10);
             this.checkBox2.Name = "checkBox2";
             this.checkBox2.Size = new System.Drawing.Size(97, 17);

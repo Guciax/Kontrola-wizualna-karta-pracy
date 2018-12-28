@@ -22,7 +22,7 @@ namespace Kontrola_wizualna_karta_pracy
             string recentOrdersPath = Path.Combine(appPath, "recentOrders.txt");
             if (System.IO.File.Exists(recentOrdersPath))
             {
-                List<string> file = System.IO.File.ReadAllLines(recentOrdersPath).ToList();
+                List<string> file = System.IO.File.ReadAllLines(recentOrdersPath, Encoding.GetEncoding("Windows-1250")).ToList();
                 foreach (var line in file)
                 {
                     var splittedLine = line.Split(';');

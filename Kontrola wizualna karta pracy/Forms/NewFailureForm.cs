@@ -19,6 +19,7 @@ using ZXing.Common;
 using ZXing.Datamatrix;
 using ZXing.Multi;
 using System.Collections;
+using Kontrola_wizualna_karta_pracy.DataStructures;
 
 namespace Kontrola_wizualna_karta_pracy
 {
@@ -119,8 +120,16 @@ namespace Kontrola_wizualna_karta_pracy
         {
             if (flowLayoutPanel1.Controls.Count < 11)
             {
+                string result = "NG";
+                if (buttonClicked.ToUpper().StartsWith("SCRAP"))
+                {
+                    result = "SCR";
+                }
+
                 Image img = pictureBox1.Image;
-                img.Tag = serialNo + "_" + buttonClicked + '_' + flowLayoutPanel1.Controls.Count;
+                imageFailureTag imgTag = new imageFailureTag(serialNo, buttonClicked, flowLayoutPanel1.Controls.Count.ToString(), result);
+                //img.Tag = serialNo + "_" + buttonClicked + '_' + flowLayoutPanel1.Controls.Count;
+                img.Tag = imgTag;
                 imageList.Add(img);
 
                 PictureBox picBx = new PictureBox();
@@ -264,64 +273,80 @@ namespace Kontrola_wizualna_karta_pracy
                 {
                     result = dataMatrixResult;
                 }
-                    //Result result = Reader.Decode(bitmap);
-                    //Result result = multiReader.decode(barcodeBitmap);
+                //Result result = Reader.Decode(bitmap);
+                //Result result = multiReader.decode(barcodeBitmap);
 
-                    if (result != null)
+                if (result != null)
+                {
+                    try
                     {
-                        try
+                        string decoded = result.ToString().Trim();
+                        if (decoded != "")
                         {
-                            string decoded = result.ToString().Trim();
-                            if (decoded != "")
-                            {
-                                bool checkSerials = AppSettings.GetSettings("SprawdzajSerial") == "ON";
-                                if (!PcbsInCurrentLot.Contains(decoded) & PcbsInCurrentLot.Length > 0 & checkSerials)
-                                {
-                                    labelDecodedQr.Text = LanguangeTranslation.Translate("Ten numer PCB należy do innego zlecenia!", LangPolish);
-                                    panelQr.BackColor = Color.Red;
-                                    panelQr.ForeColor = Color.White;
-                                    timer1.Enabled = false;
-                                }
-                                else
-                                {
-                                    if (listOfNgPcbSerials.Contains(decoded))
-                                    {
-                                        this.Close();
-                                        MessageBox.Show(LanguangeTranslation.Translate("Ten numer PCB jest już dodany", LangPolish));
-                                    }
-                                    timer1.Stop();
-                                    stoper.Stop();
-                                    stoper.Reset();
-                                    labelDecodedQr.Text = decoded;
-                                    //btnTakePic.Visible = true;
-                                    panelQr.BackColor = Color.Lime;
-                                    panelQr.ForeColor = Color.Black;
-                                    System.Windows.Forms.Clipboard.SetText(decoded);
-                                    serialNo = decoded;
-                                    
-                                CreateWasteReasonButtons(ngButtons, scrapButtons);
-                            }
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            Debug.WriteLine(ex.Message + " - " + ex.HResult);
+                            CheckDecodedSerial(decoded);
                         }
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        labelDecodedQr.Text = "Zeskanuj kod Qr  ......" + Math.Round(waitTime - stoper.Elapsed.TotalMilliseconds / 1000, 1).ToString() + " sek.";
-                        if (stoper.Elapsed.Seconds >= waitTime)
-                        {
-                            timer1.Stop();
-                            stoper.Stop();
-                            stoper.Reset();
-                            labelDecodedQr.Text = LanguangeTranslation.Translate("Nie można odczytać kodu, wpisz ręcznie:", LangPolish);
-                           // btnTakePic.Visible = true;
-                            textBox1.Visible = true;
-                        }
+                        Debug.WriteLine(ex.Message + " - " + ex.HResult);
                     }
+                }
+                else
+                {
+                    labelDecodedQr.Text = "Zeskanuj kod Qr  ......" + Math.Round(waitTime - stoper.Elapsed.TotalMilliseconds / 1000, 1).ToString() + " sek.";
+                    if (stoper.Elapsed.Seconds >= waitTime)
+                    {
+                        timer1.Stop();
+                        stoper.Stop();
+                        stoper.Reset();
+                        labelDecodedQr.Text = LanguangeTranslation.Translate("Nie można odczytać kodu, wpisz ręcznie:", LangPolish);
+                        // btnTakePic.Visible = true;
+                        textBox1.Visible = true;
+                    }
+                }
                 
+            }
+        }
+
+        private void CheckDecodedSerial(string decoded)
+        {
+            stoper.Stop();
+            stoper.Reset();
+            timer1.Enabled = false;
+
+            bool checkSerials = AppSettings.GetSettings("SprawdzajSerial") == "ON";
+
+            if (SqlOperations.CheckIfSerialIsInNgTable(decoded).Rows.Count > 0)
+            {
+                this.Close();
+                MessageBox.Show("Ten numer PCB jest już zarejestrowany w bazie!");
+                
+            }
+
+            if (!PcbsInCurrentLot.Contains(decoded) & PcbsInCurrentLot.Length > 0 & checkSerials)
+            {
+                this.Close();
+                labelDecodedQr.Text = LanguangeTranslation.Translate("Ten numer PCB należy do innego zlecenia!", LangPolish);
+                panelQr.BackColor = Color.Red;
+                panelQr.ForeColor = Color.White;
+                
+            }
+            else
+            {
+                if (listOfNgPcbSerials.Contains(decoded))
+                {
+                    this.Close();
+                    MessageBox.Show(LanguangeTranslation.Translate("Ten numer PCB jest już dodany", LangPolish));
+                }
+                
+                labelDecodedQr.Text = decoded;
+                //btnTakePic.Visible = true;
+                panelQr.BackColor = Color.Lime;
+                panelQr.ForeColor = Color.Black;
+                System.Windows.Forms.Clipboard.SetText(decoded);
+                serialNo = decoded;
+
+                CreateWasteReasonButtons(ngButtons, scrapButtons);
             }
         }
 
@@ -399,19 +424,7 @@ namespace Kontrola_wizualna_karta_pracy
 
         private void textBox1_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Return)
-            {
-                if (listOfNgPcbSerials.Contains(textBox1.Text))
-                {
-                    MessageBox.Show(LanguangeTranslation.Translate("Ten numer PCB jest już dodany", LangPolish));
-                    this.Close();
-                }
-                labelDecodedQr.Text = textBox1.Text;
-                textBox1.Visible = false;
-                serialNo = textBox1.Text;
-                button1.Visible = true;
-                CreateWasteReasonButtons(ngButtons, scrapButtons);
-            }
+            CheckDecodedSerial(textBox1.Text);
         }
 
         private void btnTakePic_Leave(object sender, EventArgs e)

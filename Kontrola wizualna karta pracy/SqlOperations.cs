@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -83,6 +84,28 @@ namespace Kontrola_wizualna_karta_pracy
             }
 
             return tempHash.OrderBy(op=>op).ToList();
+        }
+
+
+        internal static void UpdateNgAfterRework(string serial, string result, string viOperator)
+        {
+            string connectionString = @"Data Source=MSTMS010;Initial Catalog=MES;User Id=mes;Password=mes;";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                using (SqlCommand command = connection.CreateCommand())
+                {
+                    command.CommandText = "UPDATE MES.dbo.tb_NG_tracking SET post_rework_vi_result=@result ,vi_Operator=@vi_Operator WHERE serial_no = @serial";
+
+                    command.Parameters.AddWithValue("@result", result);
+                    command.Parameters.AddWithValue("@serial", serial);
+                    command.Parameters.AddWithValue("@vi_Operator", viOperator);
+
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                    connection.Close();
+                }
+            }
         }
 
         public static Dictionary<string, List<string>> HowManyModulesTested(string lotId)
@@ -260,51 +283,55 @@ namespace Kontrola_wizualna_karta_pracy
             return tabletoFill.Rows.Count > 0 ? true : false;
         }
 
-        public static void RegisterNgPcbToMes(string serial, string ngType)
+        public static void InsertPcbToNgTable(List<Image> imagesTosave)
         {
-            string[] splitted = serial.Split('_');
-            string orderNo = "";
-            if (splitted.Length > 1)
+            List<imageFailureTag> pcbToSave = new List<imageFailureTag>();
+            List<string> controlSerialList = new List<string>();
+            foreach (var pcb in imagesTosave)
             {
-                orderNo = splitted[splitted.Length - 2];
+                imageFailureTag tag = (imageFailureTag)pcb.Tag;
+                if (controlSerialList.Contains(tag.Serial)) continue;
+                controlSerialList.Add(tag.Serial);
+                pcbToSave.Add(tag);
             }
+
+
+
             using (SqlConnection openCon = new SqlConnection(@"Data Source=MSTMS010;Initial Catalog=MES;User Id=mes;Password=mes;"))
             {
-                string save = "INSERT into tb_tester_measurements (serial_no,inspection_time,tester_id,wip_entity_id,wip_entity_name,program_id,result,ng_type) VALUES (@serial_no,@inspection_time,@tester_id,@wip_entity_id,@wip_entity_name,@program_id,@result,@ng_type)";
-                using (SqlCommand querySave = new SqlCommand(save))
+                openCon.Open();
+                foreach (var imgTag in pcbToSave)
                 {
-                    querySave.Connection = openCon;
-                    querySave.Parameters.Add("@serial_no", SqlDbType.NVarChar).Value = serial;
-                    querySave.Parameters.Add("@inspection_time", SqlDbType.NVarChar).Value = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                    querySave.Parameters.Add("@tester_id", SqlDbType.TinyInt).Value = 0;
-                    querySave.Parameters.Add("@wip_entity_id", SqlDbType.Int).Value = 0;
-                    querySave.Parameters.Add("@wip_entity_name", SqlDbType.NVarChar).Value = orderNo;
-                    querySave.Parameters.Add("@program_id", SqlDbType.Int).Value = 0;
-                    querySave.Parameters.Add("@result", SqlDbType.NVarChar).Value = "NG";
-                    querySave.Parameters.Add("@ng_type", SqlDbType.NVarChar).Value = ngType;
-                    openCon.Open();
-                    querySave.ExecuteNonQuery();
+                    string save = "INSERT into tb_NG_tracking (serial_no, result, ng_type, datetime) VALUES (@serial_no, @result, @ng_type, @datetime)";
+                    using (SqlCommand querySave = new SqlCommand(save))
+                    {
+                        querySave.Connection = openCon;
+                        querySave.Parameters.Add("@serial_no", SqlDbType.NVarChar).Value = imgTag.Serial;
+                        querySave.Parameters.Add("@result", SqlDbType.NVarChar).Value = imgTag.Result;
+                        querySave.Parameters.Add("@ng_type", SqlDbType.NVarChar).Value = imgTag.NgType;
+                        querySave.Parameters.Add("@datetime", SqlDbType.SmallDateTime).Value = DateTime.Now;
+                        querySave.ExecuteNonQuery();
+                    }
                 }
             }
         }
 
-        public static void InsertPcbToBgTable(string serial, string result, string ngReason)
+        public static DataTable CheckIfSerialIsInNgTable(string serial)
         {
-            using (SqlConnection openCon = new SqlConnection(@"Data Source=MSTMS010;Initial Catalog=MES;User Id=mes;Password=mes;"))
-            {
-                string save = "INSERT into tb_NG_tracking (serial_no, result, ng_type, datetime) VALUES (@serial_no, @result, @ng_type, @datetime)";
-                using (SqlCommand querySave = new SqlCommand(save))
-                {
-                    querySave.Connection = openCon;
-                    querySave.Parameters.Add("@serial_no", SqlDbType.NVarChar).Value = serial;
-                    querySave.Parameters.Add("@result", SqlDbType.NVarChar).Value = result;
-                    querySave.Parameters.Add("@ng_type", SqlDbType.NVarChar).Value = ngReason;
-                    querySave.Parameters.Add("@datetime", SqlDbType.SmallDateTime).Value = DateTime.Now;
-                   
-                    openCon.Open();
-                    querySave.ExecuteNonQuery();
-                }
-            }
+            DataTable tabletoFill = new DataTable();
+
+            SqlConnection conn = new SqlConnection();
+            conn.ConnectionString = @"Data Source=MSTMS010;Initial Catalog=MES;User Id=mes;Password=mes;";
+
+            SqlCommand command = new SqlCommand();
+            command.Connection = conn;
+            command.CommandText = @"SELECT serial_no,result,ng_type,datetime,rework_result,rework_datetime,post_rework_vi_result,post_rework_OQA_result FROM tb_NG_tracking WHERE serial_no=@serial";
+            command.Parameters.AddWithValue("@serial", serial);
+            SqlDataAdapter adapter = new SqlDataAdapter(command);
+
+            adapter.Fill(tabletoFill);
+
+            return tabletoFill;
         }
     }
 }

@@ -23,6 +23,7 @@ using System.Globalization;
 using static Kontrola_wizualna_karta_pracy.DateOperations;
 using System.Configuration;
 using System.Drawing.Drawing2D;
+using Kontrola_wizualna_karta_pracy.Forms;
 
 namespace Kontrola_wizualna_karta_pracy
 {
@@ -74,6 +75,7 @@ namespace Kontrola_wizualna_karta_pracy
         bool cameraEnabled = false;
         string[] pcbsInCurrentLot = null;
         bool rotate180 = false;
+        string[] operatorList;
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -89,7 +91,8 @@ namespace Kontrola_wizualna_karta_pracy
             imagesList = ImagesTools.CreateListOfImages(Path.Combine(AppSettings.GetSettings("AppPath"), @"Zdjecia\PL"));
             CaptureDevice = new FilterInfoCollection(FilterCategory.VideoInputDevice);
 
-            comboBoxOperator.Items.AddRange(SqlOperations.RecentOperatorsList(45).ToArray());
+            operatorList = SqlOperations.RecentOperatorsList(45).ToArray();
+            comboBoxOperator.Items.AddRange(operatorList);
             smtInfo = SqlOperations.GetSmtInfo();
             mstOrdersFromExcel.loadExcel(ref smtInfo);
 
@@ -445,9 +448,11 @@ namespace Kontrola_wizualna_karta_pracy
             for (int i = 0; i < imgList.Count; i++)
             {
                 Image img = imgList[i];
-                string pcbId = img.Tag.ToString();
+                imageFailureTag imgTag = (imageFailureTag)img.Tag;
+                string pcbId_ngType = imgTag.Serial + "_" + imgTag.NgType + "_" + imgTag.Index;
+
                 var saveBmp = new Bitmap(img);
-                saveBmp.Save(imgFolderPath + "\\" + pcbId + "_" +  ".jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
+                saveBmp.Save(imgFolderPath + "\\" + pcbId_ngType + "_" +  ".jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
             }
         }
 
@@ -522,6 +527,7 @@ namespace Kontrola_wizualna_karta_pracy
                         if (imagesToSave.Count > 0)
                         {
                             SaveImagesToFiles(imagesToSave, recordToSave.NumerZlecenia);
+                            SqlOperations.InsertPcbToNgTable(imagesToSave);
                         }
 
                         var allNg = recordToSaveCalculation.GetAllNg();
@@ -1122,7 +1128,6 @@ namespace Kontrola_wizualna_karta_pracy
                         rotate180 = true;
                     }
                     deviceMonikerString = CheckDeviceMonikerString();
-                    
                 }
             }
         }
@@ -1186,6 +1191,12 @@ namespace Kontrola_wizualna_karta_pracy
 
         }
 
-        
+        private void button14_Click_2(object sender, EventArgs e)
+        {
+            using (CheckRework checkReworkForm = new CheckRework(deviceMonikerString, radioButtonPolish.Checked, operatorList))
+            {
+                checkReworkForm.ShowDialog();
+            }
+        }
     }
 }

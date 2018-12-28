@@ -31,6 +31,10 @@ namespace Kontrola_wizualna_karta_pracy
             {
                 comboBox1.Items.Add(device.Name);
             }
+            if (comboBox1.Items.Count==0)
+            {
+                MessageBox.Show("Nie wykryto kamery!");
+            }
 
             
             string rotateSettings = AppSettings.GetSettings("camera180Rotate");
