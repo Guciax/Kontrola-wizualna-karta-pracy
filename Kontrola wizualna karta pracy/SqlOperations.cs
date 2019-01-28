@@ -86,7 +86,6 @@ namespace Kontrola_wizualna_karta_pracy
             return tempHash.OrderBy(op=>op).ToList();
         }
 
-
         internal static void UpdateNgAfterRework(string serial, string result, string viOperator)
         {
             string connectionString = @"Data Source=MSTMS010;Initial Catalog=MES;User Id=mes;Password=mes;";

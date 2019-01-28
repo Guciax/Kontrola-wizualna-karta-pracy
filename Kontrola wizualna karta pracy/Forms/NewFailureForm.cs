@@ -296,16 +296,21 @@ namespace Kontrola_wizualna_karta_pracy
                     labelDecodedQr.Text = "Zeskanuj kod Qr  ......" + Math.Round(waitTime - stoper.Elapsed.TotalMilliseconds / 1000, 1).ToString() + " sek.";
                     if (stoper.Elapsed.Seconds >= waitTime)
                     {
-                        timer1.Stop();
-                        stoper.Stop();
-                        stoper.Reset();
-                        labelDecodedQr.Text = LanguangeTranslation.Translate("Nie można odczytać kodu, wpisz ręcznie:", LangPolish);
-                        // btnTakePic.Visible = true;
-                        textBox1.Visible = true;
+                        EnableQrManualInput();
                     }
                 }
                 
             }
+        }
+
+        private void EnableQrManualInput()
+        {
+            timer1.Stop();
+            stoper.Stop();
+            stoper.Reset();
+            labelDecodedQr.Text = LanguangeTranslation.Translate("Nie można odczytać kodu, wpisz ręcznie:", LangPolish);
+            // btnTakePic.Visible = true;
+            textBox1.Visible = true;
         }
 
         private void CheckDecodedSerial(string decoded)
@@ -316,11 +321,10 @@ namespace Kontrola_wizualna_karta_pracy
 
             bool checkSerials = AppSettings.GetSettings("SprawdzajSerial") == "ON";
 
-            if (SqlOperations.CheckIfSerialIsInNgTable(decoded).Rows.Count > 0)
+            if (SqlOperations.CheckIfSerialIsInNgTable(decoded).Rows.Count > 0) 
             {
                 this.Close();
                 MessageBox.Show("Ten numer PCB jest już zarejestrowany w bazie!");
-                
             }
 
             if (!PcbsInCurrentLot.Contains(decoded) & PcbsInCurrentLot.Length > 0 & checkSerials)
@@ -329,7 +333,6 @@ namespace Kontrola_wizualna_karta_pracy
                 labelDecodedQr.Text = LanguangeTranslation.Translate("Ten numer PCB należy do innego zlecenia!", LangPolish);
                 panelQr.BackColor = Color.Red;
                 panelQr.ForeColor = Color.White;
-                
             }
             else
             {
@@ -424,7 +427,10 @@ namespace Kontrola_wizualna_karta_pracy
 
         private void textBox1_KeyDown(object sender, KeyEventArgs e)
         {
-            CheckDecodedSerial(textBox1.Text);
+            if (e.KeyCode == Keys.Return)
+            {
+                CheckDecodedSerial(textBox1.Text);
+            }
         }
 
         private void btnTakePic_Leave(object sender, EventArgs e)
@@ -440,6 +446,9 @@ namespace Kontrola_wizualna_karta_pracy
             }
         }
 
-        
+        private void button2_Click(object sender, EventArgs e)
+        {
+            EnableQrManualInput();
+        }
     }
 }
