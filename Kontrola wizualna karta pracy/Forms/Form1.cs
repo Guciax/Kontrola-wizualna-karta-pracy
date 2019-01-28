@@ -527,7 +527,7 @@ namespace Kontrola_wizualna_karta_pracy
                         if (imagesToSave.Count > 0)
                         {
                             SaveImagesToFiles(imagesToSave, recordToSave.NumerZlecenia);
-                            SqlOperations.InsertPcbToNgTable(imagesToSave);
+                            SqlOperations.InsertPcbToNgTable(imagesToSave, recordToSave.NumerZlecenia);
                         }
 
                         var allNg = recordToSaveCalculation.GetAllNg();

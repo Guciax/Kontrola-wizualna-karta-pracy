@@ -282,7 +282,7 @@ namespace Kontrola_wizualna_karta_pracy
             return tabletoFill.Rows.Count > 0 ? true : false;
         }
 
-        public static void InsertPcbToNgTable(List<Image> imagesTosave)
+        public static void InsertPcbToNgTable(List<Image> imagesTosave, string orderNo)
         {
             List<imageFailureTag> pcbToSave = new List<imageFailureTag>();
             List<string> controlSerialList = new List<string>();
@@ -301,11 +301,12 @@ namespace Kontrola_wizualna_karta_pracy
                 openCon.Open();
                 foreach (var imgTag in pcbToSave)
                 {
-                    string save = "INSERT into tb_NG_tracking (serial_no, result, ng_type, datetime) VALUES (@serial_no, @result, @ng_type, @datetime)";
+                    string save = "INSERT into tb_NG_tracking (serial_no, order_no, result, ng_type, datetime) VALUES (@serial_no, @order_no, @result, @ng_type, @datetime)";
                     using (SqlCommand querySave = new SqlCommand(save))
                     {
                         querySave.Connection = openCon;
                         querySave.Parameters.Add("@serial_no", SqlDbType.NVarChar).Value = imgTag.Serial;
+                        querySave.Parameters.Add("@order_no", SqlDbType.NVarChar).Value = orderNo;
                         querySave.Parameters.Add("@result", SqlDbType.NVarChar).Value = imgTag.Result;
                         querySave.Parameters.Add("@ng_type", SqlDbType.NVarChar).Value = imgTag.NgType;
                         querySave.Parameters.Add("@datetime", SqlDbType.SmallDateTime).Value = DateTime.Now;
